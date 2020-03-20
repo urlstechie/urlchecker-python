@@ -8,6 +8,7 @@ import configparser
 from urlchecker.core.fileproc import get_file_paths
 from urlchecker.main.github import clone_repo, delete_repo, get_branch
 from urlchecker.core.check import check_files
+from urlchecker.logger import print_failure
 
 @pytest.mark.parametrize('git_path', ["https://github.com/SuperKogito/SuperKogito.github.io"])
 def test_clone_and_del_repo(git_path):
@@ -174,7 +175,7 @@ def test_check_generally(retry_count):
     elif not force_pass and check_results['failed']:
         print("\n\nDone. The following URLS did not pass:")
         for failed_url in check_results['failed']:
-            print_failre(failed_url)
+            print_failure(failed_url)
         if retry_count == 1:
             return True
     else:
