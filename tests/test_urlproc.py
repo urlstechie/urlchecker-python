@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import pytest
-from core.fileproc import collect_links_from_file
-from core.urlproc import check_response_status_code, check_urls, remove_empty
+from urlchecker.core.fileproc import collect_links_from_file
+from urlchecker.core.urlproc import check_response_status_code, check_urls, remove_empty
 
 
 @pytest.mark.parametrize('file', ["tests/test_files/sample_test_file.md",

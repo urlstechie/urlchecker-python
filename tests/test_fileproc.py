@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import pytest
-from core.fileproc import check_file_type, get_file_paths, collect_links_from_file, include_file
+from urlchecker.core.fileproc import check_file_type, get_file_paths, collect_links_from_file, include_file
 
 
 @pytest.mark.parametrize('file_path', ["tests/test_files/sample_test_file.md",

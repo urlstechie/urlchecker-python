@@ -5,9 +5,9 @@ import sys
 import pytest
 import subprocess
 import configparser
-from core.fileproc import get_file_paths
-from check import clone_repo, del_repo, check_repo, get_branch
-
+from urlchecker.core.fileproc import get_file_paths
+from urlchecker.main.github import clone_repo, delete_repo, get_branch
+from urlchecker.core.check import check_files
 
 @pytest.mark.parametrize('git_path', ["https://github.com/SuperKogito/SuperKogito.github.io"])
 def test_clone_and_del_repo(git_path):
@@ -23,7 +23,7 @@ def test_clone_and_del_repo(git_path):
     assert(base_path == os.path.basename(git_path))
 
     # delete should have return code of 0 (success)
-    if not del_repo(base_path) == 0:
+    if not delete_repo(base_path) == 0:
         raise AssertionError
 
 
@@ -59,42 +59,52 @@ def test_get_branch():
 @pytest.mark.parametrize('print_all', [False, True])
 @pytest.mark.parametrize('white_listed_urls', [["https://github.com/SuperKogito/SuperKogito.github.io"]])
 @pytest.mark.parametrize('white_listed_patterns', [[], ["https://github.com/SuperKogito/SuperKogito.github.io"]])
-def test_check_repo(file_paths,
+def test_check_files(file_paths,
                     print_all,
                     white_listed_urls,
                     white_listed_patterns):
     """
     test check repo function.
     """
-    check_repo(file_paths, print_all, white_listed_urls, white_listed_patterns)
+    check_files(file_paths, print_all, white_listed_urls, white_listed_patterns)
 
 
 @pytest.mark.parametrize('config_fname', ['./tests/_local_test_config.conf'])
-@pytest.mark.parametrize('cleanup', ["false", "true"])
-@pytest.mark.parametrize('print_all', ["false", "true"])
-@pytest.mark.parametrize('force_pass', ["false", "true"])
-@pytest.mark.parametrize('rcount', ["1", "3"])
-@pytest.mark.parametrize('timeout', ["3", "5"])
+@pytest.mark.parametrize('cleanup', [False, True])
+@pytest.mark.parametrize('print_all', [False, True])
+@pytest.mark.parametrize('force_pass', [False, True])
+@pytest.mark.parametrize('rcount', [1, 3])
+@pytest.mark.parametrize('timeout', [3, 5])
 def test_script(config_fname, cleanup, print_all, force_pass, rcount, timeout):
     # init config parser
     config = configparser.ConfigParser()
     config.read(config_fname)
 
     # init env variables
-    os.environ["INPUT_GIT_PATH"]  = config['DEFAULT']["git_path_test_value"]
-    os.environ["INPUT_SUBFOLDER"] = "_project"
-    os.environ["INPUT_CLEANUP"]    = cleanup
-    os.environ["INPUT_FILE_TYPES"] = config['DEFAULT']["file_types_test_values"]
-    os.environ["INPUT_PRINT_ALL"]  = print_all
-    os.environ["INPUT_WHITE_LISTED_URLS"] = config['DEFAULT']["white_listed_test_urls"]
-    os.environ["INPUT_WHITE_LISTED_PATTERNS"] =  config['DEFAULT']["white_listed__test_patterns"]
-    os.environ["INPUT_WHITE_LISTED_FILES"] = "conf.py"
-    os.environ["INPUT_FORCE_PASS"]  = force_pass
-    os.environ["INPUT_RETRY_COUNT"] = rcount
-    os.environ["INPUT_TIMEOUT"]     = timeout
+    path  = config['DEFAULT']["git_path_test_value"]
+    file_types = config['DEFAULT']["file_types_test_values"]
+    white_listed_urls = config['DEFAULT']["white_listed_test_urls"]
+    white_listed_patterns =  config['DEFAULT']["white_listed__test_patterns"]
+
+    # Generate command
+    cmd = ["urlchecker", "check", "--subfolder", "_project", "--file-types", file_types,
+           "--white-listed-files", "conf.py", "--white-listed-urls", white_listed_urls,
+           "--white-listed_patterns", white_listed_patterns, "--retry-count", retry_count,
+           "--timeout", timeout]
+
+    # Add boolean arguments
+    if cleanup:
+        cmd.append("--cleanup")
+    if print_all:
+        cmd.append("--print-all")
+    if force_pass:
+        cmd.append("--force-pass")
+
+    # Add final path
+    cmd.append(path)
 
     # excute script
-    pipe = subprocess.run(["python3", "check.py"],
+    pipe = subprocess.run(cmd,
                           stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE)
 
@@ -109,7 +119,7 @@ def test_locally(local_folder_path, config_fname):
     # read input variables
     git_path = local_folder_path
     file_types = config['DEFAULT']["file_types_test_values"].split(",")
-    print_all = "true"
+    print_all = True
     white_listed_urls = config['DEFAULT']["white_listed_test_urls"].split(",")
     white_listed_patterns = config['DEFAULT']["white_listed__test_patterns"].split(",")
 
@@ -125,25 +135,26 @@ def test_locally(local_folder_path, config_fname):
     file_paths = get_file_paths(git_path, file_types)
 
     # check repo urls
-    check_repo(file_paths, print_all, white_listed_urls, white_listed_patterns)
+    check_files(file_paths, print_all, white_listed_urls, white_listed_patterns)
     print("Done.")
 
 
 @pytest.mark.parametrize('retry_count', [1, 3])
 def test_check_generally(retry_count):
+
     # init vars
     git_path = "https://github.com/SuperKogito/SuperKogito.github.io.git"
     file_types = [".py", ".md"]
-    print_all = "true"
+    print_all = True
     white_listed_urls = ["https://superkogito.github.io/figures/fig2.html",
                          "https://superkogito.github.io/figures/fig4.html"]
     white_listed_patterns = ["https://superkogito.github.io/tables"]
     timeout = 1
-    force_pass = "false"
+    force_pass = False
 
     # del repo if it exisits
     if os.path.exists(os.path.basename(git_path)):
-        del_repo(os.path.basename(git_path))
+        delete_repo(os.path.basename(git_path))
 
     # clone repo
     base_path = clone_repo(git_path)
@@ -152,21 +163,21 @@ def test_check_generally(retry_count):
     file_paths = get_file_paths(base_path, file_types)
 
     # check repo urls
-    check_results = check_repo(file_paths, print_all, white_listed_urls,
-                               white_listed_patterns, retry_count, timeout)
+    check_results = check_files(file_paths, print_all, white_listed_urls,
+                                white_listed_patterns, retry_count, timeout)
 
     # exit
-    if len(check_results) == 0:
-        print("Done. No links were collected.")
+    if not check_results['failed'] and not check_results['passed']:
+        print("\n\nDone. No links were collected.")
         sys.exit(0)
 
-    elif force_pass == "false" and len(check_results[1]) > 0 :
-        print("Done. The following URLS did not pass:")
-        print("\x1b[31m" + "\n".join(check_results[1]) + "\x1b[0m")
+    elif not force_pass and check_results['failed']:
+        print("\n\nDone. The following URLS did not pass:")
+        for failed_url in check_results['failed']:
+            print_failre(failed_url)
         if retry_count == 1:
             return True
-
-    else :
-        print("Done. All URLS passed.")
+    else:
+        print("\n\nDone. All URLS passed.")
         if retry_count == 3:
             return True
