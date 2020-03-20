@@ -89,8 +89,8 @@ def test_script(config_fname, cleanup, print_all, force_pass, rcount, timeout):
     # Generate command
     cmd = ["urlchecker", "check", "--subfolder", "_project", "--file-types", file_types,
            "--white-listed-files", "conf.py", "--white-listed-urls", white_listed_urls,
-           "--white-listed_patterns", white_listed_patterns, "--retry-count", rcount,
-           "--timeout", timeout]
+           "--white-listed_patterns", white_listed_patterns, "--retry-count", str(rcount),
+           "--timeout", str(timeout)]
 
     # Add boolean arguments
     if cleanup:
