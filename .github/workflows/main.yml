@@ -5,13 +5,13 @@ on:
     branches_ignore: []
 
 jobs:
-  formatting:
+  testing-urlschecker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       
       - name: Setup python environment
-        run: conda env create --quiet urlstechie
+        run: conda create --quiet urlstechie
 
       - name: Run tests
         run: |
