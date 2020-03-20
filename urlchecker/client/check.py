@@ -26,7 +26,6 @@ def main(args, extra):
       - args: the argparse ArgParser with parsed args
       - extra: extra arguments not handled by the parser
     """
-
     path = args.path
 
     # Case 1: specify present working directory
@@ -49,9 +48,9 @@ def main(args, extra):
 
     # Parse file types, and white listed urls and files (includes absolute and patterns)
     file_types = args.file_types.split(",")
-    white_listed_urls = remove_empty(args.white_listed_urls).split(",")
-    white_listed_patterns = remove_empty(args.white_listed_patterns).split(",")
-    white_listed_files = remove_empty(args.white_listed_files).split(",")
+    white_listed_urls = remove_empty(args.white_listed_urls.split(","))
+    white_listed_patterns = remove_empty(args.white_listed_patterns.split(","))
+    white_listed_files = remove_empty(args.white_listed_files.split(","))
 
     # Alert user about settings
     print("  original path: %s" % args.path)
@@ -60,7 +59,7 @@ def main(args, extra):
     print("         branch: %s" % args.branch)
     print("        cleanup: %s" % args.cleanup)
     print("     file types: %s" % file_types)
-    print("      print all: %s" % args.print_all)
+    print("      print all: %s" % (not args.no_print))
     print(" url whitetlist: %s" % white_listed_urls)
     print("   url patterns: %s" % white_listed_patterns)
     print("  file patterns: %s" % white_listed_files)
@@ -75,7 +74,7 @@ def main(args, extra):
                                    white_listed_files=white_listed_files,
                                    white_listed_urls=white_listed_urls,
                                    white_listed_patterns=white_listed_patterns,
-                                   print_all=args.print_all,
+                                   print_all=not args.no_print,
                                    retry_count=args.retry_count,
                                    timeout=args.timeout)
 
@@ -89,7 +88,6 @@ def main(args, extra):
         print("\n\nDone. No urls were collected.")
         sys.exit(0)
 
-    # TODO write a function to print failure, print success
     # Case 2: We had errors, but force pass is True
     elif args.force_pass and check_results['failed']:
         print("\n\nDone. The following urls did not pass:")

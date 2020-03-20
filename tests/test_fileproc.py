@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import pytest
-from urlchecker.core.fileproc import check_file_type, get_file_paths, collect_links_from_file, include_file
+from urlchecker.core.fileproc import check_file_type, get_file_paths, collect_links_from_file, include_file, remove_empty
 
 
 @pytest.mark.parametrize('file_path', ["tests/test_files/sample_test_file.md",
@@ -74,3 +74,12 @@ def collect_links_from_file(file_path):
     # read file content
     urls = collect_links_from_file()
     assert(len(url) == 3)
+
+
+def test_remove_empty():
+    """
+    test that empty urls are removed
+    """
+    urls = ["notempty", "notempty", "", None]
+    if len(remove_empty(urls)) != 2:
+        raise AssertionError
