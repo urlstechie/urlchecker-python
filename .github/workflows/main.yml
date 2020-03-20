@@ -1,0 +1,13 @@
+name: CI
+
+on:
+  pull_request:
+    branches_ignore: []
+
+jobs:
+  testing-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Build container image
+        run: docker build -t urlstechie .

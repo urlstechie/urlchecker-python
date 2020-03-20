@@ -10,8 +10,8 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import os
 import sys
 import subprocess
-from core import urlproc
-from core import fileproc
+from urlchecker.core import urlproc
+from urlchecker.core import fileproc
 
 
 def clone_repo(git_path, branch="master"):
