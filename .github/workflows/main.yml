@@ -18,6 +18,7 @@ jobs:
           # activate conda env
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate urlstechie
+          pip install pytest
           python setup.py install
           pytest -vs -x tests/test_check.py tests/test_fileproc.py tests/test_files tests/test_urlproc.py
 
