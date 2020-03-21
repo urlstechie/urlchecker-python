@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
 
-![docs/urlstechie.png](docs/urlstechie.png)
+![docs/urlchecker.png](docs/urlchecker.png)
 
 This is a python module to collect urls over static files (code and documentation)
 and then test for and report broken links.
@@ -203,3 +203,10 @@ In the "client" folder, for example, the commands that are exposed for the clien
 (e.g., check) would named accordingly, e.g., `client/check.py`.
 Functions for Github are be provided in `main/github.py`. This organization should
 be fairly straight forward to always find what you are looking for.
+
+## Support
+
+If you need help, or want to suggest a project for the organization,
+please [open an issue](https://github.com/urlstechie/urlchecker-python)
+
+![docs/urlstechie.png](docs/urlstechie.png)
