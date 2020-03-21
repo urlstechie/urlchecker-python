@@ -10,7 +10,7 @@ from urlchecker.main.github import clone_repo, delete_repo, get_branch
 from urlchecker.core.check import check_files
 from urlchecker.logger import print_failure
 
-@pytest.mark.parametrize('git_path', ["https://github.com/SuperKogito/SuperKogito.github.io"])
+@pytest.mark.parametrize('git_path', ["https://github.com/urlstechie/urlchecker-test-repo"])
 def test_clone_and_del_repo(git_path):
     """
     test clone and del repo function.
@@ -144,7 +144,7 @@ def test_locally(local_folder_path, config_fname):
 def test_check_generally(retry_count):
 
     # init vars
-    git_path = "https://github.com/SuperKogito/SuperKogito.github.io.git"
+    git_path = "https://github.com/urlstechie/urlchecker-test-repo"
     file_types = [".py", ".md"]
     print_all = True
     white_listed_urls = ["https://superkogito.github.io/figures/fig2.html",
