@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
     branches_ignore: []
+  release:
+    types: [published, created, edited]
 
 jobs:
   testing-docker:
@@ -10,4 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2      
       - name: Build container image
-        run: docker build -t urlstechie .
+        run: |
+          docker build -t quay.io/urlstechie/urlchecker .
+          DOCKER_TAG=$(docker run quay.io/urlstechie/urlchecker --version)
+          printf "Docker Tag is ${DOCKER_TAG}\n"
+          echo "::set-env name=DOCKER_TAG::${DOCKER_TAG}"
+      - name: Docker login
+        env:
+          docker_user: ${{ secrets.DOCKER_USERNAME }}
+          docker_pass: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u="${docker_user}" -p="${docker_pass}" quay.io
+      - name: Push containers
+        run: |
+          docker tag quay.io/urlstechie/urlchecker:latest "quay.io/urlstechie/urlchecker:${DOCKER_TAG}"
+          docker push quay.io/urlstechie/urlchecker:latest
+          docker push "quay.io/urlstechie/urlchecker:${DOCKER_TAG}"
+
