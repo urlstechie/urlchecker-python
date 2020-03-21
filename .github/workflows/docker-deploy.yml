@@ -1,0 +1,66 @@
+name: Docker Publish
+
+on:
+  push:
+    branches:
+      - master
+
+    tags:
+      - v*
+
+  pull_request:
+
+env:
+  IMAGE_NAME: urlchecker
+
+jobs:
+  testing-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Derive container tag
+        run:
+          for string in $(cat urlchecker/version.py | grep __version__); do
+            DOCKER_TAG="${string//\"}"
+          done
+          echo "Version for Docker tag is ${DOCKER_TAG}"
+          echo "::set-env name=DOCKER_TAG::$DOCKER_TAG"
+      - name: Build container image
+        run: docker build -t image .
+
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+
+    # Ensure test job passes before pushing image.
+    needs: testing-docker
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Derive container tag
+        run:
+          for string in $(cat urlchecker/version.py | grep __version__); do
+            DOCKER_TAG="${string//\"}"
+          done
+          echo "Version for Docker tag is ${DOCKER_TAG}"
+          echo "::set-env name=DOCKER_TAG::$DOCKER_TAG"
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag image
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME          
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$DOCKER_TAG
+          docker tag image $IMAGE_ID:latest
+          docker tag image $IMAGE_ID:$DOCKER_TAG
+          docker push $IMAGE_ID:$DOCKER_TAG
+          docker push $IMAGE_ID:latest
