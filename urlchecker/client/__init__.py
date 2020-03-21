@@ -125,12 +125,14 @@ def get_parser():
     check.add_argument(
         "--retry-count",
         help="retry count upon failure (defaults to 2, one retry).",
+        type=int,
         default=2,
     )
 
     check.add_argument(
         "--timeout",
         help="timeout (seconds) to provide to the requests library (defaults to 5)",
+        type=int,
         default=5,
     )
 
