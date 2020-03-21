@@ -1,8 +1,6 @@
-name: CI
+name: docker-deploy
 
 on:
-  pull_request:
-    branches_ignore: []
   release:
     types: [published, created, edited]
 
