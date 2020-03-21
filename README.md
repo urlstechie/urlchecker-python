@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
 
-![docs/urlchecker.png](docs/urlchecker.png)
+![docs/urlstechie.png](https://raw.githubusercontent.com/urlstechie/urlchecker-python/master/docs/urlstechie.png)
 
 This is a python module to collect urls over static files (code and documentation)
 and then test for and report broken links.
@@ -209,4 +209,3 @@ be fairly straight forward to always find what you are looking for.
 If you need help, or want to suggest a project for the organization,
 please [open an issue](https://github.com/urlstechie/urlchecker-python)
 
-![docs/urlstechie.png](docs/urlstechie.png)
