@@ -1,8 +1,8 @@
-URLS-checker.core.urlproc
+urlchecker.core.urlproc
 ==========================
 
 
-.. automodule:: core.urlproc
+.. automodule:: urlchecker.core.urlproc
     :members:
     :undoc-members:
     :show-inheritance:

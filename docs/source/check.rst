@@ -1,8 +1,8 @@
-URLS-checker.check
+urlchecker.check
 ==================
 
 
-.. automodule:: check
+.. automodule:: urlchecker.core.check
     :members:
     :undoc-members:
     :show-inheritance:
