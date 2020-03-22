@@ -1,15 +1,17 @@
-# urlchecker python
+<div style="text-align:center"><img src="https://raw.githubusercontent.com/urlstechie/urlchecker-python/master/docs/urlstechie.png"/></div>
 
-[![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/urlstechie/urlchecker-python.svg?branch=master)](https://travis-ci.com/urlstechie/urlchecker-python) [![Documentation Status](https://readthedocs.org/projects/urlchecker-python/badge/?version=latest)](https://urlchecker-python.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/urlstechie/urlchecker-python/branch/master/graph/badge.svg)](https://codecov.io/gh/urlstechie/urlchecker-python) [![Python](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue)](https://www.python.org/doc/versions/) [![CodeFactor](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python/badge)](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python) ![PyPI](https://img.shields.io/pypi/v/urlchecker) [![Downloads](https://pepy.tech/badge/urlchecker)](https://pepy.tech/project/urlchecker) [![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
 
-![docs/urlstechie.png](https://raw.githubusercontent.com/urlstechie/urlchecker-python/master/docs/urlstechie.png)
+
+
+# urlchecker-python
 
 This is a python module to collect urls over static files (code and documentation)
 and then test for and report broken links.
 
 ## Module Documentation
 
-A detailed documentation of the code is available under [urls-checker.readthedocs.io](https://urls-checker.readthedocs.io/en/latest/)
+A detailed documentation of the code is available under [urlchecker-python.readthedocs.io](https://urlchecker-python.readthedocs.io/en/latest/)
 
 ## Usage
 
@@ -113,7 +115,7 @@ $ urlchecker check .
     retry count: 2
         timeout: 5
 
- /tmp/SuperKogito.github.io/README.md 
+ /tmp/SuperKogito.github.io/README.md
  ------------------------------------
 https://travis-ci.com/SuperKogito/SuperKogito.github.io
 https://www.python.org/download/releases/3.0/
@@ -133,7 +135,7 @@ https://superKogito.github.io/blog/ffmpegpipe.html
 https://superkogito.github.io/blog/Encryption.html
 https://superkogito.github.io/blog/NaiveVad.html
 
- /tmp/SuperKogito.github.io/_project/src/postprocessing.py 
+ /tmp/SuperKogito.github.io/_project/src/postprocessing.py
  ---------------------------------------------------------
 No urls found.
 ...
@@ -173,7 +175,7 @@ If you have any questions, please don't hesitate to [open an issue](https://gith
 ### Docker
 
 A Docker container is provided if you want to build a base container with urlchecker,
-meaning that you don't need to install it on your host. You can build the container as 
+meaning that you don't need to install it on your host. You can build the container as
 follows:
 
 ```bsah
@@ -199,7 +201,7 @@ The module is organized as follows:
 └── version.py          # package and versioning
 ```
 
-In the "client" folder, for example, the commands that are exposed for the client 
+In the "client" folder, for example, the commands that are exposed for the client
 (e.g., check) would named accordingly, e.g., `client/check.py`.
 Functions for Github are be provided in `main/github.py`. This organization should
 be fairly straight forward to always find what you are looking for.
@@ -208,4 +210,3 @@ be fairly straight forward to always find what you are looking for.
 
 If you need help, or want to suggest a project for the organization,
 please [open an issue](https://github.com/urlstechie/urlchecker-python)
-
