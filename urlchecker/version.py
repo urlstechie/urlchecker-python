@@ -1,14 +1,13 @@
 """
 
-Copyright (C) 2017-2020 Vanessa Sochat.
+Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
 
-This Source Code Form is subject to the terms of the
-Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed
-with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+This source code is licensed under the terms of the MIT license.  
+For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 AUTHOR = "Ayoub Malek, Vanessa Sochat"
 AUTHOR_EMAIL = "vsochat@stanford.edu"
 NAME = "urlchecker"

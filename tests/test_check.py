@@ -4,13 +4,14 @@ import os
 import sys
 import pytest
 import subprocess
+import tempfile
 import configparser
 from urlchecker.core.fileproc import get_file_paths
 from urlchecker.main.github import clone_repo, delete_repo, get_branch
 from urlchecker.core.check import check_files
 from urlchecker.logger import print_failure
 
-@pytest.mark.parametrize('git_path', ["https://github.com/SuperKogito/SuperKogito.github.io"])
+@pytest.mark.parametrize('git_path', ["https://github.com/urlstechie/urlchecker-test-repo"])
 def test_clone_and_del_repo(git_path):
     """
     test clone and del repo function.
@@ -109,6 +110,7 @@ def test_script(config_fname, cleanup, print_all, force_pass, rcount, timeout):
                           stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE)
 
+    
 
 @pytest.mark.parametrize('local_folder_path', ['./tests/test_files'])
 @pytest.mark.parametrize('config_fname', ['./tests/_local_test_config.conf'])
@@ -144,7 +146,7 @@ def test_locally(local_folder_path, config_fname):
 def test_check_generally(retry_count):
 
     # init vars
-    git_path = "https://github.com/SuperKogito/SuperKogito.github.io.git"
+    git_path = "https://github.com/urlstechie/urlchecker-test-repo"
     file_types = [".py", ".md"]
     print_all = True
     white_listed_urls = ["https://superkogito.github.io/figures/fig2.html",
@@ -182,3 +184,39 @@ def test_check_generally(retry_count):
         print("\n\nDone. All URLS passed.")
         if retry_count == 3:
             return True
+
+
+@pytest.mark.parametrize('save', [True])
+def test_save(save):
+
+    # init config parser
+    config = configparser.ConfigParser()
+    config.read('./tests/_local_test_config.conf')
+
+    # init env variables
+    path  = config['DEFAULT']["git_path_test_value"]
+    file_types = config['DEFAULT']["file_types_test_values"]
+    white_listed_urls = config['DEFAULT']["white_listed_test_urls"]
+    white_listed_patterns =  config['DEFAULT']["white_listed__test_patterns"]
+
+    # Generate command
+    cmd = ["urlchecker", "check", "--subfolder", "_project", "--file-types", file_types,
+           "--white-listed-files", "conf.py", "--white-listed-urls", white_listed_urls,
+           "--white-listed_patterns", white_listed_patterns]
+
+    # Write to file
+    if save:
+        output_csv = tempfile.NamedTemporaryFile(suffix=".csv", prefix="urlchecker-")
+        cmd += ["--save", output_csv.name]
+
+    # Add final path
+    cmd.append(path)
+
+    print(" ".join(cmd))
+    # excute script
+    pipe = subprocess.run(cmd,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE)
+    if save:
+        if not os.path.exists(output_csv.name):
+            raise AssertionError
