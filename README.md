@@ -7,7 +7,9 @@
 # urlchecker-python
 
 This is a python module to collect urls over static files (code and documentation)
-and then test for and report broken links.
+and then test for and report broken links. If you are interesting in using
+this as a GitHub action, see [urlchecker-action](https://github.com/urlstechie/urlchecker-action). There are also container
+bases available on [quay.io/urlstechie/urlchecker](https://quay.io/repository/urlstechie/urlchecker?tab=tags).
 
 ## Module Documentation
 
