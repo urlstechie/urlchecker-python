@@ -119,6 +119,13 @@ def get_parser():
         default="",
     )
 
+# Saving
+
+    check.add_argument(
+        "--save",
+        help="Path toa csv file to save results to.",
+        default=None,
+    )
 
 # Timeouts
 

@@ -9,7 +9,7 @@ import sys
 import logging
 
 from urlchecker.main.github import clone_repo, delete_repo
-from urlchecker.core.fileproc import remove_empty
+from urlchecker.core.fileproc import remove_empty, save_results
 from urlchecker.core.check import run_urlchecker
 from urlchecker.logger import print_success, print_failure
 
@@ -65,8 +65,8 @@ def main(args, extra):
     print("  file patterns: %s" % white_listed_files)
     print("     force pass: %s" % args.force_pass)
     print("    retry count: %s" % args.retry_count)
+    print("           save: %s" % args.save) 
     print("        timeout: %s" % args.timeout)
-
 
     # Run checks, get lookup of results and fails
     check_results = run_urlchecker(path=path,
@@ -77,6 +77,10 @@ def main(args, extra):
                                    print_all=not args.no_print,
                                    retry_count=args.retry_count,
                                    timeout=args.timeout)
+
+    # save results to flie, if save indicated
+    if args.save:
+        save_results(check_results, args.save)
 
     # delete repo when done, if requested
     if args.cleanup:

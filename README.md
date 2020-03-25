@@ -156,6 +156,8 @@ https://stackoverflow.com/questions/49197916/how-to-profile-cpu-usage-of-a-pytho
 Done. All URLS passed.
 ```
 
+### Check GitHub Repository
+
 But wouldn't it be easier to not have to clone the repository first?
 Of course! We can specify a GitHub url instead, and add `--cleanup`
 if we want to clean up the folder after.
@@ -169,6 +171,100 @@ sure that you provide a comma separated list *without any spaces*
 
 ```
 urlchecker check --white-listed-files=README.md,_config.yml
+```
+
+### Save Results
+
+If you want to save your results to file, perhaps for some kind of record or
+other data analysis, you can provide the `--save` argument:
+
+```bash
+$ urlchecker check --save results.csv .
+  original path: .
+     final path: /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo
+      subfolder: None
+         branch: master
+        cleanup: False
+     file types: ['.md', '.py']
+      print all: True
+ url whitetlist: []
+   url patterns: []
+  file patterns: []
+     force pass: False
+    retry count: 2
+           save: results.csv
+        timeout: 5
+
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/README.md 
+ --------------------------------------------------------------------
+No urls found.
+
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.py 
+ -----------------------------------------------------------------------------------------
+https://github.com/SuperKogito/URLs-checker/README.md
+https://github.com/SuperKogito/URLs-checker/README.md
+https://www.google.com/
+https://github.com/SuperKogito
+
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.md 
+ -----------------------------------------------------------------------------------------
+https://github.com/SuperKogito/URLs-checker/blob/master/README.md
+https://github.com/SuperKogito/Voice-based-gender-recognition/issues
+https://github.com/SuperKogito/spafe/issues/7
+https://github.com/SuperKogito/URLs-checker
+https://github.com/SuperKogito/URLs-checker/issues
+https://github.com/SuperKogito/spafe/issues/4
+https://github.com/SuperKogito/URLs-checker/issues/2
+https://github.com/SuperKogito/URLs-checker/issues/2
+https://github.com/SuperKogito/Voice-based-gender-recognition/issues/1
+https://github.com/SuperKogito/spafe/issues/6
+https://github.com/SuperKogito/spafe/issues
+...
+
+Saving results to /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/results.csv
+
+
+Done. All URLS passed.
+```
+
+The file that you save to will include a comma separated value tabular listing
+of the urls, and their result. The result options are "passed" and "failed"
+and the default header is `URL,RESULT`. All of these defaults are exposed
+if you want to change them (e.g., using a tab separator or a different header)
+if you call the function from within Python. Here is an example of the default file
+produced, which should satisfy most use cases:
+
+```
+URL,RESULT
+https://github.com/SuperKogito,passed
+https://www.google.com/,passed
+https://github.com/SuperKogito/Voice-based-gender-recognition/issues,passed
+https://github.com/SuperKogito/Voice-based-gender-recognition,passed
+https://github.com/SuperKogito/spafe/issues/4,passed
+https://github.com/SuperKogito/Voice-based-gender-recognition/issues/2,passed
+https://github.com/SuperKogito/spafe/issues/5,passed
+https://github.com/SuperKogito/URLs-checker/blob/master/README.md,passed
+https://img.shields.io/,passed
+https://github.com/SuperKogito/spafe/,passed
+https://github.com/SuperKogito/spafe/issues/3,passed
+https://www.google.com/,passed
+https://github.com/SuperKogito,passed
+https://github.com/SuperKogito/spafe/issues/8,passed
+https://github.com/SuperKogito/spafe/issues/7,passed
+https://github.com/SuperKogito/Voice-based-gender-recognition/issues/1,passed
+https://github.com/SuperKogito/spafe/issues,passed
+https://github.com/SuperKogito/URLs-checker/issues,passed
+https://github.com/SuperKogito/spafe/issues/2,passed
+https://github.com/SuperKogito/URLs-checker,passed
+https://github.com/SuperKogito/spafe/issues/6,passed
+https://github.com/SuperKogito/spafe/issues/1,passed
+https://github.com/SuperKogito/URLs-checker/README.md,failed
+https://github.com/SuperKogito/URLs-checker/issues/3,failed
+https://none.html,failed
+https://github.com/SuperKogito/URLs-checker/issues/2,failed
+https://github.com/SuperKogito/URLs-checker/README.md,failed
+https://github.com/SuperKogito/URLs-checker/issues/1,failed
+https://github.com/SuperKogito/URLs-checker/issues/4,failed
 ```
 
 If you have any questions, please don't hesitate to [open an issue](https://github.com/urlstechie/urlchecker-python).

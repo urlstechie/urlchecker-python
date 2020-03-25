@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 import os
 import pytest
-from urlchecker.core.fileproc import check_file_type, get_file_paths, collect_links_from_file, include_file, remove_empty
+import tempfile
+from urlchecker.core.fileproc import check_file_type, get_file_paths, collect_links_from_file, include_file, remove_empty, save_results
 
 
 @pytest.mark.parametrize('file_path', ["tests/test_files/sample_test_file.md",
@@ -82,4 +83,15 @@ def test_remove_empty():
     """
     urls = ["notempty", "notempty", "", None]
     if len(remove_empty(urls)) != 2:
+        raise AssertionError
+
+
+def test_save_results():
+    """
+    test that saving results works.
+    """
+    check_results = {"failed": ["fail1", "fail2"], "passed": ["pass1", "pass2"]}
+    output_csv = tempfile.NamedTemporaryFile(suffix=".csv", prefix="urlchecker-").name
+    output_file = save_results(check_results, output_csv)
+    if not os.path.exists(output_csv):
         raise AssertionError
