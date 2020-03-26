@@ -111,12 +111,11 @@ def get_user_agent():
     return random.choice(agents)
 
 
-def check_urls(file, urls, check_results, retry_count=1, timeout=5):
+def check_urls(urls, check_results, retry_count=1, timeout=5):
     """
     Check urls extracted from a certain file and print the checks results.
 
     Args:
-        - file           (str) : path to file.
         - urls          (list) : list of urls to check.
         - check_results (list) : a list containing a list of succesfully checked links and errenous links.
         - retry_count    (int) : a number of retries to issue (defaults to 1, no retry).

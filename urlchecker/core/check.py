@@ -106,7 +106,7 @@ def check_files(
         # if some links are found, check them
         if urls:
             print("\n", file_name, "\n", "-" * len(file_name))
-            urlproc.check_urls(file_name, urls, check_results, retry_count, timeout)
+            urlproc.check_urls(urls, check_results, retry_count, timeout)
 
         # if no urls are found, mention it if required
         else:
