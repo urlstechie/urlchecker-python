@@ -267,8 +267,24 @@ https://github.com/SuperKogito/URLs-checker/issues/1,failed
 https://github.com/SuperKogito/URLs-checker/issues/4,failed
 ```
 
-If you have any questions, please don't hesitate to [open an issue](https://github.com/urlstechie/urlchecker-python).
 
+### Usage from Python
+
+If you want to check a list of urls outside of the provided client, this is fairly easy to do!
+Let's say we have a list of urls, `urls`:
+
+```python
+from urlchecker.core.urlproc import check_urls
+
+# We will update a dictionary with failed and passed
+check_results = {"failed": [], "passed": []}
+check_urls(urls=urls, retry_count=3, timeout=5, check_results=check_results)
+```
+
+Using the above, you're check_results will be updated to include those in your
+list that passed, and those that failed.
+
+If you have any questions, please don't hesitate to [open an issue](https://github.com/urlstechie/urlchecker-python).
 
 ### Docker
 
@@ -276,7 +292,7 @@ A Docker container is provided if you want to build a base container with urlche
 meaning that you don't need to install it on your host. You can build the container as
 follows:
 
-```bsah
+```bash
 docker build -t urlchecker .
 ```
 
