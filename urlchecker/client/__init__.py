@@ -4,7 +4,7 @@
 
 Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
@@ -75,21 +75,18 @@ def get_parser():
         "--cleanup",
         help="remove root folder after checking (defaults to False, no cleaup)",
         default=False,
-        action="store_true",
     )
 
     check.add_argument(
         "--force-pass",
         help="force successful pass (return code 0) regardless of result",
         default=False,
-        action="store_true",
     )
 
     check.add_argument(
         "--no-print",
         help="Skip printing results to the screen (defaults to printing to console).",
         default=False,
-        action="store_true",
     )
 
     check.add_argument(
@@ -153,7 +150,7 @@ def main():
     parser = get_parser()
 
     def help(return_code=0):
-        """print help, including the software version and active client 
+        """print help, including the software version and active client
            and exit with return code.
         """
 
@@ -180,9 +177,10 @@ def main():
     else:
         print("Unsupported command %s" % args.command)
         sys.exit(0)
-    
+
     # Pass on to the correct parser
     return_code = 0
+
     try:
         main(args=args, extra=extra)
         sys.exit(return_code)
