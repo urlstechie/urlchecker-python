@@ -84,12 +84,12 @@ def main(args, extra):
         save_results(check_results, args.save)
 
     # delete repo when done, if requested
-    if cleanup:
+    if args.cleanup:
         logger.info("Cleaning up %s..." % path)
         delete_repo(path)
 
     # force pass
-    if force_pass:
+    if args.force_pass:
         if check_results['failed']:
             print("\n\nDone. The following urls did not pass:")
             for failed_url in check_results['failed']:
