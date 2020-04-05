@@ -2,7 +2,7 @@
 
 Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
@@ -96,7 +96,7 @@ def check_files(
         urls = fileproc.collect_links_from_file(file_name)
 
         # eliminate white listed urls and white listed white listed patterns
-        if white_listed_urls:
+        if white_listed_urls or white_listed_patterns:
             urls = [
                 url
                 for url in urls
