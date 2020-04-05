@@ -50,12 +50,14 @@ for files. In this case, you can use urlchecker check:
 $ urlchecker check --help
 
 $ urlchecker check --help
-usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup]
-                        [--force-pass] [--no-print] [--file-types FILE_TYPES]
+usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER]
+                        [--cleanup CLEANUP] [--force-pass FORCE_PASS]
+                        [--no-print NO_PRINT] [--file-types FILE_TYPES]
                         [--white-listed-urls WHITE_LISTED_URLS]
                         [--white-listed-patterns WHITE_LISTED_PATTERNS]
                         [--white-listed-files WHITE_LISTED_FILES]
-                        [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
+                        [--save SAVE] [--retry-count RETRY_COUNT]
+                        [--timeout TIMEOUT]
                         path
 
 positional arguments:
@@ -69,11 +71,12 @@ optional arguments:
   --subfolder SUBFOLDER
                         relative subfolder path within path (if not specified,
                         we use root)
-  --cleanup             remove root folder after checking (defaults to False,
+  --cleanup CLEANUP     remove root folder after checking (defaults to False,
                         no cleaup)
-  --force-pass          force successful pass (return code 0) regardless of
+  --force-pass FORCE_PASS
+                        force successful pass (return code 0) regardless of
                         result
-  --no-print            Skip printing results to the screen (defaults to
+  --no-print NO_PRINT   Skip printing results to the screen (defaults to
                         printing to console).
   --file-types FILE_TYPES
                         comma separated list of file extensions to check
@@ -86,6 +89,7 @@ optional arguments:
   --white-listed-files WHITE_LISTED_FILES
                         comma separated list of white listed files and
                         patterns for files (no spaces)
+  --save SAVE           Path toa csv file to save results to.
   --retry-count RETRY_COUNT
                         retry count upon failure (defaults to 2, one retry).
   --timeout TIMEOUT     timeout (seconds) to provide to the requests library
@@ -97,14 +101,15 @@ along with the number of retries or timeout (seconds). The most basic usage will
 check an entire directory. Let's clone and check the directory of one of the
 maintainers:
 
-```bash
+```diff
 git clone https://github.com/SuperKogito/SuperKogito.github.io.git
 cd SuperKogito.github.io
 urlchecker check .
 
 $ urlchecker check .
+
   original path: .
-     final path: /tmp/SuperKogito.github.io
+     final path: /home/kogito/Desktop/urlstechie/SuperKogito.github.io
       subfolder: None
          branch: master
         cleanup: False
@@ -115,42 +120,43 @@ $ urlchecker check .
   file patterns: []
      force pass: False
     retry count: 2
+           save: None
         timeout: 5
 
  /tmp/SuperKogito.github.io/README.md
  ------------------------------------
-https://travis-ci.com/SuperKogito/SuperKogito.github.io
-https://www.python.org/download/releases/3.0/
-https://superkogito.github.io/blog/diabetesML2.html
-https://superkogito.github.io/blog/Cryptography.html
-http://www.sphinx-doc.org/en/master/
-https://github.com/
-https://superkogito.github.io/blog/SignalFraming.html
-https://superkogito.github.io/blog/VoiceBasedGenderRecognition.html
-https://travis-ci.com/SuperKogito/SuperKogito.github.io.svg?branch=master
-https://superkogito.github.io/blog/SpectralLeakageWindowing.html
-https://superkogito.github.io/blog/Intro.html
-https://github.com/SuperKogito/SuperKogito.github.io/workflows/Check%20URLs/badge.svg
-https://superkogito.github.io/blog/diabetesML1.html
-https://superkogito.github.io/blog/AuthenticatedEncryption.html
-https://superKogito.github.io/blog/ffmpegpipe.html
-https://superkogito.github.io/blog/Encryption.html
-https://superkogito.github.io/blog/NaiveVad.html
++ https://travis-ci.com/SuperKogito/SuperKogito.github.io
++ https://www.python.org/download/releases/3.0/
++ https://superkogito.github.io/blog/diabetesML2.html
++ https://superkogito.github.io/blog/Cryptography.html
++ http://www.sphinx-doc.org/en/master/
++ https://github.com/
++ https://superkogito.github.io/blog/SignalFraming.html
++ https://travis-ci.com/SuperKogito/SuperKogito.github.io.svg?branch=master
++ https://superkogito.github.io/blog/VoiceBasedGenderRecognition.html
++ https://superkogito.github.io/blog/SpectralLeakageWindowing.html
++ https://superkogito.github.io/blog/Intro.html
++ https://github.com/SuperKogito/SuperKogito.github.io/workflows/Check%20URLs/badge.svg
++ https://superkogito.github.io/blog/diabetesML1.html
++ https://superkogito.github.io/blog/AuthenticatedEncryption.html
++ https://superKogito.github.io/blog/ffmpegpipe.html
++ https://superkogito.github.io/blog/Encryption.html
++ https://superkogito.github.io/blog/NaiveVad.html
 
  /tmp/SuperKogito.github.io/_project/src/postprocessing.py
  ---------------------------------------------------------
 No urls found.
 ...
 
-https://github.com/marsbroshok/VAD-python/blob/d74033aa08fbbbcdbd491f6e52a1dfdbbb388eea/vad.py#L64
-https://github.com/fgnt/pb_chime5
-https://ai.facebook.com/blog/wav2vec-state-of-the-art-speech-recognition-through-self-supervision/
-https://corplinguistics.wordpress.com/tag/mandarin/
-http://www.cs.tut.fi/~tuomasv/papers/ijcnn_paper_valenti_extended.pdf
-http://shachi.org/resources
-https://conference.scipy.org/proceedings/scipy2015/pdfs/brian_mcfee.pdf
-https://www.dlology.com/blog/simple-speech-keyword-detecting-with-depthwise-separable-convolutions/
-https://stackoverflow.com/questions/49197916/how-to-profile-cpu-usage-of-a-python-script
++ https://github.com/marsbroshok/VAD-python/blob/d74033aa08fbbbcdbd491f6e52a1dfdbbb388eea/vad.py#L64
++ https://github.com/fgnt/pb_chime5
++ https://ai.facebook.com/blog/wav2vec-state-of-the-art-speech-recognition-through-self-supervision/
++ https://corplinguistics.wordpress.com/tag/mandarin/
++ http://www.cs.tut.fi/~tuomasv/papers/ijcnn_paper_valenti_extended.pdf
+- http://shachi.org/resources
++ https://conference.scipy.org/proceedings/scipy2015/pdfs/brian_mcfee.pdf
++ https://www.dlology.com/blog/simple-speech-keyword-detecting-with-depthwise-separable-convolutions/
++ https://stackoverflow.com/questions/49197916/how-to-profile-cpu-usage-of-a-python-script
 
 
 Done. All URLS passed.
@@ -178,7 +184,7 @@ urlchecker check --white-listed-files=README.md,_config.yml
 If you want to save your results to file, perhaps for some kind of record or
 other data analysis, you can provide the `--save` argument:
 
-```bash
+```diff
 $ urlchecker check --save results.csv .
   original path: .
      final path: /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo
@@ -195,30 +201,30 @@ $ urlchecker check --save results.csv .
            save: results.csv
         timeout: 5
 
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/README.md 
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/README.md
  --------------------------------------------------------------------
 No urls found.
 
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.py 
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.py
  -----------------------------------------------------------------------------------------
-https://github.com/SuperKogito/URLs-checker/README.md
-https://github.com/SuperKogito/URLs-checker/README.md
-https://www.google.com/
-https://github.com/SuperKogito
+- https://github.com/SuperKogito/URLs-checker/README.md
+- https://github.com/SuperKogito/URLs-checker/README.md
++ https://www.google.com/
++ https://github.com/SuperKogito
 
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.md 
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.md
  -----------------------------------------------------------------------------------------
-https://github.com/SuperKogito/URLs-checker/blob/master/README.md
-https://github.com/SuperKogito/Voice-based-gender-recognition/issues
-https://github.com/SuperKogito/spafe/issues/7
-https://github.com/SuperKogito/URLs-checker
-https://github.com/SuperKogito/URLs-checker/issues
-https://github.com/SuperKogito/spafe/issues/4
-https://github.com/SuperKogito/URLs-checker/issues/2
-https://github.com/SuperKogito/URLs-checker/issues/2
-https://github.com/SuperKogito/Voice-based-gender-recognition/issues/1
-https://github.com/SuperKogito/spafe/issues/6
-https://github.com/SuperKogito/spafe/issues
+- https://github.com/SuperKogito/URLs-checker/blob/master/README.md
++ https://github.com/SuperKogito/Voice-based-gender-recognition/issues
++ https://github.com/SuperKogito/spafe/issues/7
+- https://github.com/SuperKogito/URLs-checker
+- https://github.com/SuperKogito/URLs-checker/issues
++ https://github.com/SuperKogito/spafe/issues/4
+- https://github.com/SuperKogito/URLs-checker/issues/2
+- https://github.com/SuperKogito/URLs-checker/issues/2
++ https://github.com/SuperKogito/Voice-based-gender-recognition/issues/1
++ https://github.com/SuperKogito/spafe/issues/6
++ https://github.com/SuperKogito/spafe/issues
 ...
 
 Saving results to /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/results.csv
