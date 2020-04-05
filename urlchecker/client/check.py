@@ -88,31 +88,18 @@ def main(args, extra):
         logger.info("Cleaning up %s..." % path)
         delete_repo(path)
 
-    # force pass
-    if args.force_pass:
-        if check_results['failed']:
-            print("\n\nDone. The following urls did not pass:")
-            for failed_url in check_results['failed']:
-                print_failure(failed_url)
-            sys.exit(1)
+    # Case 1: We didn't find any urls to check
+    if not check_results['failed'] and not check_results['passed']:
+        print("\n\nDone. No urls were collected.")
+        sys.exit(0)
 
-        else:
-            print("\n\nDone. All URLS passed.")
-            sys.exit(1)
+    # Case 2: We had errors, but force pass is True
+    elif args.force_pass and check_results['failed']:
+        print("\n\nDone. The following urls did not pass:")
+        for failed_url in check_results['failed']:
+            print_failure(failed_url)
+        sys.exit(1)
 
-    # no force pass
     else:
-        # Case 1: We didn't find any urls to check
-        if not check_results['failed'] and not check_results['passed']:
-            print("\n\nDone. No urls were collected.")
-            sys.exit(0)
-
-        # Case 2 : Only working urls found
-        elif not check_results['failed'] and check_results['passed']:
-            print("\n\nDone. All URLS passed.")
-            sys.exit(0)
-
-        # exit
-        else:
-            print("\n\nDone.")
-            sys.exit(0)
+        print("\n\nDone. All URLS passed.")
+        sys.exit(0)
