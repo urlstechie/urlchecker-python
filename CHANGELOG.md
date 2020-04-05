@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - reverting back to working client (0.0.15)
  - removing unused file variable (0.0.13)
  - adding support for csv export (0.0.12)
  - fixing bug with parameter type for retry count and timeout (0.0.11)
