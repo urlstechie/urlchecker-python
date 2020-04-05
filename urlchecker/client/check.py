@@ -15,6 +15,27 @@ from urlchecker.logger import print_success, print_failure
 
 logger = logging.getLogger('urlchecker')
 
+
+def str2bool(str_bool):
+    """
+    Convert str input to boolean
+
+    Args:
+        - str_bool (str) : boolean variable as an str.
+
+    Returns
+        bool
+    """
+    if isinstance(str_bool, bool):
+       return str_bool
+    if str_bool.lower() in ('true', 't', 'y', '1'):
+        return True
+    elif str_bool.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise ArgumentTypeError('Boolean value expected.')
+
+
 def main(args, extra):
     """
     main entrypoint for running a check. We expect an args object with
@@ -52,20 +73,25 @@ def main(args, extra):
     white_listed_patterns = remove_empty(args.white_listed_patterns.split(","))
     white_listed_files = remove_empty(args.white_listed_files.split(","))
 
+    # parse booleans
+    cleanup = str2bool(args.cleanup)
+    print_all = not str2bool(args.no_print)
+    force_pass = str2bool(args.force_pass)
+
     # Alert user about settings
     print("  original path: %s" % args.path)
     print("     final path: %s" % path)
     print("      subfolder: %s" % args.subfolder)
     print("         branch: %s" % args.branch)
-    print("        cleanup: %s" % args.cleanup)
+    print("        cleanup: %s" % cleanup)
     print("     file types: %s" % file_types)
-    print("      print all: %s" % (not args.no_print))
+    print("      print all: %s" % print_all)
     print(" url whitetlist: %s" % white_listed_urls)
     print("   url patterns: %s" % white_listed_patterns)
     print("  file patterns: %s" % white_listed_files)
-    print("     force pass: %s" % args.force_pass)
+    print("     force pass: %s" % force_pass)
     print("    retry count: %s" % args.retry_count)
-    print("           save: %s" % args.save) 
+    print("           save: %s" % args.save)
     print("        timeout: %s" % args.timeout)
 
     # Run checks, get lookup of results and fails
@@ -74,7 +100,7 @@ def main(args, extra):
                                    white_listed_files=white_listed_files,
                                    white_listed_urls=white_listed_urls,
                                    white_listed_patterns=white_listed_patterns,
-                                   print_all=not args.no_print,
+                                   print_all=print_all,
                                    retry_count=args.retry_count,
                                    timeout=args.timeout)
 
@@ -83,22 +109,35 @@ def main(args, extra):
         save_results(check_results, args.save)
 
     # delete repo when done, if requested
-    if args.cleanup:
+    if cleanup:
         logger.info("Cleaning up %s..." % path)
         delete_repo(path)
 
-    # Case 1: We didn't find any urls to check
-    if not check_results['failed'] and not check_results['passed']:
-        print("\n\nDone. No urls were collected.")
-        sys.exit(0)
+    # force pass
+    if force_pass:
+        if check_results['failed']:
+            print("\n\nDone. The following urls did not pass:")
+            for failed_url in check_results['failed']:
+                print_failure(failed_url)
+            sys.exit(1)
 
-    # Case 2: We had errors, but force pass is True
-    elif args.force_pass and check_results['failed']:
-        print("\n\nDone. The following urls did not pass:")
-        for failed_url in check_results['failed']:
-            print_failure(failed_url)
-        sys.exit(1)
+        else:
+            print("\n\nDone. All URLS passed.")
+            sys.exit(1)
 
+    # no force pass
     else:
-        print("\n\nDone. All URLS passed.")
-        sys.exit(0)
+        # Case 1: We didn't find any urls to check
+        if not check_results['failed'] and not check_results['passed']:
+            print("\n\nDone. No urls were collected.")
+            sys.exit(0)
+
+        # Case 2 : Only working urls found
+        elif not check_results['failed'] and check_results['passed']:
+            print("\n\nDone. All URLS passed.")
+            sys.exit(0)
+
+        # exit
+        else:
+            print("\n\nDone.")
+            sys.exit(0)
