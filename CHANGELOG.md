@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - default for files needs to be empty string (not None) (0.0.17)
  - bug with incorrect return code on fail, add files flag (0.0.16)
  - reverting back to working client (0.0.15)
  - removing unused file variable (0.0.13)

@@ -103,7 +103,7 @@ def get_parser():
         "--files",
         dest="files",
         help="comma separated list of exact files or patterns to check.",
-        default=None,
+        default="",
     )
 
     # White listing
