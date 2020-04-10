@@ -34,40 +34,61 @@ def check_file_type(file_path, file_types):
     return False
 
 
-def include_file(file_path, white_list_patterns):
+def include_file(file_path, white_list_patterns=None, include_patterns=None):
     """
     Check a file path for inclusion based on an OR regular expression.
     The user is currently not notified if a file is marked for removal.
 
     Args:
         - file_path            (str) : a file path to check if should be included.
-        - white_list_patterns (list) : list of patterns to whitelist (include).
+        - white_list_patterns (list) : list of patterns to whitelist (not test).
+        - include_patterns    (list) : list of patterns to include.
 
     Returns:
-        (bool) boolean indicating if the URL should be white listed (included).
+        (bool) boolean indicating if the URL should be white listed (not tested).
     """
+    include_patterns = include_patterns or []
+    white_list_patterns = white_list_patterns or []
+
     # No white listed patterns, all files are included
-    if not white_list_patterns:
+    if not white_list_patterns and not include_patterns:
         return True
 
-    # Return False (don't include) if the patterns match
-    regexp = "(%s)" % "|".join(white_list_patterns)
-    return not re.search(regexp, file_path)
+    # Create a regular expression for each
+    whitelist_regexp = "(%s)" % "|".join(white_list_patterns)
+    include_regexp = "(%s)" % "|".join(include_patterns)
+
+    # Return False (don't include) if whitelisted
+    if not include_patterns:
+        return not re.search(whitelist_regexp, file_path)
+
+    # We have an include_patterns only
+    elif not white_list_patterns:
+        return re.search(include_regexp, file_path)
+
+    # If both defined, whitelisting takes preference
+    return re.search(include_regexp, file_path) and not re.search(
+        whitelist_regexp, file_path
+    )
 
 
-def get_file_paths(base_path, file_types, white_listed_files=None):
+def get_file_paths(
+    base_path, file_types, white_listed_files=None, include_patterns=None
+):
     """
     Get path to all files under a give directory and its subfolders.
 
     Args:
         - base_path           (str) : base path.
         - file_types         (list) : list of file extensions to accept.
+        - include_patterns   (list) : list of files and patterns to include.
         - white_listed_files (list) : list of files or patterns to white list
 
     Returns:
         (list) list of file paths.
     """
     white_listed_files = white_listed_files or []
+    include_patterns = include_patterns or []
 
     # init paths
     file_paths = []
@@ -79,7 +100,9 @@ def get_file_paths(base_path, file_types, white_listed_files=None):
             for file in files
             if os.path.isfile(os.path.join(root, file))
             and check_file_type(file, file_types)
-            and include_file(os.path.join(root, file), white_listed_files)
+            and include_file(
+                os.path.join(root, file), white_listed_files, include_patterns
+            )
         ]
     return file_paths
 
@@ -145,7 +168,7 @@ def save_results(check_results, file_path, sep=",", header=None):
     dirname = os.path.dirname(file_path)
 
     if not os.path.exists(dirname):
-        sys.exit("%s does not exist, cannot save %s there." %(dirname, file_path))
+        sys.exit("%s does not exist, cannot save %s there." % (dirname, file_path))
 
     # Ensure the header is provided and correct (length 2)
     if not header:
@@ -157,10 +180,10 @@ def save_results(check_results, file_path, sep=",", header=None):
     print("Saving results to %s" % file_path)
 
     # Write to file after header row
-    with open(file_path, mode='w') as fd:
+    with open(file_path, mode="w") as fd:
         writer = csv.writer(fd, delimiter=sep, quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(header)
         for result, items in check_results.items():
-            [writer.writerow([item, result]) for item in items];
+            [writer.writerow([item, result]) for item in items]
 
     return file_path

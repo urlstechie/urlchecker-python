@@ -16,6 +16,7 @@ import argparse
 import urlchecker
 import logging
 
+
 def get_parser():
     parser = argparse.ArgumentParser(description="urlchecker python")
 
@@ -39,7 +40,7 @@ def get_parser():
     subparsers = parser.add_subparsers(
         help="urlchecker python actions",
         title="actions",
-        description='actions for urlchecker',
+        description="actions for urlchecker",
         dest="command",
     )
 
@@ -55,8 +56,7 @@ def get_parser():
 
     # supports a clone URL or a path
     check.add_argument(
-        "path",
-        help="the local path or GitHub repository to clone and check",
+        "path", help="the local path or GitHub repository to clone and check",
     )
 
     check.add_argument(
@@ -99,7 +99,14 @@ def get_parser():
         default=".md,.py",
     )
 
-# White listing
+    check.add_argument(
+        "--files",
+        dest="files",
+        help="comma separated list of exact files or patterns to check.",
+        default=None,
+    )
+
+    # White listing
 
     check.add_argument(
         "--white-listed-urls",
@@ -119,15 +126,13 @@ def get_parser():
         default="",
     )
 
-# Saving
+    # Saving
 
     check.add_argument(
-        "--save",
-        help="Path toa csv file to save results to.",
-        default=None,
+        "--save", help="Path to a csv file to save results to.", default=None,
     )
 
-# Timeouts
+    # Timeouts
 
     check.add_argument(
         "--retry-count",
@@ -180,7 +185,7 @@ def main():
     else:
         print("Unsupported command %s" % args.command)
         sys.exit(0)
-    
+
     # Pass on to the correct parser
     return_code = 0
     try:

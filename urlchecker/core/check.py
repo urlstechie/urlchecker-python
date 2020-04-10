@@ -12,6 +12,7 @@ import sys
 from urlchecker.core import fileproc, urlproc
 from urlchecker.core.whitelist import white_listed
 
+
 def run_urlchecker(
     path,
     file_types,
@@ -19,8 +20,9 @@ def run_urlchecker(
     white_listed_urls,
     white_listed_patterns,
     print_all,
+    include_patterns=None,
     retry_count=2,
-    timeout=5
+    timeout=5,
 ):
     """
     Run the url checker given a path, a whitelist for each of url and file
@@ -34,6 +36,7 @@ def run_urlchecker(
         - white_listed_urls     (list) : list of white-listed urls.
         - white_listed_patterns (list) : list of white-listed patterns for urls.
         - white_listed_files    (list) : list of white-listed files and patterns for flies.
+        - include_patterns      (list) : list of files and patterns to check.
         - retry_count            (int) : number of retries on failed first check. Default=2.
         - timeout                (int) : timeout to use when waiting on check feedback. Default=5.
 
@@ -44,6 +47,7 @@ def run_urlchecker(
 
     # get all file paths
     file_paths = fileproc.get_file_paths(
+        include_patterns=include_patterns,
         base_path=path,
         file_types=file_types,
         white_listed_files=white_listed_files,
@@ -83,7 +87,7 @@ def check_files(
         (list) check-results as a list of two lists (successfull checks, failed checks).
     """
     # init results list (first is success, second is issue)
-    check_results = {"passed":[], "failed": []}
+    check_results = {"passed": [], "failed": []}
 
     # Allow for user to skip specifying white listed options
     white_listed_urls = white_listed_urls or []
