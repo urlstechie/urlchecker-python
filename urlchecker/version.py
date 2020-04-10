@@ -7,7 +7,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-__version__ = "0.0.16"
+__version__ = "0.0.17"
 AUTHOR = "Ayoub Malek, Vanessa Sochat"
 AUTHOR_EMAIL = "superkogito@gmail.com, vsochat@stanford.edu"
 NAME = "urlchecker"
