@@ -13,7 +13,7 @@ from urlchecker.core.fileproc import remove_empty, save_results
 from urlchecker.core.check import run_urlchecker
 from urlchecker.logger import print_success, print_failure
 
-logger = logging.getLogger('urlchecker')
+logger = logging.getLogger("urlchecker")
 
 
 def main(args, extra):
@@ -52,6 +52,7 @@ def main(args, extra):
     white_listed_urls = remove_empty(args.white_listed_urls.split(","))
     white_listed_patterns = remove_empty(args.white_listed_patterns.split(","))
     white_listed_files = remove_empty(args.white_listed_files.split(","))
+    files = remove_empty(args.files.split(","))
 
     # Alert user about settings
     print("  original path: %s" % args.path)
@@ -60,6 +61,7 @@ def main(args, extra):
     print("         branch: %s" % args.branch)
     print("        cleanup: %s" % args.cleanup)
     print("     file types: %s" % file_types)
+    print("          files: %s" % files)
     print("      print all: %s" % (not args.no_print))
     print(" url whitetlist: %s" % white_listed_urls)
     print("   url patterns: %s" % white_listed_patterns)
@@ -70,14 +72,17 @@ def main(args, extra):
     print("        timeout: %s" % args.timeout)
 
     # Run checks, get lookup of results and fails
-    check_results = run_urlchecker(path=path,
-                                   file_types=file_types,
-                                   white_listed_files=white_listed_files,
-                                   white_listed_urls=white_listed_urls,
-                                   white_listed_patterns=white_listed_patterns,
-                                   print_all=not args.no_print,
-                                   retry_count=args.retry_count,
-                                   timeout=args.timeout)
+    check_results = run_urlchecker(
+        path=path,
+        file_types=file_types,
+        include_patterns=files,
+        white_listed_files=white_listed_files,
+        white_listed_urls=white_listed_urls,
+        white_listed_patterns=white_listed_patterns,
+        print_all=not args.no_print,
+        retry_count=args.retry_count,
+        timeout=args.timeout,
+    )
 
     # save results to flie, if save indicated
     if args.save:
@@ -89,17 +94,23 @@ def main(args, extra):
         delete_repo(path)
 
     # Case 1: We didn't find any urls to check
-    if not check_results['failed'] and not check_results['passed']:
+    if not check_results["failed"] and not check_results["passed"]:
         print("\n\nDone. No urls were collected.")
         sys.exit(0)
 
-    # Case 2: We had errors, but force pass is True
-    elif args.force_pass and check_results['failed']:
+    # Case 2: We had errors, print them for the user
+    if check_results["failed"]:
         print("\n\nDone. The following urls did not pass:")
-        for failed_url in check_results['failed']:
+        for failed_url in check_results["failed"]:
             print_failure(failed_url)
+
+    # If we have failures and it's not a force pass, exit with 1
+    if not args.force_pass and check_results["failed"]:
         sys.exit(1)
 
+    # Finally, alert user if we are passing conditionally
+    if check_results["failed"]:
+        print("\n\nConditional pass force pass True.")
     else:
         print("\n\nDone. All URLS passed.")
-        sys.exit(0)
+    sys.exit(0)

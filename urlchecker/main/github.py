@@ -55,7 +55,6 @@ def delete_repo(base_path):
     return result.returncode
 
 
-
 def get_branch(default="master"):
     """
     Derive the selected branch. We first look to the environment variable

@@ -9,6 +9,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 import logging
 
+
 def print_failure(message):
     """
     Given a message string, print as a failure in red.
@@ -29,7 +30,7 @@ def print_success(message):
     print("\x1b[32m" + message + "\x1b[0m")
 
 
-def get_logger(name='urlchecker', level=logging.INFO):
+def get_logger(name="urlchecker", level=logging.INFO):
     """
     Get a default logger for the urlchecker library, meaning
     that we use name "urlchecker" and use the default logging
@@ -50,7 +51,9 @@ def get_logger(name='urlchecker', level=logging.INFO):
     ch.setLevel(logging.ERROR)
 
     # formatting
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')    
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     ch.setFormatter(formatter)
     logger.addHandler(ch)
     return logger

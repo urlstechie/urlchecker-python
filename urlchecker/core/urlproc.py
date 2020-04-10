@@ -14,6 +14,7 @@ import requests
 from urlchecker.core import urlmarker
 from urlchecker.logger import print_success, print_failure
 
+
 def record_response(url, response, check_results):
     """
     Record response status of an input url. This function is run after success,

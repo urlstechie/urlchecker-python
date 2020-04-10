@@ -7,6 +7,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
+
 def white_listed(url, white_listed_urls, white_listed_patterns):
     """
     Check if link is in the white listed URLs or patterns to ignore.

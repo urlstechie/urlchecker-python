@@ -48,14 +48,14 @@ for files. In this case, you can use urlchecker check:
 
 ```bash
 $ urlchecker check --help
-
-$ urlchecker check --help
 usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup]
                         [--force-pass] [--no-print] [--file-types FILE_TYPES]
+                        [--files FILES]
                         [--white-listed-urls WHITE_LISTED_URLS]
                         [--white-listed-patterns WHITE_LISTED_PATTERNS]
                         [--white-listed-files WHITE_LISTED_FILES]
-                        [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
+                        [--save SAVE] [--retry-count RETRY_COUNT]
+                        [--timeout TIMEOUT]
                         path
 
 positional arguments:
@@ -78,6 +78,8 @@ optional arguments:
   --file-types FILE_TYPES
                         comma separated list of file extensions to check
                         (defaults to .md,.py)
+  --files FILES         comma separated list of exact files or patterns to
+                        check.
   --white-listed-urls WHITE_LISTED_URLS
                         comma separated list of white listed urls (no spaces)
   --white-listed-patterns WHITE_LISTED_PATTERNS
@@ -86,6 +88,7 @@ optional arguments:
   --white-listed-files WHITE_LISTED_FILES
                         comma separated list of white listed files and
                         patterns for files (no spaces)
+  --save SAVE           Path to a csv file to save results to.
   --retry-count RETRY_COUNT
                         retry count upon failure (defaults to 2, one retry).
   --timeout TIMEOUT     timeout (seconds) to provide to the requests library
