@@ -9,7 +9,6 @@ from urlchecker.core.fileproc import (
     collect_links_from_file,
     include_file,
     remove_empty,
-    save_results,
 )
 
 

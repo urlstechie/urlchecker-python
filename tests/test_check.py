@@ -21,7 +21,7 @@ def test_clone_and_del_repo(git_path):
     """
     # del repo if it exisits
     if os.path.exists(os.path.basename(git_path)):
-        del_repo(os.path.basename(git_path))
+        delete_repo(os.path.basename(git_path))
 
     # clone
     base_path = clone_repo(git_path)
@@ -164,7 +164,12 @@ def test_locally(local_folder_path, config_fname):
     file_paths = get_file_paths(git_path, file_types)
 
     # check repo urls
-    check_files(file_paths, print_all, white_listed_urls, white_listed_patterns)
+    checker = UrlChecker(print_all=print_all)
+    checker.run(
+        file_paths=file_paths,
+        white_listed_urls=white_listed_urls,
+        white_listed_patterns=white_listed_patterns,
+    )
     print("Done.")
 
 
