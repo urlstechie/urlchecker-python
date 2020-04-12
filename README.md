@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.com/urlstechie/urlchecker-python.svg?branch=master)](https://travis-ci.com/urlstechie/urlchecker-python) [![Documentation Status](https://readthedocs.org/projects/urlchecker-python/badge/?version=latest)](https://urlchecker-python.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/urlstechie/urlchecker-python/branch/master/graph/badge.svg)](https://codecov.io/gh/urlstechie/urlchecker-python) [![Python](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue)](https://www.python.org/doc/versions/) [![CodeFactor](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python/badge)](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python) ![PyPI](https://img.shields.io/pypi/v/urlchecker) [![Downloads](https://pepy.tech/badge/urlchecker)](https://pepy.tech/project/urlchecker) [![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
 
 
-
 # urlchecker-python
 
 This is a python module to collect urls over static files (code and documentation)
@@ -273,19 +272,215 @@ https://github.com/SuperKogito/URLs-checker/issues/4,failed
 
 ### Usage from Python
 
+#### Checking a Path
+
 If you want to check a list of urls outside of the provided client, this is fairly easy to do!
-Let's say we have a list of urls, `urls`:
+Let's say we have a path, our present working directory, and we want to check
+.py and .md files (the default)
 
 ```python
-from urlchecker.core.urlproc import check_urls
+from urlchecker.core.check import UrlChecker
+import os
 
-# We will update a dictionary with failed and passed
-check_results = {"failed": [], "passed": []}
-check_urls(urls=urls, retry_count=3, timeout=5, check_results=check_results)
+path = os.getcwd()
+checker = UrlChecker(path)    
+# UrlChecker:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python
 ```
 
-Using the above, you're check_results will be updated to include those in your
-list that passed, and those that failed.
+And of course you can provide more substantial arguments to derive the original
+file list:
+
+```python
+checker = UrlChecker(
+    path=path,
+    file_types=[".md", ".py", ".rst"],
+    include_patterns=[],
+    white_listed_files=["README.md", "LICENSE"],
+    print_all=True,
+)
+```
+I can then run the checker like this:
+
+```python
+checker.run()
+```
+
+Or with more customization of white listing urls:
+
+```python
+checker.run(
+    white_listed_urls=white_listed_urls,
+    white_listed_patterns=white_listed_patterns,
+    retry_count=3,
+    timeout=5,
+)
+```
+
+You'll get the results object returned, which is also available at `checker.results`,
+a simple dictionary with "passed" and "failed" keys to show passes and fails across
+all files.
+
+```python
+{'passed': ['https://github.com/SuperKogito/spafe/issues/4',
+  'http://shachi.org/resources',
+  'https://superkogito.github.io/blog/SpectralLeakageWindowing.html',
+  'https://superkogito.github.io/figures/fig4.html',
+  'https://github.com/urlstechie/urlchecker-test-repo',
+  'https://www.google.com/',
+  ...
+  'https://github.com/SuperKogito',
+  'https://img.shields.io/',
+  'https://www.google.com/',
+  'https://docs.python.org/2'],
+ 'failed': ['https://github.com/urlstechie/urlschecker-python/tree/master',
+  'https://github.com/SuperKogito/Voice-based-gender-recognition,passed',
+  'https://github.com/SuperKogito/URLs-checker/README.md',
+   ...
+  'https://superkogito.github.io/tables',
+  'https://github.com/SuperKogito/URLs-checker/issues/2',
+  'https://github.com/SuperKogito/URLs-checker/README.md',
+  'https://github.com/SuperKogito/URLs-checker/issues/4',
+  'https://github.com/SuperKogito/URLs-checker/issues/3',
+  'https://github.com/SuperKogito/URLs-checker/issues/1',
+  'https://none.html']}
+```
+
+You can look at `checker.checks`, which is a dictionary of result objects,
+organized by the filename:
+
+```python
+for file_name, result in checker.checks.items(): 
+    print() 
+    print(result) 
+    print("Total Results: %s " % result.count) 
+    print("Total Failed: %s" % len(result.failed)) 
+    print("Total Passed: %s" % len(result.passed)) 
+
+...
+
+UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/tests/test_files/sample_test_file.md
+Total Results: 26 
+Total Failed: 6
+Total Passed: 20
+
+UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/.pytest_cache/README.md
+Total Results: 1 
+Total Failed: 0
+Total Passed: 1
+
+UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/.eggs/pytest_runner-5.2-py3.7.egg/ptr.py
+Total Results: 0 
+Total Failed: 0
+Total Passed: 0
+
+UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/docs/source/conf.py
+Total Results: 3 
+Total Failed: 0
+Total Passed: 3
+```
+
+For any result object, you can print the list of passed, falied, white listed,
+or all the urls.
+
+```python
+result.all                                                                                                                                                                       
+['https://www.sphinx-doc.org/en/master/usage/configuration.html',
+ 'https://docs.python.org/3',
+ 'https://docs.python.org/2']
+
+result.failed                                                                                                                                                                    
+[]
+
+result.white_listed
+[]
+
+result.passed                                                                                                                                                                    
+['https://www.sphinx-doc.org/en/master/usage/configuration.html',
+ 'https://docs.python.org/3',
+ 'https://docs.python.org/2']
+
+result.count
+3
+```
+
+
+#### Checking a List of URls
+
+If you start with a list of urls you want to check, you can do that too!
+
+```python
+from urlchecker.core.urlproc import UrlCheckResult
+
+urls = ['https://www.github.com', "https://github.com", "https://banana-pudding-doesnt-exist.com"]
+
+# Instantiate an empty checker to extract urls
+checker = UrlCheckResult()
+File name None is undefined or does not exist, skipping extraction.
+```
+
+If you provied a file name, the urls would be extracted for you.
+
+```python
+checker = UrlCheckResult(
+    file_name=file_name,
+    white_listed_patterns=white_listed_patterns,
+    white_listed_urls=white_listed_urls,
+    print_all=self.print_all,
+)
+```
+
+or you can provide all the parameters without the filename:
+
+```python
+checker = UrlCheckResult(
+    white_listed_patterns=white_listed_patterns,
+    white_listed_urls=white_listed_urls,
+    print_all=self.print_all,
+)
+```
+
+If you don't provide the file_name to check urls, you can give the urls
+you defined previously directly to the `check_urls` function:
+
+
+```python
+checker.check_urls(urls)
+
+https://www.github.com
+https://github.com
+HTTPSConnectionPool(host='banana-pudding-doesnt-exist.com', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f989abdfa10>: Failed to establish a new connection: [Errno -2] Name or service not known'))
+https://banana-pudding-doesnt-exist.com
+```
+
+And of course you can specify a timeout and retry:
+
+```python
+checker.check_urls(urls, retry_count=retry_count, timeout=timeout)
+```
+
+After you run the checker you can get all the urls, the passed,
+and failed sets:
+
+```python
+checker.failed                                                                                                                                                                   
+['https://banana-pudding-doesnt-exist.com']
+
+checker.passed                                                                                                                                                                   
+['https://www.github.com', 'https://github.com']
+
+checker.all                                                                                                                                                                      
+['https://www.github.com',
+ 'https://github.com',
+ 'https://banana-pudding-doesnt-exist.com']
+
+checker.all                                                                                                                                                                      
+['https://www.github.com',
+ 'https://github.com',
+ 'https://banana-pudding-doesnt-exist.com']
+
+checker.count                                                                                                                                                                    
+3
+```
 
 If you have any questions, please don't hesitate to [open an issue](https://github.com/urlstechie/urlchecker-python).
 

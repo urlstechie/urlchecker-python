@@ -3,7 +3,6 @@ This is a test file.
 """
 
 
-
 if __name__ == "__main__":
     # define urls in code
     print("This is a test file with some URLs")

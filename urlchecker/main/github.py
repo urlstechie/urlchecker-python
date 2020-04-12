@@ -10,24 +10,30 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import os
 import sys
 import subprocess
+import tempfile
 from urlchecker.core import urlproc
 from urlchecker.core import fileproc
+from urlchecker.main.utils import get_tmpdir
 
 
-def clone_repo(git_path, branch="master"):
+def clone_repo(git_path, branch="master", dest=None):
     """
     Clone and name a git repository.
 
     Args:
         - git_path (str) : https path to git repository.
-        - branch   (str) : name of the brankch to use. Default="master"
+        - branch   (str) : name of the branch to use. Default="master"
+        - dest     (str) : fullpath to clone repository to. Defaults to tmp.
 
     Returns:
         (str) base path of the cloned git repository.
     """
-    base_path = os.path.basename(git_path)
+    if not dest:
+        base_path = os.path.basename(git_path)
+        dest = get_tmpdir(prefix=base_path, create=False)
+
     result = subprocess.run(
-        ["git", "clone", "-b", branch, git_path, base_path],
+        ["git", "clone", "-b", branch, git_path, dest],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
@@ -35,7 +41,7 @@ def clone_repo(git_path, branch="master"):
     if result.returncode != 0:
         sys.exit("Issue with cloning branch %s of %s" % (branch, git_path))
 
-    return base_path
+    return dest
 
 
 def delete_repo(base_path):

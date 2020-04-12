@@ -8,7 +8,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 
-def white_listed(url, white_listed_urls, white_listed_patterns):
+def white_listed(url, white_listed_urls=None, white_listed_patterns=None):
     """
     Check if link is in the white listed URLs or patterns to ignore.
 
@@ -20,16 +20,17 @@ def white_listed(url, white_listed_urls, white_listed_patterns):
     Returns:
         (bool) boolean for whether link is white-listed or not.
     """
+    white_listed_urls = white_listed_urls or []
+    white_listed_patterns = white_listed_patterns or []
+
     # check white listed urls
     if url in white_listed_urls:
         return True
 
     # check white listed patterns
-    i = 0
-    while i < len(white_listed_patterns):
-        if white_listed_patterns[i] in url:
+    for white_listed_pattern in white_listed_patterns:
+        if white_listed_pattern in url:
             return True
-        i += 1
 
     # default return
     return False

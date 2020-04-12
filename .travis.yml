@@ -27,7 +27,7 @@ before_script:
 
 # command to run tests
 script:
-  - pytest -vs -x --cov=./ tests/test_check.py tests/test_fileproc.py tests/test_files tests/test_urlproc.py
+  - pytest -vs -x --cov=./ tests/test_*.py
 
 after_success:
   - codecov
