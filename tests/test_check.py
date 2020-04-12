@@ -1,6 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import os
+import re
 import sys
 import pytest
 import subprocess
@@ -174,7 +173,7 @@ def test_locally(local_folder_path, config_fname):
 
 
 @pytest.mark.parametrize("retry_count", [1, 3])
-def test_check_generally(retry_count):
+def test_check_run_save(tmp_path, retry_count):
 
     # init vars
     git_path = "https://github.com/urlstechie/urlchecker-test-repo"
@@ -188,14 +187,11 @@ def test_check_generally(retry_count):
     timeout = 1
     force_pass = False
 
-    # del repo if it exisits
-    if os.path.exists(os.path.basename(git_path)):
-        delete_repo(os.path.basename(git_path))
-
     # clone repo
     base_path = clone_repo(git_path)
 
-    # get all file paths
+    # get all file paths in subfolder specified
+    base_path = os.path.join(base_path, 'test_files')
     file_paths = get_file_paths(base_path, file_types)
 
     # check repo urls
@@ -207,6 +203,26 @@ def test_check_generally(retry_count):
         retry_count=retry_count,
         timeout=timeout,
     )
+
+    # Test saving to file
+    output_file = os.path.join(str(tmp_path), 'results.csv')
+    assert(not os.path.exists(output_file))
+    saved_file = checker.save_results(output_file)
+    assert(os.path.exists(output_file))
+
+    # Read in output file
+    with open(saved_file, 'r') as filey:
+        lines = filey.readlines()
+
+    # Header line has three items
+    assert(lines[0] == 'URL,RESULT,FILENAME\n')
+
+    # Ensure content looks okay
+    for line in lines[1:]:
+        url, result, filename = line.split(',')
+        assert(url.startswith('http'))
+        assert(result in ['passed', 'failed'])
+        assert(re.search('(.py|.md)$', filename))
 
     # exit
     if not check_results["failed"] and not check_results["passed"]:

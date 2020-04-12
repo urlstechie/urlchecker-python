@@ -29,7 +29,7 @@ def clone_repo(git_path, branch="master", dest=None):
     """
     if not dest:
         base_path = os.path.basename(git_path)
-        dest = get_tmpdir(prefix=base_path, create=false)
+        dest = get_tmpdir(prefix=base_path, create=False)
 
     result = subprocess.run(
         ["git", "clone", "-b", branch, git_path, dest],
@@ -40,7 +40,7 @@ def clone_repo(git_path, branch="master", dest=None):
     if result.returncode != 0:
         sys.exit("Issue with cloning branch %s of %s" % (branch, git_path))
 
-    return base_path
+    return dest
 
 
 def delete_repo(base_path):

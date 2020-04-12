@@ -65,7 +65,9 @@ class UrlChecker:
             )
 
     def __str__(self):
-        return "UrlChecker:%s" % self.path
+        if self.path:
+            return "UrlChecker:%s" % self.path
+        return "UrlChecker"
 
     def __repr__(self):
         return self.__str__()
