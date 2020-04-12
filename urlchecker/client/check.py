@@ -79,7 +79,7 @@ def main(args, extra):
         white_listed_files=white_listed_files,
         print_all=not args.no_print,
     )
-    checker.run(
+    check_results = checker.run(
         white_listed_urls=white_listed_urls,
         white_listed_patterns=white_listed_patterns,
         retry_count=args.retry_count,
