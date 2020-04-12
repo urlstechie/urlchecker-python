@@ -379,7 +379,8 @@ Total Failed: 0
 Total Passed: 3
 ```
 
-For any result object, you can print the list of passed, falied, or all the urls.
+For any result object, you can print the list of passed, falied, white listed,
+or all the urls.
 
 ```python
 result.all                                                                                                                                                                       
@@ -388,6 +389,9 @@ result.all
  'https://docs.python.org/2']
 
 result.failed                                                                                                                                                                    
+[]
+
+result.white_listed
 []
 
 result.passed                                                                                                                                                                    

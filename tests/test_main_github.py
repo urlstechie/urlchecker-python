@@ -2,6 +2,7 @@ import os
 import pytest
 from urlchecker.main.github import clone_repo, delete_repo, get_branch
 
+
 @pytest.mark.parametrize(
     "git_path", ["https://github.com/urlstechie/urlchecker-test-repo"]
 )
@@ -15,8 +16,8 @@ def test_clone_and_del_repo(git_path):
 
     # clone
     repo_path = clone_repo(git_path)
-    assert(os.path.exists(repo_path))
-    assert(os.path.basename(repo_path).startswith(os.path.basename(git_path)))
+    assert os.path.exists(repo_path)
+    assert os.path.basename(repo_path).startswith(os.path.basename(git_path))
 
     # delete should have return code of 0 (success)
     if not delete_repo(repo_path) == 0:

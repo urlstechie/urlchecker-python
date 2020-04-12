@@ -10,6 +10,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import os
 import tempfile
 
+
 def get_tmpdir(base_dir=None, prefix="", create=True):
     """get a temporary directory for an operation. If SREGISTRY_TMPDIR
        is set, return that. Otherwise, return the output of tempfile.mkdtemp
@@ -22,7 +23,7 @@ def get_tmpdir(base_dir=None, prefix="", create=True):
 
         Returns:
           (str) full path to directory
-    """    
+    """
     tmpdir = base_dir or tempfile.gettempdir()
     prefix = prefix or "urlchecker-"
     prefix = "%s.%s" % (prefix, next(tempfile._get_candidate_names()))

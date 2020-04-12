@@ -107,6 +107,7 @@ class UrlCheckResult:
         self.print_all = print_all
         self.passed = []
         self.failed = []
+        self.white_listed = []
         self.urls = []
         self.white_listed_patterns = white_listed_patterns or []
         self.white_listed_urls = white_listed_urls or []
@@ -125,7 +126,7 @@ class UrlCheckResult:
         """All returns all urls found in a file name, including those that
            passed and failed.
         """
-        return self.passed + self.failed
+        return self.passed + self.failed + self.white_listed
 
     @property
     def count(self):
@@ -143,19 +144,7 @@ class UrlCheckResult:
             return
 
         # collect all links from file (unique=True is set)
-        urls = fileproc.collect_links_from_file(self.file_name)
-
-        # eliminate white listed urls and white listed white listed patterns
-        if self.white_listed_urls or self.white_listed_patterns:
-            urls = [
-                url
-                for url in urls
-                if not white_listed(
-                    url, self.white_listed_urls, self.white_listed_patterns
-                )
-            ]
-
-        self.urls = urls
+        self.urls = fileproc.collect_links_from_file(self.file_name)
 
     def check_urls(self, urls=None, retry_count=1, timeout=5):
         """
@@ -166,6 +155,15 @@ class UrlCheckResult:
             - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
         """
         urls = urls or self.urls
+
+        # eliminate white listed urls and white listed white listed patterns
+        if self.white_listed_urls or self.white_listed_patterns:
+            self.white_listed = [
+                url
+                for url in urls
+                if white_listed(url, self.white_listed_urls, self.white_listed_patterns)
+            ]
+            urls = list(set(urls).difference(set(self.white_listed)))
 
         # if no urls are found, mention it if required
         if not urls:

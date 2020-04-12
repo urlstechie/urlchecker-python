@@ -15,6 +15,7 @@ from urlchecker.core import urlproc
 from urlchecker.core import fileproc
 from urlchecker.main.utils import get_tmpdir
 
+
 def clone_repo(git_path, branch="master", dest=None):
     """
     Clone and name a git repository.
