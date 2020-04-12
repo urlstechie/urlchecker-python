@@ -157,7 +157,7 @@ class UrlCheckResult:
 
         self.urls = urls
 
-    def run_checks(self, urls=None, retry_count=1, timeout=5):
+    def check_urls(self, urls=None, retry_count=1, timeout=5):
         """
         Check urls extracted from a certain file and print the checks results.
 

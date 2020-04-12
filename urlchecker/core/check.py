@@ -159,7 +159,7 @@ class UrlChecker:
             )
 
             # Check the urls
-            checker.run_checks(retry_count=retry_count, timeout=timeout)
+            checker.check_urls(retry_count=retry_count, timeout=timeout)
 
             # Update flattened results
             self.results["failed"].update(checker.failed)

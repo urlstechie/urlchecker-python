@@ -436,11 +436,11 @@ checker = UrlCheckResult(
 ```
 
 If you don't provide the file_name to check urls, you can give the urls
-you defined previously directly to the run_checks function:
+you defined previously directly to the `check_urls` function:
 
 
 ```python
-checker.run_checks(urls)                                                                                                                                                         
+checker.check_urls(urls)
 
 https://www.github.com
 https://github.com
@@ -451,7 +451,7 @@ https://banana-pudding-doesnt-exist.com
 And of course you can specify a timeout and retry:
 
 ```python
-checker.run_checks(urls, retry_count=retry_count, timeout=timeout)
+checker.check_urls(urls, retry_count=retry_count, timeout=timeout)
 ```
 
 After you run the checker you can get all the urls, the passed,

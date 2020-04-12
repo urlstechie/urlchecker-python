@@ -6,55 +6,9 @@ import subprocess
 import tempfile
 import configparser
 from urlchecker.core.fileproc import get_file_paths
-from urlchecker.main.github import clone_repo, delete_repo, get_branch
+from urlchecker.main.github import clone_repo
 from urlchecker.core.check import UrlChecker
 from urlchecker.logger import print_failure
-
-
-@pytest.mark.parametrize(
-    "git_path", ["https://github.com/urlstechie/urlchecker-test-repo"]
-)
-def test_clone_and_del_repo(git_path):
-    """
-    test clone and del repo function.
-    """
-    # del repo if it exisits
-    if os.path.exists(os.path.basename(git_path)):
-        delete_repo(os.path.basename(git_path))
-
-    # clone
-    base_path = clone_repo(git_path)
-    assert base_path == os.path.basename(git_path)
-
-    # delete should have return code of 0 (success)
-    if not delete_repo(base_path) == 0:
-        raise AssertionError
-
-
-def test_get_branch():
-    """
-    test getting branch from environment or default
-    """
-    # Unset defaults to master
-    branch = get_branch()
-    if branch != "master":
-        raise AssertionError
-
-    # Set both GitHub input variable and ref (ref takes priority)
-    for pair in [["INPUT_BRANCH", "devel"], ["GITHUB_REF", "refs/heads/branchy"]]:
-        os.environ[pair[0]] = pair[1]
-        os.putenv(pair[0], pair[1])
-
-    # Second preference should be for INPUT_BRANCH
-    branch = get_branch()
-    if branch != "devel":
-        raise AssertionError
-
-    del os.environ["INPUT_BRANCH"]
-    os.unsetenv("INPUT_BRANCH")
-    branch = get_branch()
-    if branch != "branchy":
-        raise AssertionError
 
 
 @pytest.mark.parametrize(
@@ -223,22 +177,6 @@ def test_check_run_save(tmp_path, retry_count):
         assert(url.startswith('http'))
         assert(result in ['passed', 'failed'])
         assert(re.search('(.py|.md)$', filename))
-
-    # exit
-    if not check_results["failed"] and not check_results["passed"]:
-        print("\n\nDone. No links were collected.")
-        sys.exit(0)
-
-    elif not force_pass and check_results["failed"]:
-        print("\n\nDone. The following URLS did not pass:")
-        for failed_url in check_results["failed"]:
-            print_failure(failed_url)
-        if retry_count == 1:
-            return True
-    else:
-        print("\n\nDone. All URLS passed.")
-        if retry_count == 3:
-            return True
 
 
 @pytest.mark.parametrize("save", [True])
