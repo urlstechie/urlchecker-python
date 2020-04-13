@@ -48,8 +48,8 @@ for files. In this case, you can use urlchecker check:
 ```bash
 $ urlchecker check --help
 usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup]
-                        [--force-pass] [--no-print] [--file-types FILE_TYPES]
-                        [--files FILES]
+                        [--force-pass] [--file-types FILE_TYPES]
+                        [--files FILES] [--print-level PRINT_LEVEL]
                         [--white-listed-urls WHITE_LISTED_URLS]
                         [--white-listed-patterns WHITE_LISTED_PATTERNS]
                         [--white-listed-files WHITE_LISTED_FILES]
@@ -72,13 +72,14 @@ optional arguments:
                         no cleaup)
   --force-pass          force successful pass (return code 0) regardless of
                         result
-  --no-print            Skip printing results to the screen (defaults to
-                        printing to console).
   --file-types FILE_TYPES
                         comma separated list of file extensions to check
                         (defaults to .md,.py)
   --files FILES         comma separated list of exact files or patterns to
                         check.
+  --print-level PRINT_LEVEL
+                        print levels: all, only_files_with_urls, fails-only,
+                        success-only, none
   --white-listed-urls WHITE_LISTED_URLS
                         comma separated list of white listed urls (no spaces)
   --white-listed-patterns WHITE_LISTED_PATTERNS
@@ -111,7 +112,7 @@ $ urlchecker check .
          branch: master
         cleanup: False
      file types: ['.md', '.py']
-      print all: True
+    print level: all
  url whitetlist: []
    url patterns: []
   file patterns: []
@@ -188,7 +189,7 @@ $ urlchecker check --save results.csv .
          branch: master
         cleanup: False
      file types: ['.md', '.py']
-      print all: True
+    print level: all
  url whitetlist: []
    url patterns: []
   file patterns: []
@@ -197,18 +198,18 @@ $ urlchecker check --save results.csv .
            save: results.csv
         timeout: 5
 
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/README.md 
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/README.md
  --------------------------------------------------------------------
 No urls found.
 
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.py 
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.py
  -----------------------------------------------------------------------------------------
 https://github.com/SuperKogito/URLs-checker/README.md
 https://github.com/SuperKogito/URLs-checker/README.md
 https://www.google.com/
 https://github.com/SuperKogito
 
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.md 
+ /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.md
  -----------------------------------------------------------------------------------------
 https://github.com/SuperKogito/URLs-checker/blob/master/README.md
 https://github.com/SuperKogito/Voice-based-gender-recognition/issues
@@ -296,7 +297,7 @@ checker = UrlChecker(
     file_types=[".md", ".py", ".rst"],
     include_patterns=[],
     white_listed_files=["README.md", "LICENSE"],
-    print_all=True,
+    print_level="all",
 )
 ```
 I can then run the checker like this:
@@ -349,32 +350,32 @@ You can look at `checker.checks`, which is a dictionary of result objects,
 organized by the filename:
 
 ```python
-for file_name, result in checker.checks.items(): 
-    print() 
-    print(result) 
-    print("Total Results: %s " % result.count) 
-    print("Total Failed: %s" % len(result.failed)) 
-    print("Total Passed: %s" % len(result.passed)) 
+for file_name, result in checker.checks.items():
+    print()
+    print(result)
+    print("Total Results: %s " % result.count)
+    print("Total Failed: %s" % len(result.failed))
+    print("Total Passed: %s" % len(result.passed))
 
 ...
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/tests/test_files/sample_test_file.md
-Total Results: 26 
+Total Results: 26
 Total Failed: 6
 Total Passed: 20
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/.pytest_cache/README.md
-Total Results: 1 
+Total Results: 1
 Total Failed: 0
 Total Passed: 1
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/.eggs/pytest_runner-5.2-py3.7.egg/ptr.py
-Total Results: 0 
+Total Results: 0
 Total Failed: 0
 Total Passed: 0
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/docs/source/conf.py
-Total Results: 3 
+Total Results: 3
 Total Failed: 0
 Total Passed: 3
 ```
@@ -425,7 +426,7 @@ checker = UrlCheckResult(
     file_name=file_name,
     white_listed_patterns=white_listed_patterns,
     white_listed_urls=white_listed_urls,
-    print_all=self.print_all,
+    print_level=self.print_level,
 )
 ```
 
@@ -435,7 +436,7 @@ or you can provide all the parameters without the filename:
 checker = UrlCheckResult(
     white_listed_patterns=white_listed_patterns,
     white_listed_urls=white_listed_urls,
-    print_all=self.print_all,
+    print_level=self.print_level,
 )
 ```
 
@@ -522,4 +523,3 @@ be fairly straight forward to always find what you are looking for.
 
 If you need help, or want to suggest a project for the organization,
 please [open an issue](https://github.com/urlstechie/urlchecker-python)
-
