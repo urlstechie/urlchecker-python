@@ -17,7 +17,7 @@ from urlchecker.core.check import UrlChecker
     ],
 )
 @pytest.mark.parametrize(
-    "print_level", ["all", "only_files_with_urls",
+    "print_level", ["all", "files-with-urls-only",
                     "fails-only", "success-only", "none"]
 )
 @pytest.mark.parametrize(

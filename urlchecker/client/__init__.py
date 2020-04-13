@@ -104,7 +104,8 @@ def get_parser():
     check.add_argument(
         "--print-level",
         dest="print_level",
-        help="print levels: all, only_files_with_urls, fails-only, success-only, none",
+        help="print levels: all, files-with-urls-only, fails-only, success-only, none",
+        choices=["all", "files-with-urls-only", "fails-only", "success-only", "none"],
         default="all",
     )
 

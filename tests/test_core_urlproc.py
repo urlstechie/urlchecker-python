@@ -60,7 +60,7 @@ def test_get_user_agent():
 
 
 @pytest.mark.parametrize(
-    "print_level", ["all", "only_files_with_urls",
+    "print_level", ["all", "files-with-urls-only",
                     "fails-only", "success-only", "none"]
 )
 def test_check_response_status_code(print_level):

@@ -78,7 +78,7 @@ optional arguments:
   --files FILES         comma separated list of exact files or patterns to
                         check.
   --print-level PRINT_LEVEL
-                        print levels: all, only_files_with_urls, fails-only,
+                        print levels: all, files-with-urls-only, fails-only,
                         success-only, none
   --white-listed-urls WHITE_LISTED_URLS
                         comma separated list of white listed urls (no spaces)

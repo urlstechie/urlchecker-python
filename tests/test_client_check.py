@@ -7,7 +7,7 @@ import configparser
 
 @pytest.mark.parametrize("config_fname", ["./tests/_local_test_config.conf"])
 @pytest.mark.parametrize("cleanup", [False, True])
-@pytest.mark.parametrize("print_level", ["all", "only_files_with_urls", "fails-only", "success-only", "none"])
+@pytest.mark.parametrize("print_level", ["all", "files-with-urls-only", "fails-only", "success-only", "none"])
 @pytest.mark.parametrize("force_pass", [False, True])
 @pytest.mark.parametrize("rcount", [1, 3])
 @pytest.mark.parametrize("timeout", [3, 5])
