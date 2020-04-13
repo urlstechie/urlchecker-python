@@ -2,7 +2,7 @@
 
 Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
@@ -16,7 +16,7 @@ from urlchecker.core.whitelist import white_listed
 from urlchecker.logger import print_success, print_failure
 
 
-def check_response_status_code(url, response):
+def check_response_status_code(url, response, print_level):
     """
     Check response status of an input url. Returns a boolean
     to indicate if retry is needed.
@@ -30,16 +30,19 @@ def check_response_status_code(url, response):
     """
     # Case 1: response is None indicating triggered error
     if not response:
-        print_failure(url)
+        if print_level not in ["success-only", "none"] :
+            print_failure(url)
         return True
 
     # Case 2: success! Retry is not needed.
     if response.status_code == 200:
-        print_success(url)
+        if print_level not in ["fails-only", "none"] :
+            print_success(url)
         return False
 
     # Case 3: failure of some kind
-    print_failure(url)
+    if print_level not in ["success-only", "none"] :
+        print_failure(url)
     return True
 
 
@@ -101,10 +104,10 @@ class UrlCheckResult:
         file_name=None,
         white_listed_patterns=None,
         white_listed_urls=None,
-        print_all=True,
+        print_level=None,
     ):
         self.file_name = file_name
-        self.print_all = print_all
+        self.print_level = print_level
         self.passed = []
         self.failed = []
         self.white_listed = []
@@ -167,13 +170,13 @@ class UrlCheckResult:
 
         # if no urls are found, mention it if required
         if not urls:
-            if self.print_all:
+            if self.print_level == "all":
                 if self.file_name:
                     print("\n", self.file_name, "\n", "-" * len(self.file_name))
                 print("No urls found.")
             return
 
-        if self.file_name:
+        if self.file_name and self.print_level != "none":
             print("\n", self.file_name, "\n", "-" * len(self.file_name))
 
         # init seen urls list
@@ -210,19 +213,22 @@ class UrlCheckResult:
                     response = requests.get(url, timeout=pause, headers=headers)
 
                 except requests.exceptions.Timeout as e:
-                    print(e)
+                    if self.print_level not in ["success-only", "none"]:
+                        print(e)
 
                 except requests.exceptions.ConnectionError as e:
-                    print(e)
+                    if self.print_level not in ["success-only", "none"]:
+                        print(e)
 
                 except Exception as e:
-                    print(e)
+                    if self.print_level not in ["success-only", "none"]:
+                        print(e)
 
                 # decrement retrials count
                 rcount -= 1
 
                 # Break from the loop if we have success, update user
-                do_retry = check_response_status_code(url, response)
+                do_retry = check_response_status_code(url, response, self.print_level)
 
                 # If we try again, pause for retry seconds and update retry seconds
                 if rcount > 0 and do_retry:
