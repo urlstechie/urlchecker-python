@@ -9,6 +9,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 import csv
 import os
+import re
 import sys
 from urlchecker.core import fileproc
 from urlchecker.core.urlproc import UrlCheckResult
@@ -72,7 +73,7 @@ class UrlChecker:
     def __repr__(self):
         return self.__str__()
 
-    def save_results(self, file_path, sep=",", header=None):
+    def save_results(self, file_path, sep=",", header=None, relative_paths=True):
         """
         Given a check_results dictionary, a dict with "failed" and "passed" keys (
         or more generally, keys to indicate some status), save a csv
@@ -84,6 +85,7 @@ class UrlChecker:
             - file_path (str): the file path (.csv) to save to.
             - sep (str): the separate to use (defaults to comma)
             - header (list): if not provided, will save URL,RESULT
+            - relative paths (bool) : save relative paths (default True)
 
         Returns:
             (str) file_path: a newly saved csv with the results
@@ -113,6 +115,14 @@ class UrlChecker:
 
             # Iterate through filenames, each with check results
             for file_name, result in self.checks.items():
+
+                # Derive the relative path based on self.path, or relative to run
+                if relative_paths:
+                    if self.path:
+                        file_name = re.sub(self.path, "", file_name).strip('/')
+                    else:
+                        file_name = os.path.relpath(file_name)
+
                 [writer.writerow([url, "passed", file_name]) for url in result.passed]
                 [writer.writerow([url, "failed", file_name]) for url in result.failed]
 
