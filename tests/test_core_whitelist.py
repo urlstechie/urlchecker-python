@@ -12,7 +12,7 @@ def test_whitelisted():
     assert not white_listed(url)
 
     # Exact url provided as white list url
-    assert (white_listed(url), [url])
+    assert white_listed(url, [url])
 
     # Pattern provided as white list
-    assert (white_listed(url), [], ["https://white-listed/"])
+    assert white_listed(url, [], ["https://white-listed/"])

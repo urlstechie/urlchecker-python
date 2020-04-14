@@ -33,6 +33,7 @@ def test_check_files(file_paths, print_all, white_listed_urls, white_listed_patt
         file_paths,
         white_listed_urls=white_listed_urls,
         white_listed_patterns=white_listed_patterns,
+        retry_count = 1,
     )
 
 
@@ -59,6 +60,7 @@ def test_locally(local_folder_path, config_fname):
         file_paths=file_paths,
         white_listed_urls=white_listed_urls,
         white_listed_patterns=white_listed_patterns,
+        retry_count = 1,
     )
     print("Done.")
 
@@ -111,6 +113,20 @@ def test_check_run_save(tmp_path, retry_count):
     # Ensure content looks okay
     for line in lines[1:]:
         url, result, filename = line.split(",")
+
+        root = filename.split('/')[0]
         assert url.startswith("http")
         assert result in ["passed", "failed"]
         assert re.search("(.py|.md)$", filename)
+
+    # Save with full path
+    saved_file = checker.save_results(output_file, relative_paths=False)
+
+    # Read in output file
+    with open(saved_file, "r") as filey:
+        lines = filey.readlines()
+
+    # Ensure content looks okay
+    for line in lines[1:]:
+        url, result, filename = line.split(",")
+        assert not filename.startswith(root)
