@@ -2,7 +2,7 @@
 
 Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
@@ -125,6 +125,9 @@ def collect_links_from_file(file_path, unique=True):
     urls = re.findall(urlmarker.URL_REGEX, content)
     urls = [url.strip() for url in urls if url.strip().startswith("http")]
     urls = [url.strip("\\n") if url.endswith("\\n") else url for url in urls]
+
+    # filter urls including {}
+    urls = [url for url in urls if not bool(re.search("(\\{[a-z0-9.]*})", url))]
 
     # Do we only want unique links?
     if unique:
