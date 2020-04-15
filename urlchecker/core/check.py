@@ -40,7 +40,7 @@ class UrlChecker:
             - include_patterns      (list) : list of files and patterns to check.
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
-        self.results = {"passed": set(), "failed": set()}
+        self.results = {"passed": set(), "failed": set(), "white_listed": set()}
         self.checks = {}
 
         # Save run parameters
@@ -123,8 +123,9 @@ class UrlChecker:
                     else:
                         file_name = os.path.relpath(file_name)
 
-                [writer.writerow([url, "passed", file_name]) for url in result.passed]
                 [writer.writerow([url, "failed", file_name]) for url in result.failed]
+                [writer.writerow([url, "white_listed", file_name]) for url in result.white_listed]
+                [writer.writerow([url, "passed", file_name]) for url in result.passed]
 
         return file_path
 
@@ -174,6 +175,7 @@ class UrlChecker:
             # Update flattened results
             self.results["failed"].update(checker.failed)
             self.results["passed"].update(checker.passed)
+            self.results["white_listed"].update(checker.white_listed)
 
             # Save the checker in the lookup
             self.checks[file_name] = checker

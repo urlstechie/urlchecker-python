@@ -13,6 +13,7 @@ Referenced versions in headers are tagged on Github, in parentheses are for pypi
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
  - csv save uses relative paths (0.0.19)
+ - adding white_listed to print of results
  - refactor check.py to be UrlChecker class, save with filename (0.0.18)
  - default for files needs to be empty string (not None) (0.0.17)
  - bug with incorrect return code on fail, add files flag (0.0.16)
