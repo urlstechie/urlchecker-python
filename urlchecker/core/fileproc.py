@@ -127,7 +127,7 @@ def collect_links_from_file(file_path, unique=True):
     urls = [url.strip("\\n") if url.endswith("\\n") else url for url in urls]
 
     # filter urls including {}
-    urls = [url for url in urls if not bool(re.search("(\\{[a-z0-9.]*})", url))]
+    urls = [url for url in urls if not re.search("(\\{[a-z0-9.]*})", url)]
 
     # Do we only want unique links?
     if unique:
