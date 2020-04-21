@@ -33,17 +33,17 @@ def test_check_urls(file):
     assert len(checker.all) == len(urls)
 
     # Ensure one not whitelisted is failed
-    assert "https://github.com/SuperKogito/URLs-checker/issues/4" in checker.failed
+    assert "https://none.html" in checker.failed
 
     assert checker.print_all
 
     # Run again with whitelist of exact urls
     checker = UrlCheckResult(
-        white_listed_urls=["https://github.com/SuperKogito/URLs-checker/issues/4"]
+        white_listed_urls=["https://none.html"]
     )
     checker.check_urls(urls)
     assert (
-        "https://github.com/SuperKogito/URLs-checker/issues/4" in checker.white_listed
+        "https://none.html" in checker.white_listed
     )
 
     # Run again with whitelist of patterns
