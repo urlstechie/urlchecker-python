@@ -129,11 +129,18 @@ def collect_links_from_file(file_path, unique=True):
     # filter urls including {}
     urls = [url for url in urls if not re.search("(\\{[a-z0-9.]*})", url)]
 
+    # Final cleaning of URLS
+    final = []
+    for url in urls:
+        match = re.match(urlmarker.FINAL_REGEX, url)
+        if match:
+            final.append(url[match.start() : match.end()])
+
     # Do we only want unique links?
     if unique:
-        return list(set(urls))
+        return list(set(final))
 
-    return urls
+    return final
 
 
 def remove_empty(file_list):

@@ -119,7 +119,7 @@ class UrlChecker:
                 # Derive the relative path based on self.path, or relative to run
                 if relative_paths:
                     if self.path:
-                        file_name = re.sub(self.path, "", file_name).strip('/')
+                        file_name = re.sub(self.path, "", file_name).strip("/")
                     else:
                         file_name = os.path.relpath(file_name)
 
