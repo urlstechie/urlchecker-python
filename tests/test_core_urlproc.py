@@ -35,8 +35,6 @@ def test_check_urls(file):
     # Ensure one not whitelisted is failed
     assert "https://none.html" in checker.failed
 
-    assert checker.print_all
-
     # Run again with whitelist of exact urls
     checker = UrlCheckResult(
         white_listed_urls=["https://none.html"]
@@ -62,7 +60,11 @@ def test_get_user_agent():
     assert isinstance(user_agent, str)
 
 
-def test_check_response_status_code():
+@pytest.mark.parametrize(
+    "print_level", ["all", "files-with-urls-only",
+                    "fails-only", "success-only", "none"]
+)
+def test_check_response_status_code(print_level):
     class failedResponse:
         status_code = 500
 
@@ -71,7 +73,7 @@ def test_check_response_status_code():
 
     # Any failure returns True (indicating a retry is needed)
     assert not check_response_status_code(
-        "https://this-should-succeed", successResponse
+        "https://this-should-succeed", successResponse, print_level
     )
-    assert check_response_status_code("https://this-should-fail", failedResponse)
-    assert check_response_status_code("https://this-should-also-fail", None)
+    assert check_response_status_code("https://this-should-fail", failedResponse, print_level)
+    assert check_response_status_code("https://this-should-also-fail", None, print_level)

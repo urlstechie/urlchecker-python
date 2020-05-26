@@ -62,7 +62,7 @@ def main(args, extra):
     print("        cleanup: %s" % args.cleanup)
     print("     file types: %s" % file_types)
     print("          files: %s" % files)
-    print("      print all: %s" % (not args.no_print))
+    print("    print_level: %s" % args.print_level)
     print(" url whitetlist: %s" % white_listed_urls)
     print("   url patterns: %s" % white_listed_patterns)
     print("  file patterns: %s" % white_listed_files)
@@ -77,7 +77,7 @@ def main(args, extra):
         file_types=file_types,
         include_patterns=files,
         white_listed_files=white_listed_files,
-        print_all=not args.no_print,
+        print_level=args.print_level,
     )
     check_results = checker.run(
         white_listed_urls=white_listed_urls,

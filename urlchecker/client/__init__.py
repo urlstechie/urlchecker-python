@@ -86,13 +86,6 @@ def get_parser():
     )
 
     check.add_argument(
-        "--no-print",
-        help="Skip printing results to the screen (defaults to printing to console).",
-        default=False,
-        action="store_true",
-    )
-
-    check.add_argument(
         "--file-types",
         dest="file_types",
         help="comma separated list of file extensions to check (defaults to .md,.py)",
@@ -105,6 +98,17 @@ def get_parser():
         help="comma separated list of exact files or patterns to check.",
         default="",
     )
+
+    # Printing
+
+    check.add_argument(
+        "--print-level",
+        dest="print_level",
+        help="print levels: all, files-with-urls-only, fails-only, success-only, none",
+        choices=["all", "files-with-urls-only", "fails-only", "success-only", "none"],
+        default="all",
+    )
+
 
     # White listing
 
@@ -158,7 +162,7 @@ def main():
     parser = get_parser()
 
     def help(return_code=0):
-        """print help, including the software version and active client 
+        """print help, including the software version and active client
            and exit with return code.
         """
 

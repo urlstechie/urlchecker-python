@@ -7,11 +7,11 @@ import configparser
 
 @pytest.mark.parametrize("config_fname", ["./tests/_local_test_config.conf"])
 @pytest.mark.parametrize("cleanup", [False, True])
-@pytest.mark.parametrize("print_all", [False, True])
+@pytest.mark.parametrize("print_level", ["all", "files-with-urls-only", "fails-only", "success-only", "none"])
 @pytest.mark.parametrize("force_pass", [False, True])
 @pytest.mark.parametrize("rcount", [1, 3])
 @pytest.mark.parametrize("timeout", [3, 5])
-def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, timeout):
+def test_client_general(config_fname, cleanup, print_level, force_pass, rcount, timeout):
 
     # init config parser
     config = configparser.ConfigParser()
@@ -33,6 +33,8 @@ def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, ti
         file_types,
         "--white-listed-files",
         "conf.py",
+        "--print_level",
+        print_level,
         "--white-listed-urls",
         white_listed_urls,
         "--white-listed_patterns",
@@ -46,8 +48,7 @@ def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, ti
     # Add boolean arguments
     if cleanup:
         cmd.append("--cleanup")
-    if print_all:
-        cmd.append("--print-all")
+
     if force_pass:
         cmd.append("--force-pass")
 

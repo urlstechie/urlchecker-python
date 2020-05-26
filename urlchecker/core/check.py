@@ -25,7 +25,7 @@ class UrlChecker:
         path=None,
         file_types=None,
         white_listed_files=None,
-        print_all=True,
+        print_level=None,
         include_patterns=None,
     ):
         """
@@ -35,7 +35,7 @@ class UrlChecker:
 
         Args:
             - path                   (str) : full path to the root folder to check. If not defined, no file_paths are parsed
-            - print_all              (str) : control var for whether to print all checked file names or only the ones with urls.
+            - print_level            (str) : control the printing level.
             - white_listed_files    (list) : list of white-listed files and patterns for flies.
             - include_patterns      (list) : list of files and patterns to check.
         """
@@ -46,7 +46,7 @@ class UrlChecker:
         # Save run parameters
         self.white_listed_files = white_listed_files or []
         self.include_patterns = include_patterns or []
-        self.print_all = print_all
+        self.print_level = print_level
         self.path = path
         self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
@@ -166,7 +166,7 @@ class UrlChecker:
                 file_name=file_name,
                 white_listed_patterns=white_listed_patterns,
                 white_listed_urls=white_listed_urls,
-                print_all=self.print_all,
+                print_level=self.print_level,
             )
 
             # Check the urls
