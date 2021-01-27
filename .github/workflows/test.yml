@@ -43,6 +43,7 @@ jobs:
       - name: Codecov
         env:
           CODADY_PROJECT_TOKEN: ${{ secrets.CODADY_PROJECT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate testing
