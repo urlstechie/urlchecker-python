@@ -39,15 +39,3 @@ jobs:
           pip install .
           pip install -r tests/test-requirements.txt
           pytest -vs -x --cov=./ tests/test_*.py
-
-      - name: Codecov
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export PATH="/usr/share/miniconda/bin:$PATH"
-          source activate testing
-          # codecov
-          coveralls
-          coverage xml
-          python-codacy-coverage -r coverage.xml
