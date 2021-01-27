@@ -100,9 +100,14 @@ check an entire directory. Let's clone and check the directory of one of the
 maintainers:
 
 ```bash
-git clone https://github.com/SuperKogito/SuperKogito.github.io.git
-cd SuperKogito.github.io
-urlchecker check .
+$ git clone https://github.com/SuperKogito/SuperKogito.github.io.git
+$ cd SuperKogito.github.io
+```
+
+and run the simplest command to check the present working directory (.).
+
+```bash
+$ urlchecker check .
 
 $ urlchecker check .
   original path: .
@@ -157,6 +162,22 @@ https://stackoverflow.com/questions/49197916/how-to-profile-cpu-usage-of-a-pytho
 
 Done. All URLS passed.
 ```
+
+If we want to filter down file types (for example, to only check different file
+types) we might do any of the following:
+
+```bash
+# Check only html files
+urlchecker check --file-types *.html .
+
+# Check hidden flies
+urlchecker check --file-types .* .
+
+# Check hidden files and html files
+urlchecker check --file-types .*,*.html .
+```
+
+By default, the urlchecker checks python and markdown.
 
 ### Check GitHub Repository
 

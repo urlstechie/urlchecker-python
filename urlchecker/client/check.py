@@ -1,6 +1,6 @@
 """
 client/github.py: entrypoint for interaction with a GitHub repostiory.
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 """
 
 import re
@@ -11,7 +11,7 @@ import logging
 from urlchecker.main.github import clone_repo, delete_repo
 from urlchecker.core.fileproc import remove_empty
 from urlchecker.core.check import UrlChecker
-from urlchecker.logger import print_success, print_failure
+from urlchecker.logger import print_failure
 
 logger = logging.getLogger("urlchecker")
 

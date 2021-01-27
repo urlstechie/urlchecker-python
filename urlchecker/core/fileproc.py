@@ -1,23 +1,24 @@
 """
 
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-import csv
-import os
+import fnmatch
 import re
-import sys
+import os
 from urlchecker.core import urlmarker
 
 
 def check_file_type(file_path, file_types):
     """
     Check file type to assert that only file with certain predefined extensions
-    are checked.
+    are checked. We currently support an extension verbatim, or regular
+    expression to match the filename. For example, .* matches all hidden files,
+    and *.html matches an html file.
 
     Args:
         - file_path   (str) : path to file.
@@ -28,6 +29,10 @@ def check_file_type(file_path, file_types):
     """
     ftype = "." + file_path.split(".")[-1]
     if ftype in file_types:
+        return True
+
+    # The user can also provide a regular expression
+    if any(fnmatch.fnmatch(file_path, x) for x in file_types):
         return True
 
     # default return

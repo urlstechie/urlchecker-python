@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -17,7 +17,7 @@ from urlchecker.core.urlproc import UrlCheckResult
 
 class UrlChecker:
     """The UrlChecker can be instantiated by a client, and then used
-       to parse files, extract urls, and save results.
+    to parse files, extract urls, and save results.
     """
 
     def __init__(
@@ -124,7 +124,10 @@ class UrlChecker:
                         file_name = os.path.relpath(file_name)
 
                 [writer.writerow([url, "failed", file_name]) for url in result.failed]
-                [writer.writerow([url, "white_listed", file_name]) for url in result.white_listed]
+                [
+                    writer.writerow([url, "white_listed", file_name])
+                    for url in result.white_listed
+                ]
                 [writer.writerow([url, "passed", file_name]) for url in result.passed]
 
         return file_path

@@ -12,6 +12,25 @@ from urlchecker.core.fileproc import (
 
 @pytest.mark.parametrize(
     "file_path",
+    [".filename"],
+)
+@pytest.mark.parametrize("file_types", [[".*"]])
+def test_check_file_type(file_path, file_types):
+    """
+    test pattern matching
+    """
+    output = check_file_type(file_path, file_types)
+    if not output:
+        raise AssertionError
+
+    # check for false
+    output = check_file_type("nonesense" + file_path, file_types)
+    if output:
+        raise AssertionError
+
+
+@pytest.mark.parametrize(
+    "file_path",
     ["tests/test_files/sample_test_file.md", "tests/test_files/sample_test_file.py"],
 )
 @pytest.mark.parametrize("file_types", [[".md", ".py"]])
