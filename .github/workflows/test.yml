@@ -44,6 +44,8 @@ jobs:
         env:
           CODADY_PROJECT_TOKEN: ${{ secrets.CODADY_PROJECT_TOKEN }}
         run: |
+          export PATH="/usr/share/miniconda/bin:$PATH"
+          source activate testing
           codecov
           coveralls
           coverage xml
