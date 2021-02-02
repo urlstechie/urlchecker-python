@@ -171,13 +171,15 @@ types) we might do any of the following:
 urlchecker check --file-types *.html .
 
 # Check hidden flies
-urlchecker check --file-types .* .
+urlchecker check --file-types ".*" .
 
 # Check hidden files and html files
-urlchecker check --file-types .*,*.html .
+urlchecker check --file-types ".*,*.html" .
 ```
 
-By default, the urlchecker checks python and markdown.
+Note that while some patterns will work without quotes, it's recommended for most
+to use them because if the shell expands any part of the pattern, it will not work as
+expected. By default, the urlchecker checks python and markdown.
 
 ### Check GitHub Repository
 
