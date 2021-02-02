@@ -38,4 +38,4 @@ jobs:
           source activate testing
           pip install .
           pip install -r tests/test-requirements.txt
-          pytest -vs -x --cov=./ tests/test_*.py
+          pytest -vs -x --cov=./urlchecker tests/test_*.py
