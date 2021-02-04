@@ -27,7 +27,7 @@ before_script:
 
 # command to run tests
 script:
-  - pytest -vs -x --cov=./ tests/test_*.py
+  - pytest -vs -x --cov=./urlchecker tests/test_*.py
 
 after_success:
   - codecov

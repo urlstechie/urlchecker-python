@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.  
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -11,7 +11,7 @@ import os
 import time
 import random
 import requests
-from urlchecker.core import urlmarker, fileproc
+from urlchecker.core import fileproc
 from urlchecker.core.whitelist import white_listed
 from urlchecker.logger import print_success, print_failure
 
@@ -92,8 +92,8 @@ def get_user_agent():
 
 class UrlCheckResult:
     """A UrlCheckResult is a basic class to hold a result for a filename.
-       It includes passed, failed, and all urls for a particular file,
-       along with taking the filename and parsing it for urls.
+    It includes passed, failed, and all urls for a particular file,
+    along with taking the filename and parsing it for urls.
     """
 
     def __init__(
@@ -124,7 +124,7 @@ class UrlCheckResult:
     @property
     def all(self):
         """All returns all urls found in a file name, including those that
-           passed and failed.
+        passed and failed.
         """
         return self.passed + self.failed + self.white_listed
 
@@ -134,7 +134,7 @@ class UrlCheckResult:
 
     def extract_urls(self):
         """Typically on init, use the provided white list patterns and urls to
-           extract a list of urls for the given filename.
+        extract a list of urls for the given filename.
         """
         if not self.file_name or not os.path.exists(self.file_name):
             print(
@@ -195,9 +195,6 @@ class UrlCheckResult:
 
             # With retry, increase timeout by a second
             pause = timeout
-
-            # get url termination
-            url_termination = "." + os.path.basename(url).split(".")[-1]
 
             # No need to test the same URL twice
             if url in seen:

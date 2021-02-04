@@ -8,7 +8,8 @@ from urlchecker.core.urlproc import (
 
 
 @pytest.mark.parametrize(
-    "file", ["tests/test_files/sample_test_file.md"],
+    "file",
+    ["tests/test_files/sample_test_file.md"],
 )
 def test_check_urls(file):
     """
@@ -38,13 +39,9 @@ def test_check_urls(file):
     assert checker.print_all
 
     # Run again with whitelist of exact urls
-    checker = UrlCheckResult(
-        white_listed_urls=["https://none.html"]
-    )
+    checker = UrlCheckResult(white_listed_urls=["https://none.html"])
     checker.check_urls(urls)
-    assert (
-        "https://none.html" in checker.white_listed
-    )
+    assert "https://none.html" in checker.white_listed
 
     # Run again with whitelist of patterns
     checker = UrlCheckResult(

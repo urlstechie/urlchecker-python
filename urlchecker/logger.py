@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.  
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -35,7 +35,7 @@ def get_logger(name="urlchecker", level=logging.INFO):
     Get a default logger for the urlchecker library, meaning
     that we use name "urlchecker" and use the default logging
     level INFO
- 
+
     Parameters:
       - name: the name for the logger (defaults to urlchecker)
       - level: the logging.<level> to set with setLevel()

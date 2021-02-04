@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches_ignore: []
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup black environment
+        run: conda create --quiet --name black pyflakes
+
+      - name: Check formatting with black
+        run: |
+          export PATH="/usr/share/miniconda/bin:$PATH"
+          source activate black
+          pip install black
+          black --check urlchecker
+
+
+  testing:
+    needs: formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup testing environment
+        run: conda create --quiet --name testing pytest
+
+      - name: Test 
+        run: |
+          export PATH="/usr/share/miniconda/bin:$PATH"
+          source activate testing
+          pip install .
+          pip install -r tests/test-requirements.txt
+          pytest -vs -x --cov=./urlchecker tests/test_*.py

@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.  
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -10,9 +10,6 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import os
 import sys
 import subprocess
-import tempfile
-from urlchecker.core import urlproc
-from urlchecker.core import fileproc
 from urlchecker.main.utils import get_tmpdir
 
 

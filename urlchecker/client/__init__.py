@@ -2,7 +2,7 @@
 
 """
 
-Copyright (c) 2020 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -10,25 +10,15 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 
-import os
 import sys
 import argparse
 import urlchecker
-import logging
 
 
 def get_parser():
     parser = argparse.ArgumentParser(description="urlchecker python")
 
     # Global Variables
-    parser.add_argument(
-        "--debug",
-        dest="debug",
-        help="use verbose logging to debug.",
-        default=False,
-        action="store_true",
-    )
-
     parser.add_argument(
         "--version",
         dest="version",
@@ -56,7 +46,8 @@ def get_parser():
 
     # supports a clone URL or a path
     check.add_argument(
-        "path", help="the local path or GitHub repository to clone and check",
+        "path",
+        help="the local path or GitHub repository to clone and check",
     )
 
     check.add_argument(
@@ -129,7 +120,9 @@ def get_parser():
     # Saving
 
     check.add_argument(
-        "--save", help="Path to a csv file to save results to.", default=None,
+        "--save",
+        help="Path to a csv file to save results to.",
+        default=None,
     )
 
     # Timeouts
@@ -152,14 +145,13 @@ def get_parser():
 
 
 def main():
-    """main is the entrypoint urlchecker-python.
-    """
+    """main is the entrypoint urlchecker-python."""
 
     parser = get_parser()
 
     def help(return_code=0):
-        """print help, including the software version and active client 
-           and exit with return code.
+        """print help, including the software version and active client
+        and exit with return code.
         """
 
         version = urlchecker.__version__
