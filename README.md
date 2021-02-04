@@ -109,7 +109,6 @@ and run the simplest command to check the present working directory (.).
 ```bash
 $ urlchecker check .
 
-$ urlchecker check .
   original path: .
      final path: /tmp/SuperKogito.github.io
       subfolder: None
@@ -545,4 +544,3 @@ be fairly straight forward to always find what you are looking for.
 
 If you need help, or want to suggest a project for the organization,
 please [open an issue](https://github.com/urlstechie/urlchecker-python)
-
