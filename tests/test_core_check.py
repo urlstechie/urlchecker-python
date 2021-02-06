@@ -18,21 +18,21 @@ from urlchecker.core.check import UrlChecker
 )
 @pytest.mark.parametrize("print_all", [False, True])
 @pytest.mark.parametrize(
-    "white_listed_urls", [["https://github.com/SuperKogito/SuperKogito.github.io"]]
+    "exclude_urls", [["https://github.com/SuperKogito/SuperKogito.github.io"]]
 )
 @pytest.mark.parametrize(
-    "white_listed_patterns",
+    "exclude_patterns",
     [[], ["https://github.com/SuperKogito/SuperKogito.github.io"]],
 )
-def test_check_files(file_paths, print_all, white_listed_urls, white_listed_patterns):
+def test_check_files(file_paths, print_all, exclude_urls, exclude_patterns):
     """
     test check repo function.
     """
     checker = UrlChecker(print_all=print_all)
     checker.run(
         file_paths,
-        white_listed_urls=white_listed_urls,
-        white_listed_patterns=white_listed_patterns,
+        exclude_urls=exclude_urls,
+        exclude_patterns=exclude_patterns,
         retry_count=1,
     )
 
@@ -48,8 +48,8 @@ def test_locally(local_folder_path, config_fname):
     git_path = local_folder_path
     file_types = config["DEFAULT"]["file_types_test_values"].split(",")
     print_all = True
-    white_listed_urls = config["DEFAULT"]["white_listed_test_urls"].split(",")
-    white_listed_patterns = config["DEFAULT"]["white_listed__test_patterns"].split(",")
+    exclude_urls = config["DEFAULT"]["exclude_test_urls"].split(",")
+    exclude_patterns = config["DEFAULT"]["exclude_test_patterns"].split(",")
 
     # get all file paths
     file_paths = get_file_paths(git_path, file_types)
@@ -58,8 +58,8 @@ def test_locally(local_folder_path, config_fname):
     checker = UrlChecker(print_all=print_all)
     checker.run(
         file_paths=file_paths,
-        white_listed_urls=white_listed_urls,
-        white_listed_patterns=white_listed_patterns,
+        exclude_urls=exclude_urls,
+        exclude_patterns=exclude_patterns,
         retry_count=1,
     )
     print("Done.")
@@ -72,11 +72,11 @@ def test_check_run_save(tmp_path, retry_count):
     git_path = "https://github.com/urlstechie/urlchecker-test-repo"
     file_types = [".py", ".md"]
     print_all = True
-    white_listed_urls = [
+    exclude_urls = [
         "https://superkogito.github.io/figures/fig2.html",
         "https://superkogito.github.io/figures/fig4.html",
     ]
-    white_listed_patterns = ["https://superkogito.github.io/tables"]
+    exclude_patterns = ["https://superkogito.github.io/tables"]
     timeout = 1
     force_pass = False
 
@@ -91,8 +91,8 @@ def test_check_run_save(tmp_path, retry_count):
     checker = UrlChecker(print_all=print_all)
     check_results = checker.run(
         file_paths=file_paths,
-        white_listed_urls=white_listed_urls,
-        white_listed_patterns=white_listed_patterns,
+        exclude_urls=exclude_urls,
+        exclude_patterns=exclude_patterns,
         retry_count=retry_count,
         timeout=timeout,
     )

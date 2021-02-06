@@ -24,27 +24,27 @@ class UrlChecker:
         self,
         path=None,
         file_types=None,
-        white_listed_files=None,
+        exclude_files=None,
         print_all=True,
         include_patterns=None,
     ):
         """
         initiate a url checker. At init we take in preferences for
-        file extensions, white listing preferences, and other initial
+        file extensions, excluding preferences, and other initial
         parameters to run a url check.
 
         Args:
-            - path                   (str) : full path to the root folder to check. If not defined, no file_paths are parsed
-            - print_all              (str) : control var for whether to print all checked file names or only the ones with urls.
-            - white_listed_files    (list) : list of white-listed files and patterns for flies.
-            - include_patterns      (list) : list of files and patterns to check.
+            - path             (str) : full path to the root folder to check. If not defined, no file_paths are parsed
+            - print_all        (str) : control var for whether to print all checked file names or only the ones with urls.
+            - exclude_files    (list) : list of excluded files and patterns for flies.
+            - include_patterns (list) : list of files and patterns to check.
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
-        self.results = {"passed": set(), "failed": set(), "white_listed": set()}
+        self.results = {"passed": set(), "failed": set(), "excluded": set()}
         self.checks = {}
 
         # Save run parameters
-        self.white_listed_files = white_listed_files or []
+        self.exclude_files = exclude_files or []
         self.include_patterns = include_patterns or []
         self.print_all = print_all
         self.path = path
@@ -62,7 +62,7 @@ class UrlChecker:
                 include_patterns=self.include_patterns,
                 base_path=path,
                 file_types=self.file_types,
-                white_listed_files=self.white_listed_files,
+                exclude_files=self.exclude_files,
             )
 
     def __str__(self):
@@ -125,8 +125,8 @@ class UrlChecker:
 
                 [writer.writerow([url, "failed", file_name]) for url in result.failed]
                 [
-                    writer.writerow([url, "white_listed", file_name])
-                    for url in result.white_listed
+                    writer.writerow([url, "excluded", file_name])
+                    for url in result.excluded
                 ]
                 [writer.writerow([url, "passed", file_name]) for url in result.passed]
 
@@ -135,31 +135,31 @@ class UrlChecker:
     def run(
         self,
         file_paths=None,
-        white_listed_patterns=None,
-        white_listed_urls=None,
+        exclude_patterns=None,
+        exclude_urls=None,
         retry_count=2,
         timeout=5,
     ):
         """
-        Run the url checker given a path, a whitelist for each of url and file
+        Run the url checker given a path, excluded patterns for urls/files
         name paths or patterns, and a number of retries and timeouts.
         This provides a wrapper to check_files, which expects an already
         determined listing of files.
 
         Args:
-            - file_paths            (list) : list of file paths to run over, defaults to those generated on init.
-            - white_listed_urls     (list) : list of white-listed urls.
-            - white_listed_patterns (list) : list of white-listed patterns for urls.
-            - retry_count            (int) : number of retries on failed first check. Default=2.
-            - timeout                (int) : timeout to use when waiting on check feedback. Default=5.
+            - file_paths       (list) : list of file paths to run over, defaults to those generated on init.
+            - exclude_urls     (list) : list of excluded urls.
+            - exclude_patterns (list) : list of excluded patterns for urls.
+            - retry_count      (int) : number of retries on failed first check. Default=2.
+            - timeout          (int) : timeout to use when waiting on check feedback. Default=5.
 
         Returns: dictionary with each of list of urls for "failed" and "passed."
         """
         file_paths = file_paths or self.file_paths
 
-        # Allow for user to skip specifying white listed options
-        white_listed_urls = white_listed_urls or []
-        white_listed_patterns = white_listed_patterns or []
+        # Allow for user to skip specifying excluded options
+        exclude_urls = exclude_urls or []
+        exclude_patterns = exclude_patterns or []
 
         # loop through files files
         for file_name in file_paths:
@@ -167,8 +167,8 @@ class UrlChecker:
             # Instantiate a checker to extract urls
             checker = UrlCheckResult(
                 file_name=file_name,
-                white_listed_patterns=white_listed_patterns,
-                white_listed_urls=white_listed_urls,
+                exclude_patterns=exclude_patterns,
+                exclude_urls=exclude_urls,
                 print_all=self.print_all,
             )
 
@@ -178,7 +178,7 @@ class UrlChecker:
             # Update flattened results
             self.results["failed"].update(checker.failed)
             self.results["passed"].update(checker.passed)
-            self.results["white_listed"].update(checker.white_listed)
+            self.results["excluded"].update(checker.excluded)
 
             # Save the checker in the lookup
             self.checks[file_name] = checker

@@ -12,7 +12,7 @@ import time
 import random
 import requests
 from urlchecker.core import fileproc
-from urlchecker.core.whitelist import white_listed
+from urlchecker.core.exclude import excluded
 from urlchecker.logger import print_success, print_failure
 
 
@@ -99,18 +99,18 @@ class UrlCheckResult:
     def __init__(
         self,
         file_name=None,
-        white_listed_patterns=None,
-        white_listed_urls=None,
+        exclude_patterns=None,
+        exclude_urls=None,
         print_all=True,
     ):
         self.file_name = file_name
         self.print_all = print_all
         self.passed = []
         self.failed = []
-        self.white_listed = []
+        self.excluded = []
         self.urls = []
-        self.white_listed_patterns = white_listed_patterns or []
-        self.white_listed_urls = white_listed_urls or []
+        self.exclude_patterns = exclude_patterns or []
+        self.exclude_urls = exclude_urls or []
         self.extract_urls()
 
     def __str__(self):
@@ -126,14 +126,14 @@ class UrlCheckResult:
         """All returns all urls found in a file name, including those that
         passed and failed.
         """
-        return self.passed + self.failed + self.white_listed
+        return self.passed + self.failed + self.excluded
 
     @property
     def count(self):
         return len(self.all)
 
     def extract_urls(self):
-        """Typically on init, use the provided white list patterns and urls to
+        """Typically on init, use the provided exclude patterns and urls to
         extract a list of urls for the given filename.
         """
         if not self.file_name or not os.path.exists(self.file_name):
@@ -156,14 +156,14 @@ class UrlCheckResult:
         """
         urls = urls or self.urls
 
-        # eliminate white listed urls and white listed white listed patterns
-        if self.white_listed_urls or self.white_listed_patterns:
-            self.white_listed = [
+        # eliminate excluded urls and patterns
+        if self.exclude_urls or self.exclude_patterns:
+            self.excluded = [
                 url
                 for url in urls
-                if white_listed(url, self.white_listed_urls, self.white_listed_patterns)
+                if excluded(url, self.exclude_urls, self.exclude_patterns)
             ]
-            urls = list(set(urls).difference(set(self.white_listed)))
+            urls = list(set(urls).difference(set(self.excluded)))
 
         # if no urls are found, mention it if required
         if not urls:

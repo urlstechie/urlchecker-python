@@ -20,8 +20,8 @@ def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, ti
     # init env variables
     path = config["DEFAULT"]["git_path_test_value"]
     file_types = config["DEFAULT"]["file_types_test_values"]
-    white_listed_urls = config["DEFAULT"]["white_listed_test_urls"]
-    white_listed_patterns = config["DEFAULT"]["white_listed__test_patterns"]
+    exclude_urls = config["DEFAULT"]["exclude_test_urls"]
+    exclude_patterns = config["DEFAULT"]["exclude_test_patterns"]
 
     # Generate command
     cmd = [
@@ -31,12 +31,12 @@ def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, ti
         "test_files",
         "--file-types",
         file_types,
-        "--white-listed-files",
+        "--exclude-files",
         "conf.py",
-        "--white-listed-urls",
-        white_listed_urls,
-        "--white-listed_patterns",
-        white_listed_patterns,
+        "--exclude-urls",
+        exclude_urls,
+        "--exclude_patterns",
+        exclude_patterns,
         "--retry-count",
         str(rcount),
         "--timeout",
@@ -68,8 +68,8 @@ def test_client_save(save):
     # init env variables
     path = config["DEFAULT"]["git_path_test_value"]
     file_types = config["DEFAULT"]["file_types_test_values"]
-    white_listed_urls = config["DEFAULT"]["white_listed_test_urls"]
-    white_listed_patterns = config["DEFAULT"]["white_listed__test_patterns"]
+    exclude_urls = config["DEFAULT"]["exclude_test_urls"]
+    exclude_patterns = config["DEFAULT"]["exclude_test_patterns"]
 
     # Generate command
     cmd = [
@@ -79,12 +79,12 @@ def test_client_save(save):
         "test_files",
         "--file-types",
         file_types,
-        "--white-listed-files",
+        "--exclude-files",
         "conf.py",
-        "--white-listed-urls",
-        white_listed_urls,
-        "--white-listed_patterns",
-        white_listed_patterns,
+        "--exclude-urls",
+        exclude_urls,
+        "--exclude_patterns",
+        exclude_patterns,
     ]
 
     # Write to file

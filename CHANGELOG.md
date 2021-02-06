@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - updating "whitelist" arguments to exclude (0.0.22)
  - adding support for dotfiles for a file type (0.0.21)
  - final regexp needs to again parse away { or } (0.0.20)
  - csv save uses relative paths (0.0.19)

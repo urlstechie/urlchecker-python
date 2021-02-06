@@ -97,23 +97,23 @@ def get_parser():
         default="",
     )
 
-    # White listing
+    # Exlude patterns (previously whitelisting)
 
     check.add_argument(
-        "--white-listed-urls",
-        help="comma separated list of white listed urls (no spaces)",
+        "--exclude-urls",
+        help="comma separated links to exclude (no spaces)",
         default="",
     )
 
     check.add_argument(
-        "--white-listed-patterns",
-        help="comma separated list of white listed patterns for urls (no spaces)",
+        "--exclude-patterns",
+        help="comma separated list of patterns to exclude (no spaces)",
         default="",
     )
 
     check.add_argument(
-        "--white-listed-files",
-        help="comma separated list of white listed files and patterns for files (no spaces)",
+        "--exclude-files",
+        help="comma separated list of files and patterns to exclude (no spaces)",
         default="",
     )
 
