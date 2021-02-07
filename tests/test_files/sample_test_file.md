@@ -26,12 +26,12 @@ The following is a list of test urls to extract.
 - [test email 6]("skogito@github.io)
 - [test email 7]("mailto:superkogito%40gmail.com")
 
-# white-listed URLs
-The following is a list of white-listed urls to ignore.
- - [white-listed url 1](https://github.com/SuperKogito/URLs-checker/issues/2)
- - [white-listed url 2](https://github.com/SuperKogito/URLs-checker/issues/3)
+# excluded URLs
+The following is a list of excluded urls to ignore.
+ - [excluded url 1](https://github.com/SuperKogito/URLs-checker/issues/2)
+ - [excluded url 2](https://github.com/SuperKogito/URLs-checker/issues/3)
 
-# white-listed URLs pattern
-The following is a list of white-listed patterns to ignore.
- - [white-listed urls pattern 1](https://github.com/SuperKogito/Voice-based-gender-recognition/issues)
- - [white-listed urls pattern 2](https://img.shields.io/)
+# excluded URLs pattern
+The following is a list of excluded patterns to ignore.
+ - [excluded urls pattern 1](https://github.com/SuperKogito/Voice-based-gender-recognition/issues)
+ - [excluded urls pattern 2](https://img.shields.io/)

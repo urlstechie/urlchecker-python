@@ -21,15 +21,15 @@ A detailed documentation of the code is available under [urlchecker-python.readt
 You can install the urlchecker from [pypi](https://pypi.org/project/urlchecker):
 
 ```bash
-pip install urlchecker
+$ pip install urlchecker
 ```
 
 or install from the repository directly:
 
 ```bash
-git clone https://github.com/urlstechie/urlchecker-python.git
-cd urlchecker-python
-python setup.py install
+$ git clone https://github.com/urlstechie/urlchecker-python.git
+$ cd urlchecker-python
+$ python setup.py install
 ```
 
 Installation will place a binary, `urlchecker` in your Python path.
@@ -49,12 +49,10 @@ for files. In this case, you can use urlchecker check:
 $ urlchecker check --help
 usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup]
                         [--force-pass] [--no-print] [--file-types FILE_TYPES]
-                        [--files FILES]
-                        [--white-listed-urls WHITE_LISTED_URLS]
-                        [--white-listed-patterns WHITE_LISTED_PATTERNS]
-                        [--white-listed-files WHITE_LISTED_FILES]
-                        [--save SAVE] [--retry-count RETRY_COUNT]
-                        [--timeout TIMEOUT]
+                        [--files FILES] [--exclude-urls EXCLUDE_URLS]
+                        [--exclude-patterns EXCLUDE_PATTERNS]
+                        [--exclude-files EXCLUDE_FILES] [--save SAVE]
+                        [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
                         path
 
 positional arguments:
@@ -79,14 +77,14 @@ optional arguments:
                         (defaults to .md,.py)
   --files FILES         comma separated list of exact files or patterns to
                         check.
-  --white-listed-urls WHITE_LISTED_URLS
-                        comma separated list of white listed urls (no spaces)
-  --white-listed-patterns WHITE_LISTED_PATTERNS
-                        comma separated list of white listed patterns for urls
+  --exclude-urls EXCLUDE_URLS
+                        comma separated links to exclude (no spaces)
+  --exclude-patterns EXCLUDE_PATTERNS
+                        comma separated list of patterns to exclude (no
+                        spaces)
+  --exclude-files EXCLUDE_FILES
+                        comma separated list of files and patterns to exclude
                         (no spaces)
-  --white-listed-files WHITE_LISTED_FILES
-                        comma separated list of white listed files and
-                        patterns for files (no spaces)
   --save SAVE           Path to a csv file to save results to.
   --retry-count RETRY_COUNT
                         retry count upon failure (defaults to 2, one retry).
@@ -96,73 +94,135 @@ optional arguments:
 
 You have a lot of flexibility to define patterns of urls or files to skip,
 along with the number of retries or timeout (seconds). The most basic usage will
-check an entire directory. Let's clone and check the directory of one of the
-maintainers:
+check an entire directory. Let's clone and check the urlchecker action:
 
 ```bash
-$ git clone https://github.com/SuperKogito/SuperKogito.github.io.git
-$ cd SuperKogito.github.io
+$ git clone https://github.com/urlstechie/urlchecker-action.git
+$ cd urchecker-action
 ```
 
 and run the simplest command to check the present working directory (.).
 
 ```bash
 $ urlchecker check .
+           original path: .
+              final path: /tmp/urlchecker-action
+               subfolder: None
+                  branch: master
+                 cleanup: False
+              file types: ['.md', '.py']
+                   files: []
+               print all: True
+           urls excluded: []
+   url patterns excluded: []
+  file patterns excluded: []
+              force pass: False
+             retry count: 2
+                    save: None
+                 timeout: 5
 
-  original path: .
-     final path: /tmp/SuperKogito.github.io
-      subfolder: None
-         branch: master
-        cleanup: False
-     file types: ['.md', '.py']
-      print all: True
- url whitetlist: []
-   url patterns: []
-  file patterns: []
-     force pass: False
-    retry count: 2
-        timeout: 5
+ /tmp/urlchecker-action/README.md 
+ --------------------------------
+https://github.com/urlstechie/urlchecker-action/blob/master/LICENSE
+https://github.com/r-hub/docs/blob/bc1eac71206f7cb96ca00148dcf3b46c6d25ada4/.github/workflows/pr.yml
+https://img.shields.io/static/v1?label=Marketplace&message=urlchecker-action&color=blue?style=flat&logo=github
+https://github.com/rseng/awesome-rseng
+https://github.com/rseng/awesome-rseng/blob/5f5cb78f8392cf10aec2f3952b305ae9611029c2/.github/workflows/urlchecker.yml
+https://github.com/HPC-buildtest/buildtest-framework/actions?query=workflow%3A%22Check+URLs%22
+https://www.codefactor.io/repository/github/urlstechie/urlchecker-action/badge
+https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks
+https://github.com/urlstechie/urlchecker-action/issues
+https://github.com/USRSE/usrse.github.io
+https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks/actions?query=workflow%3ACommands
+https://github.com/USRSE/usrse.github.io/blob/abcbed5f5703e0d46edb9e8850eea8bb623e3c1c/.github/workflows/urlchecker.yml
+https://github.com/urlstechie/urlchecker-action/releases
+https://img.shields.io/badge/license-MIT-brightgreen
+https://github.com/r-hub/docs/actions?query=workflow%3ACommands
+https://github.com/rseng/awesome-rseng/actions?query=workflow%3AURLChecker
+https://github.com/buildtesters/buildtest
+https://github.com/r-hub/docs
+https://www.codefactor.io/repository/github/urlstechie/urlchecker-action
+https://github.com/urlstechie/URLs-checker-test-repo
+https://github.com/marketplace/actions/urlchecker-action
+https://github.com/actions/checkout
+https://github.com/SuperKogito/URLs-checker/issues/1,https://github.com/SuperKogito/URLs-checker/issues/2
+https://github.com/SuperKogito/URLs-checker/issues/1,https://github.com/SuperKogito/URLs-checker/issues/2
+https://github.com/USRSE/usrse.github.io/actions?query=workflow%3A%22Check+URLs%22
+https://github.com/SuperKogito/Voice-based-gender-recognition/issues
+https://github.com/buildtesters/buildtest/blob/v0.9.1/.github/workflows/urlchecker.yml
+https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks/blob/master/.github/workflows/urlchecker-pr-label.yml
 
- /tmp/SuperKogito.github.io/README.md
- ------------------------------------
-https://travis-ci.com/SuperKogito/SuperKogito.github.io
-https://www.python.org/download/releases/3.0/
-https://superkogito.github.io/blog/diabetesML2.html
-https://superkogito.github.io/blog/Cryptography.html
-http://www.sphinx-doc.org/en/master/
-https://github.com/
-https://superkogito.github.io/blog/SignalFraming.html
-https://superkogito.github.io/blog/VoiceBasedGenderRecognition.html
-https://travis-ci.com/SuperKogito/SuperKogito.github.io.svg?branch=master
-https://superkogito.github.io/blog/SpectralLeakageWindowing.html
-https://superkogito.github.io/blog/Intro.html
-https://github.com/SuperKogito/SuperKogito.github.io/workflows/Check%20URLs/badge.svg
-https://superkogito.github.io/blog/diabetesML1.html
-https://superkogito.github.io/blog/AuthenticatedEncryption.html
-https://superKogito.github.io/blog/ffmpegpipe.html
-https://superkogito.github.io/blog/Encryption.html
-https://superkogito.github.io/blog/NaiveVad.html
+ /tmp/urlchecker-action/examples/README.md 
+ -----------------------------------------
+https://github.com/urlstechie/urlchecker-action/releases
+https://github.com/urlstechie/urlchecker-action/issues
+https://help.github.com/en/actions/reference/events-that-trigger-workflows
 
- /tmp/SuperKogito.github.io/_project/src/postprocessing.py
- ---------------------------------------------------------
-No urls found.
-...
 
-https://github.com/marsbroshok/VAD-python/blob/d74033aa08fbbbcdbd491f6e52a1dfdbbb388eea/vad.py#L64
-https://github.com/fgnt/pb_chime5
-https://ai.facebook.com/blog/wav2vec-state-of-the-art-speech-recognition-through-self-supervision/
-https://corplinguistics.wordpress.com/tag/mandarin/
-http://www.cs.tut.fi/~tuomasv/papers/ijcnn_paper_valenti_extended.pdf
-http://shachi.org/resources
-https://conference.scipy.org/proceedings/scipy2015/pdfs/brian_mcfee.pdf
-https://www.dlology.com/blog/simple-speech-keyword-detecting-with-depthwise-separable-convolutions/
-https://stackoverflow.com/questions/49197916/how-to-profile-cpu-usage-of-a-python-script
+Done. The following urls did not pass:
+https://github.com/SuperKogito/URLs-checker/issues/1,https://github.com/SuperKogito/URLs-checker/issues/2
+```
+
+The url that didn't pass above is an example parameter for the library! Let's add
+a simple pattern to exclude it.
+
+```bash
+$ urlchecker check --exclude-pattern SuperKogito .
+           original path: .
+              final path: /tmp/urlchecker-action
+               subfolder: None
+                  branch: master
+                 cleanup: False
+              file types: ['.md', '.py']
+                   files: []
+               print all: True
+           urls excluded: []
+   url patterns excluded: ['SuperKogito']
+  file patterns excluded: []
+              force pass: False
+             retry count: 2
+                    save: None
+                 timeout: 5
+
+ /tmp/urlchecker-action/README.md 
+ --------------------------------
+https://github.com/urlstechie/urlchecker-action/blob/master/LICENSE
+https://github.com/urlstechie/urlchecker-action/issues
+https://github.com/rseng/awesome-rseng/actions?query=workflow%3AURLChecker
+https://github.com/USRSE/usrse.github.io/actions?query=workflow%3A%22Check+URLs%22
+https://github.com/actions/checkout
+https://github.com/USRSE/usrse.github.io/blob/abcbed5f5703e0d46edb9e8850eea8bb623e3c1c/.github/workflows/urlchecker.yml
+https://github.com/r-hub/docs/blob/bc1eac71206f7cb96ca00148dcf3b46c6d25ada4/.github/workflows/pr.yml
+https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks/blob/master/.github/workflows/urlchecker-pr-label.yml
+https://github.com/rseng/awesome-rseng
+https://www.codefactor.io/repository/github/urlstechie/urlchecker-action/badge
+https://github.com/urlstechie/URLs-checker-test-repo
+https://www.codefactor.io/repository/github/urlstechie/urlchecker-action
+https://github.com/r-hub/docs
+https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks
+https://github.com/buildtesters/buildtest
+https://img.shields.io/badge/license-MIT-brightgreen
+https://github.com/urlstechie/urlchecker-action/releases
+https://github.com/marketplace/actions/urlchecker-action
+https://img.shields.io/static/v1?label=Marketplace&message=urlchecker-action&color=blue?style=flat&logo=github
+https://github.com/r-hub/docs/actions?query=workflow%3ACommands
+https://github.com/HPC-buildtest/buildtest-framework/actions?query=workflow%3A%22Check+URLs%22
+https://github.com/buildtesters/buildtest/blob/v0.9.1/.github/workflows/urlchecker.yml
+https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks/actions?query=workflow%3ACommands
+https://github.com/USRSE/usrse.github.io
+https://github.com/rseng/awesome-rseng/blob/5f5cb78f8392cf10aec2f3952b305ae9611029c2/.github/workflows/urlchecker.yml
+
+ /tmp/urlchecker-action/examples/README.md 
+ -----------------------------------------
+https://help.github.com/en/actions/reference/events-that-trigger-workflows
+https://github.com/urlstechie/urlchecker-action/issues
+https://github.com/urlstechie/urlchecker-action/releases
 
 
 Done. All URLS passed.
 ```
 
-If we want to filter down file types (for example, to only check different file
+We can also filter by file types. If we want to do this (for example, to only check different file
 types) we might do any of the following:
 
 ```bash
@@ -187,14 +247,14 @@ Of course! We can specify a GitHub url instead, and add `--cleanup`
 if we want to clean up the folder after.
 
 ```bash
-urlchecker check https://github.com/SuperKogito/SuperKogito.github.io.git
+$ urlchecker check https://github.com/SuperKogito/SuperKogito.github.io.git
 ```
 
 If you specify any arguments for a white list (or any kind of expected list) make
 sure that you provide a comma separated list *without any spaces*
 
-```
-urlchecker check --white-listed-files=README.md,_config.yml
+```bash
+$ urlchecker check --exclude-files=README.md,_config.yml
 ```
 
 ### Save Results
@@ -204,51 +264,6 @@ other data analysis, you can provide the `--save` argument:
 
 ```bash
 $ urlchecker check --save results.csv .
-  original path: .
-     final path: /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo
-      subfolder: None
-         branch: master
-        cleanup: False
-     file types: ['.md', '.py']
-      print all: True
- url whitetlist: []
-   url patterns: []
-  file patterns: []
-     force pass: False
-    retry count: 2
-           save: results.csv
-        timeout: 5
-
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/README.md 
- --------------------------------------------------------------------
-No urls found.
-
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.py 
- -----------------------------------------------------------------------------------------
-https://github.com/SuperKogito/URLs-checker/README.md
-https://github.com/SuperKogito/URLs-checker/README.md
-https://www.google.com/
-https://github.com/SuperKogito
-
- /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/test_files/sample_test_file.md 
- -----------------------------------------------------------------------------------------
-https://github.com/SuperKogito/URLs-checker/blob/master/README.md
-https://github.com/SuperKogito/Voice-based-gender-recognition/issues
-https://github.com/SuperKogito/spafe/issues/7
-https://github.com/SuperKogito/URLs-checker
-https://github.com/SuperKogito/URLs-checker/issues
-https://github.com/SuperKogito/spafe/issues/4
-https://github.com/SuperKogito/URLs-checker/issues/2
-https://github.com/SuperKogito/URLs-checker/issues/2
-https://github.com/SuperKogito/Voice-based-gender-recognition/issues/1
-https://github.com/SuperKogito/spafe/issues/6
-https://github.com/SuperKogito/spafe/issues
-...
-
-Saving results to /home/vanessa/Desktop/Code/urlstechie/urlchecker-test-repo/results.csv
-
-
-Done. All URLS passed.
 ```
 
 The file that you save to will include a comma separated value tabular listing
@@ -317,7 +332,7 @@ checker = UrlChecker(
     path=path,
     file_types=[".md", ".py", ".rst"],
     include_patterns=[],
-    white_listed_files=["README.md", "LICENSE"],
+    exclude_files=["README.md", "LICENSE"],
     print_all=True,
 )
 ```
@@ -327,12 +342,12 @@ I can then run the checker like this:
 checker.run()
 ```
 
-Or with more customization of white listing urls:
+Or with more customization of excluded urls:
 
 ```python
 checker.run(
-    white_listed_urls=white_listed_urls,
-    white_listed_patterns=white_listed_patterns,
+    exclude_urls=exclude_urls,
+    exclude_patterns=exclude_patterns,
     retry_count=3,
     timeout=5,
 )
@@ -413,7 +428,7 @@ result.all
 result.failed                                                                                                                                                                    
 []
 
-result.white_listed
+result.exclude
 []
 
 result.passed                                                                                                                                                                    
@@ -445,8 +460,8 @@ If you provied a file name, the urls would be extracted for you.
 ```python
 checker = UrlCheckResult(
     file_name=file_name,
-    white_listed_patterns=white_listed_patterns,
-    white_listed_urls=white_listed_urls,
+    exclude_patterns=exclude_patterns,
+    exclude_urls=exclude_urls,
     print_all=self.print_all,
 )
 ```
@@ -455,8 +470,8 @@ or you can provide all the parameters without the filename:
 
 ```python
 checker = UrlCheckResult(
-    white_listed_patterns=white_listed_patterns,
-    white_listed_urls=white_listed_urls,
+    exclude_patterns=exclude_patterns,
+    exclude_urls=exclude_urls,
     print_all=self.print_all,
 )
 ```

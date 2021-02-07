@@ -47,41 +47,41 @@ def main(args, extra):
     if not os.path.exists(path):
         sys.exit("Error %s does not exist." % path)
 
-    # Parse file types, and white listed urls and files (includes absolute and patterns)
+    # Parse file types, and excluded urls and files (includes absolute and patterns)
     file_types = args.file_types.split(",")
-    white_listed_urls = remove_empty(args.white_listed_urls.split(","))
-    white_listed_patterns = remove_empty(args.white_listed_patterns.split(","))
-    white_listed_files = remove_empty(args.white_listed_files.split(","))
+    exclude_urls = remove_empty(args.exclude_urls.split(","))
+    exclude_patterns = remove_empty(args.exclude_patterns.split(","))
+    exclude_files = remove_empty(args.exclude_files.split(","))
     files = remove_empty(args.files.split(","))
 
     # Alert user about settings
-    print("  original path: %s" % args.path)
-    print("     final path: %s" % path)
-    print("      subfolder: %s" % args.subfolder)
-    print("         branch: %s" % args.branch)
-    print("        cleanup: %s" % args.cleanup)
-    print("     file types: %s" % file_types)
-    print("          files: %s" % files)
-    print("      print all: %s" % (not args.no_print))
-    print(" url whitetlist: %s" % white_listed_urls)
-    print("   url patterns: %s" % white_listed_patterns)
-    print("  file patterns: %s" % white_listed_files)
-    print("     force pass: %s" % args.force_pass)
-    print("    retry count: %s" % args.retry_count)
-    print("           save: %s" % args.save)
-    print("        timeout: %s" % args.timeout)
+    print("           original path: %s" % args.path)
+    print("              final path: %s" % path)
+    print("               subfolder: %s" % args.subfolder)
+    print("                  branch: %s" % args.branch)
+    print("                 cleanup: %s" % args.cleanup)
+    print("              file types: %s" % file_types)
+    print("                   files: %s" % files)
+    print("               print all: %s" % (not args.no_print))
+    print("           urls excluded: %s" % exclude_urls)
+    print("   url patterns excluded: %s" % exclude_patterns)
+    print("  file patterns excluded: %s" % exclude_files)
+    print("              force pass: %s" % args.force_pass)
+    print("             retry count: %s" % args.retry_count)
+    print("                    save: %s" % args.save)
+    print("                 timeout: %s" % args.timeout)
 
     # Instantiate a new checker with provided arguments
     checker = UrlChecker(
         path=path,
         file_types=file_types,
         include_patterns=files,
-        white_listed_files=white_listed_files,
+        exclude_files=exclude_files,
         print_all=not args.no_print,
     )
     check_results = checker.run(
-        white_listed_urls=white_listed_urls,
-        white_listed_patterns=white_listed_patterns,
+        exclude_urls=exclude_urls,
+        exclude_patterns=exclude_patterns,
         retry_count=args.retry_count,
         timeout=args.timeout,
     )

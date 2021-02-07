@@ -15,7 +15,7 @@ jobs:
           docker build -t quay.io/urlstechie/urlchecker .
           DOCKER_TAG=$(docker run quay.io/urlstechie/urlchecker --version)
           printf "Docker Tag is ${DOCKER_TAG}\n"
-          echo "::set-env name=DOCKER_TAG::${DOCKER_TAG}"
+          echo "DOCKER_TAG=${DOCKER_TAG}" >> $GITHUB_ENV
       - name: Docker login
         env:
           docker_user: ${{ secrets.DOCKER_USERNAME }}
@@ -24,6 +24,7 @@ jobs:
           docker login -u="${docker_user}" -p="${docker_pass}" quay.io
       - name: Push containers
         run: |
+          printf "Docker Tag is ${DOCKER_TAG}\n"
           docker tag quay.io/urlstechie/urlchecker:latest "quay.io/urlstechie/urlchecker:${DOCKER_TAG}"
           docker push quay.io/urlstechie/urlchecker:latest
           docker push "quay.io/urlstechie/urlchecker:${DOCKER_TAG}"

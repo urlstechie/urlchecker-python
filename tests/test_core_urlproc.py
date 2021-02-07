@@ -26,26 +26,26 @@ def test_check_urls(file):
     assert not checker.passed
     assert not checker.failed
     assert not checker.all
-    assert not checker.white_listed
+    assert not checker.excluded
     checker.check_urls(urls)
 
     # Ensure we have the correct sums for passing/failing
-    assert len(checker.failed + checker.passed + checker.white_listed) == checker.count
+    assert len(checker.failed + checker.passed + checker.excluded) == checker.count
     assert len(checker.all) == len(urls)
 
-    # Ensure one not whitelisted is failed
+    # Ensure one not excluded is failed
     assert "https://none.html" in checker.failed
 
     assert checker.print_all
 
-    # Run again with whitelist of exact urls
-    checker = UrlCheckResult(white_listed_urls=["https://none.html"])
+    # Run again with excluded exact urls
+    checker = UrlCheckResult(exclude_urls=["https://none.html"])
     checker.check_urls(urls)
-    assert "https://none.html" in checker.white_listed
+    assert "https://none.html" in checker.excluded
 
-    # Run again with whitelist of patterns
+    # Run again with exclude of patterns
     checker = UrlCheckResult(
-        white_listed_patterns=["https://github.com/SuperKogito/URLs-checker/issues"]
+        exclude_patterns=["https://github.com/SuperKogito/URLs-checker/issues"]
     )
     checker.check_urls(urls)
     for failed in checker.failed:

@@ -39,47 +39,45 @@ def check_file_type(file_path, file_types):
     return False
 
 
-def include_file(file_path, white_list_patterns=None, include_patterns=None):
+def include_file(file_path, exclude_patterns=None, include_patterns=None):
     """
     Check a file path for inclusion based on an OR regular expression.
     The user is currently not notified if a file is marked for removal.
 
     Args:
-        - file_path            (str) : a file path to check if should be included.
-        - white_list_patterns (list) : list of patterns to whitelist (not test).
-        - include_patterns    (list) : list of patterns to include.
+        - file_path        (str) : a file path to check if should be included.
+        - exclude_patterns (list) : list of patterns to exclude.
+        - include_patterns (list) : list of patterns to include.
 
     Returns:
-        (bool) boolean indicating if the URL should be white listed (not tested).
+        (bool) boolean indicating if the URL should be excluded (not tested).
     """
     include_patterns = include_patterns or []
-    white_list_patterns = white_list_patterns or []
+    exclude_patterns = exclude_patterns or []
 
-    # No white listed patterns, all files are included
-    if not white_list_patterns and not include_patterns:
+    # No excluded patterns, all files are included
+    if not exclude_patterns and not include_patterns:
         return True
 
     # Create a regular expression for each
-    whitelist_regexp = "(%s)" % "|".join(white_list_patterns)
+    exclude_regexp = "(%s)" % "|".join(exclude_patterns)
     include_regexp = "(%s)" % "|".join(include_patterns)
 
-    # Return False (don't include) if whitelisted
+    # Return False (don't include) if excluded
     if not include_patterns:
-        return not re.search(whitelist_regexp, file_path)
+        return not re.search(exclude_regexp, file_path)
 
     # We have an include_patterns only
-    elif not white_list_patterns:
+    elif not exclude_patterns:
         return re.search(include_regexp, file_path)
 
-    # If both defined, whitelisting takes preference
+    # If both defined, excluded takes preference
     return re.search(include_regexp, file_path) and not re.search(
-        whitelist_regexp, file_path
+        exclude_regexp, file_path
     )
 
 
-def get_file_paths(
-    base_path, file_types, white_listed_files=None, include_patterns=None
-):
+def get_file_paths(base_path, file_types, exclude_files=None, include_patterns=None):
     """
     Get path to all files under a give directory and its subfolders.
 
@@ -87,12 +85,12 @@ def get_file_paths(
         - base_path           (str) : base path.
         - file_types         (list) : list of file extensions to accept.
         - include_patterns   (list) : list of files and patterns to include.
-        - white_listed_files (list) : list of files or patterns to white list
+        - exclude_files (list) : list of files or patterns to exclude
 
     Returns:
         (list) list of file paths.
     """
-    white_listed_files = white_listed_files or []
+    exclude_files = exclude_files or []
     include_patterns = include_patterns or []
 
     # init paths
@@ -105,9 +103,7 @@ def get_file_paths(
             for file in files
             if os.path.isfile(os.path.join(root, file))
             and check_file_type(file, file_types)
-            and include_file(
-                os.path.join(root, file), white_listed_files, include_patterns
-            )
+            and include_file(os.path.join(root, file), exclude_files, include_patterns)
         ]
     return file_paths
 
