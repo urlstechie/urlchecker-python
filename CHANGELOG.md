@@ -1,7 +1,7 @@
 # CHANGELOG
 
-This is a manually generated log to track changes to the repository for each release. 
-Each section should include general headers such as **Implemented enhancements** 
+This is a manually generated log to track changes to the repository for each release.
+Each section should include general headers such as **Implemented enhancements**
 and **Merged pull requests**. Critical items to know are:
 
  - renamed commands
@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - accelerate code using asyncio and aiohttp (0.0.23)
  - updating "whitelist" arguments to exclude (0.0.22)
  - adding support for dotfiles for a file type (0.0.21)
  - final regexp needs to again parse away { or } (0.0.20)
