@@ -49,7 +49,7 @@ def main(args, extra):
 
     # Parse file types, and excluded urls and files (includes absolute and patterns)
     file_types = []
-    if ("," in args.file_types):
+    if "," in args.file_types:
         file_types = [ft for ft in args.file_types.split(",") if len(ft) > 1]
     else:
         file_types.append(args.file_types)

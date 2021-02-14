@@ -23,7 +23,10 @@ LICENSE = "LICENSE"
 # Global requirements
 
 
-INSTALL_REQUIRES = (("asyncio", {"exact_version": "3.4.3"}), ("aiohttp", {"exact_version": "3.7.3"}),)
+INSTALL_REQUIRES = (
+    ("asyncio", {"exact_version": "3.4.3"}),
+    ("aiohttp", {"exact_version": "3.7.3"}),
+)
 
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)
 

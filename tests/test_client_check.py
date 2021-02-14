@@ -9,14 +9,21 @@ from urlchecker.client import check
 
 def test_client_general():
     # excute scripts
-    pipe = subprocess.run(["urlchecker", "-h"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    pipe = subprocess.run(
+        ["urlchecker", "-h"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     assert pipe.stderr.decode("utf-8") == ""
 
-    pipe = subprocess.run(["urlchecker", "--help"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    pipe = subprocess.run(
+        ["urlchecker", "--help"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     assert pipe.stderr.decode("utf-8") == ""
 
-    pipe = subprocess.run(["urlchecker", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    pipe = subprocess.run(
+        ["urlchecker", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     assert pipe.stderr.decode("utf-8") == ""
+
 
 @pytest.mark.parametrize("config_fname", ["./tests/_local_test_config.conf"])
 @pytest.mark.parametrize("cleanup", [False, True])

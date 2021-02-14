@@ -176,11 +176,15 @@ class UrlCheckResult:
                 response = None
                 async with aiohttp.ClientSession(headers=headers) as session:
                     try:
-                        async with session.get(url=url, raise_for_status=False, timeout=aiohttp.ClientTimeout(pause*60)) as url_response:
+                        async with session.get(
+                            url=url,
+                            raise_for_status=False,
+                            timeout=aiohttp.ClientTimeout(pause * 60),
+                        ) as url_response:
                             response = url_response
 
                         # if success! Retry is not needed.
-                        if (response is not None):
+                        if response is not None:
                             do_retry = False if (response.status == 200) else True
                             if (response.status == 200) and (rcount == retry_count):
                                 print_success(url)
@@ -227,7 +231,9 @@ class UrlCheckResult:
             - timeout        (int)  : a timeout in minutes for blocking operations like the connection attempt.
             - headers        (dict) : headers to use in the request.
         """
-        ret = await asyncio.gather(*[self.aysnc_url_check(url, retry_count, timeout, headers) for url in urls])
+        ret = await asyncio.gather(
+            *[self.aysnc_url_check(url, retry_count, timeout, headers) for url in urls]
+        )
 
     def check_urls(self, urls=None, retry_count=3, timeout=5):
         """
@@ -271,13 +277,20 @@ class UrlCheckResult:
         unique_urls = set([url for url in urls if "http" in url])
 
         # handle different py versions support
-        if ((3, 7) <= sys.version_info):
-            asyncio.run(self.async_urls_check(unique_urls, retry_count, timeout, headers))
+        if (3, 7) <= sys.version_info:
+            asyncio.run(
+                self.async_urls_check(unique_urls, retry_count, timeout, headers)
+            )
         else:
             loop = asyncio.get_event_loop()
-            loop.run_until_complete(asyncio.wait([self.aysnc_url_check(url, retry_count, timeout, headers) for url in unique_urls]))
-
-
+            loop.run_until_complete(
+                asyncio.wait(
+                    [
+                        self.aysnc_url_check(url, retry_count, timeout, headers)
+                        for url in unique_urls
+                    ]
+                )
+            )
 
     def record_response(self, url, response):
         """
