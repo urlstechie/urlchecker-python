@@ -12,7 +12,7 @@ from urlchecker.core.check import UrlChecker
     "file_paths",
     [
         ["tests/test_files/sample_test_file.md"],
-        ["tests/test_files/sample_test_file.py"],
+        ["tests/test_files/sample_test_file.c"],
         ["tests/test_files/sample_test_file.rst"],
     ],
 )

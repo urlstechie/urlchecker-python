@@ -31,9 +31,9 @@ def test_check_file_type(file_path, file_types):
 
 @pytest.mark.parametrize(
     "file_path",
-    ["tests/test_files/sample_test_file.md", "tests/test_files/sample_test_file.py"],
+    ["tests/test_files/sample_test_file.txt", "tests/test_files/sample_test_file.py"],
 )
-@pytest.mark.parametrize("file_types", [[".md", ".py"]])
+@pytest.mark.parametrize("file_types", [[".txt", ".py"]])
 def test_check_file_type(file_path, file_types):
     """
     test check file types
@@ -53,18 +53,18 @@ def test_check_file_type(file_path, file_types):
     ["tests/test_files/sample_test_file.md", "tests/test_files/sample_test_file.py"],
 )
 @pytest.mark.parametrize(
-    "white_list_patterns", [["[.py]"], ["[.md]"], ["tests/test_file"]]
+    "exclude_patterns", [["[.py]"], ["[.md]"], ["tests/test_file"]]
 )
-def test_include_files(file_path, white_list_patterns):
+def test_include_files(file_path, exclude_patterns):
     """
     test if a file should be included based on patterns (using extension for test)
     """
     _, extension = os.path.splitext(file_path)
     expected = not extension in file_path
-    result = include_file(file_path, white_list_patterns)
+    result = include_file(file_path, exclude_patterns)
 
     # No files should be included for a global path pattern
-    if "tests/test_file" in white_list_patterns:
+    if "tests/test_file" in exclude_patterns:
         if result:
             raise AssertionError
 
