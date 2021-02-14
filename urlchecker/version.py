@@ -7,7 +7,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-__version__ = "0.0.22"
+__version__ = "0.0.23"
 AUTHOR = "Ayoub Malek, Vanessa Sochat"
 AUTHOR_EMAIL = "superkogito@gmail.com, vsochat@stanford.edu"
 NAME = "urlchecker"
@@ -23,7 +23,7 @@ LICENSE = "LICENSE"
 # Global requirements
 
 
-INSTALL_REQUIRES = (("requests", {"min_version": "2.18.4"}),)
+INSTALL_REQUIRES = (("asyncio", {"exact_version": "3.4.3"}), ("aiohttp", {"exact_version": "3.7.3"}),)
 
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)
 

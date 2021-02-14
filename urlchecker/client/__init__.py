@@ -136,7 +136,7 @@ def get_parser():
 
     check.add_argument(
         "--timeout",
-        help="timeout (seconds) to provide to the requests library (defaults to 5)",
+        help="timeout (minutes) to provide to the aiohttp library (defaults to 5)",
         type=int,
         default=5,
     )

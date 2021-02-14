@@ -48,7 +48,11 @@ def main(args, extra):
         sys.exit("Error %s does not exist." % path)
 
     # Parse file types, and excluded urls and files (includes absolute and patterns)
-    file_types = args.file_types.split(",")
+    file_types = []
+    if ("," in args.file_types):
+        file_types = [ft for ft in args.file_types.split(",") if len(ft) > 1]
+    else:
+        file_types.append(args.file_types)
     exclude_urls = remove_empty(args.exclude_urls.split(","))
     exclude_patterns = remove_empty(args.exclude_patterns.split(","))
     exclude_files = remove_empty(args.exclude_files.split(","))
