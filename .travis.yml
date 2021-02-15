@@ -1,12 +1,13 @@
 branches:
-  only: 
+  only:
     - master
 
 language: python
 python:
-  - "3.5"
   - "3.6"
   - "3.7"
+  - "3.8"
+  - "3.9"
 
 cache:
   - pip
@@ -23,6 +24,7 @@ before_script:
   - pip3 install codecov
   - pip3 install coveralls
   - pip3 install codacy-coverage
+  - pip3 install -r requirements.txt
   - sudo apt-get update
 
 # command to run tests

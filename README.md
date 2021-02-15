@@ -1,6 +1,6 @@
 <div style="text-align:center"><img src="https://raw.githubusercontent.com/urlstechie/urlchecker-python/master/docs/urlstechie.png"/></div>
 
-[![Build Status](https://travis-ci.com/urlstechie/urlchecker-python.svg?branch=master)](https://travis-ci.com/urlstechie/urlchecker-python) [![Documentation Status](https://readthedocs.org/projects/urlchecker-python/badge/?version=latest)](https://urlchecker-python.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/urlstechie/urlchecker-python/branch/master/graph/badge.svg)](https://codecov.io/gh/urlstechie/urlchecker-python) [![Python](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7-blue)](https://www.python.org/doc/versions/) [![CodeFactor](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python/badge)](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python) ![PyPI](https://img.shields.io/pypi/v/urlchecker) [![Downloads](https://pepy.tech/badge/urlchecker)](https://pepy.tech/project/urlchecker) [![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/urlstechie/urlchecker-python.svg?branch=master)](https://travis-ci.com/urlstechie/urlchecker-python) [![Documentation Status](https://readthedocs.org/projects/urlchecker-python/badge/?version=latest)](https://urlchecker-python.readthedocs.io/en/latest/?badge=latest) [![codecov](https://codecov.io/gh/urlstechie/urlchecker-python/branch/master/graph/badge.svg)](https://codecov.io/gh/urlstechie/urlchecker-python) [![Python](https://img.shields.io/badge/python-3.5%20|%203.6%20|%203.7%20|%203.8%20|%203.9-blue)](https://www.python.org/doc/versions/) [![CodeFactor](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python/badge)](https://www.codefactor.io/repository/github/urlstechie/urlchecker-python) [![PyPI version](https://badge.fury.io/py/urlchecker.svg)](https://badge.fury.io/py/urlchecker) [![Downloads](https://pepy.tech/badge/urlchecker)](https://pepy.tech/project/urlchecker) [![License](https://img.shields.io/badge/license-MIT-brightgreen)](https://github.com/urlstechie/urlchecker-python/blob/master/LICENSE)
 
 
 # urlchecker-python
@@ -9,6 +9,11 @@ This is a python module to collect urls over static files (code and documentatio
 and then test for and report broken links. If you are interesting in using
 this as a GitHub action, see [urlchecker-action](https://github.com/urlstechie/urlchecker-action). There are also container
 bases available on [quay.io/urlstechie/urlchecker](https://quay.io/repository/urlstechie/urlchecker?tab=tags).
+
+## Module Dependencies
+**Versions <= 0.0.22** are built around the [Requests](https://requests.readthedocs.io/en/master/) library whereas
+**versions >= 0.0.23** are built around the [asyncio](https://docs.python.org/3/library/asyncio.html) and the [AIOHTTP](https://docs.aiohttp.org/en/stable/) libraries.
+
 
 ## Module Documentation
 
@@ -88,7 +93,7 @@ optional arguments:
   --save SAVE           Path to a csv file to save results to.
   --retry-count RETRY_COUNT
                         retry count upon failure (defaults to 2, one retry).
-  --timeout TIMEOUT     timeout (seconds) to provide to the requests library
+  --timeout TIMEOUT     timeout (minutes) to provide to the aiohttp library
                         (defaults to 5)
 ```
 
@@ -121,7 +126,7 @@ $ urlchecker check .
                     save: None
                  timeout: 5
 
- /tmp/urlchecker-action/README.md 
+ /tmp/urlchecker-action/README.md
  --------------------------------
 https://github.com/urlstechie/urlchecker-action/blob/master/LICENSE
 https://github.com/r-hub/docs/blob/bc1eac71206f7cb96ca00148dcf3b46c6d25ada4/.github/workflows/pr.yml
@@ -152,7 +157,7 @@ https://github.com/SuperKogito/Voice-based-gender-recognition/issues
 https://github.com/buildtesters/buildtest/blob/v0.9.1/.github/workflows/urlchecker.yml
 https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks/blob/master/.github/workflows/urlchecker-pr-label.yml
 
- /tmp/urlchecker-action/examples/README.md 
+ /tmp/urlchecker-action/examples/README.md
  -----------------------------------------
 https://github.com/urlstechie/urlchecker-action/releases
 https://github.com/urlstechie/urlchecker-action/issues
@@ -184,7 +189,7 @@ $ urlchecker check --exclude-pattern SuperKogito .
                     save: None
                  timeout: 5
 
- /tmp/urlchecker-action/README.md 
+ /tmp/urlchecker-action/README.md
  --------------------------------
 https://github.com/urlstechie/urlchecker-action/blob/master/LICENSE
 https://github.com/urlstechie/urlchecker-action/issues
@@ -212,7 +217,7 @@ https://github.com/berlin-hack-and-tell/berlinhackandtell.rocks/actions?query=wo
 https://github.com/USRSE/usrse.github.io
 https://github.com/rseng/awesome-rseng/blob/5f5cb78f8392cf10aec2f3952b305ae9611029c2/.github/workflows/urlchecker.yml
 
- /tmp/urlchecker-action/examples/README.md 
+ /tmp/urlchecker-action/examples/README.md
  -----------------------------------------
 https://help.github.com/en/actions/reference/events-that-trigger-workflows
 https://github.com/urlstechie/urlchecker-action/issues
@@ -386,32 +391,32 @@ You can look at `checker.checks`, which is a dictionary of result objects,
 organized by the filename:
 
 ```python
-for file_name, result in checker.checks.items(): 
-    print() 
-    print(result) 
-    print("Total Results: %s " % result.count) 
-    print("Total Failed: %s" % len(result.failed)) 
-    print("Total Passed: %s" % len(result.passed)) 
+for file_name, result in checker.checks.items():
+    print()
+    print(result)
+    print("Total Results: %s " % result.count)
+    print("Total Failed: %s" % len(result.failed))
+    print("Total Passed: %s" % len(result.passed))
 
 ...
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/tests/test_files/sample_test_file.md
-Total Results: 26 
+Total Results: 26
 Total Failed: 6
 Total Passed: 20
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/.pytest_cache/README.md
-Total Results: 1 
+Total Results: 1
 Total Failed: 0
 Total Passed: 1
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/.eggs/pytest_runner-5.2-py3.7.egg/ptr.py
-Total Results: 0 
+Total Results: 0
 Total Failed: 0
 Total Passed: 0
 
 UrlCheck:/home/vanessa/Desktop/Code/urlstechie/urlchecker-python/docs/source/conf.py
-Total Results: 3 
+Total Results: 3
 Total Failed: 0
 Total Passed: 3
 ```

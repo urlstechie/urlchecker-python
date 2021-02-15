@@ -2,14 +2,14 @@
 The following is a list of test urls to extract.
  - [test url 1](https://www.google.com/)
  - [test url 2](https://github.com/SuperKogito)
- - [test url 3](https://github.com/SuperKogito/URLs-checker)
+ - [test url 3](https://github.com/vsoch)
  - [test url 4](https://github.com/SuperKogito/URLs-checker/blob/master/README.md)
  - [test url 5](https://github.com/SuperKogito/URLs-checker/issues)
- - [test url 6](https://github.com/SuperKogito/URLs-checker/issues/4)
+ - [test url 6](https://travis-ci.com/github/urlstechie)
 
 - [test url 7](https://github.com/SuperKogito/spafe/)
-- [test url 8](https://github.com/SuperKogito/spafe/issues)
-- [test url 9](https://github.com/SuperKogito/spafe/issues/1)
+- [test url 8](https://codecov.io/gh/urlstechie)
+- [test url 9](https://github.com/urlstechie/urlchecker-action)
 
 - [test url 10](https://github.com/SuperKogito/Voice-based-gender-recognition)
 - [test url 11](https://github.com/SuperKogito/Voice-based-gender-recognition/issues)

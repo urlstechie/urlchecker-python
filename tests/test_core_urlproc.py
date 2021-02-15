@@ -61,10 +61,10 @@ def test_get_user_agent():
 
 def test_check_response_status_code():
     class failedResponse:
-        status_code = 500
+        status = 500
 
     class successResponse:
-        status_code = 200
+        status = 200
 
     # Any failure returns True (indicating a retry is needed)
     assert not check_response_status_code(

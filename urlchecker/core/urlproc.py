@@ -2,14 +2,17 @@
 
 Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
 import os
+import sys
 import time
 import random
+import asyncio
+import aiohttp
 import requests
 from urlchecker.core import fileproc
 from urlchecker.core.exclude import excluded
@@ -34,7 +37,7 @@ def check_response_status_code(url, response):
         return True
 
     # Case 2: success! Retry is not needed.
-    if response.status_code == 200:
+    if response.status == 200:
         print_success(url)
         return False
 
@@ -146,13 +149,100 @@ class UrlCheckResult:
         # collect all links from file (unique=True is set)
         self.urls = fileproc.collect_links_from_file(self.file_name)
 
-    def check_urls(self, urls=None, retry_count=1, timeout=5):
+    async def aysnc_url_check(self, url, retry_count, timeout, headers):
+        """
+        Asyncronous check function for one url.
+
+        Args:
+            - urls           (list) : a list of urls to check.
+            - retry_count    (int)  : a number of retries to issue (defaults to 1, no retry).
+            - timeout        (int)  : a timeout in minutes for blocking operations like the connection attempt.
+            - headers        (dict) : headers to use in the request.
+        """
+        # init do retrails and retrails counts
+        do_retry = True
+        rcount = retry_count
+
+        # we will double the time for retry each time
+        retry_seconds = 15
+
+        # With retry, increase timeout by a second
+        pause = timeout
+        saved_responses = []
+        saved_errors = []
+
+        try:
+            while rcount > 0 and do_retry:
+                response = None
+                async with aiohttp.ClientSession(headers=headers) as session:
+                    try:
+                        async with session.get(
+                            url=url,
+                            raise_for_status=False,
+                            timeout=aiohttp.ClientTimeout(pause * 60),
+                        ) as url_response:
+                            response = url_response
+
+                        # if success! Retry is not needed.
+                        if response is not None:
+                            do_retry = False if (response.status == 200) else True
+                            if (response.status == 200) and (rcount == retry_count):
+                                print_success(url)
+                            else:
+                                saved_responses.append(response)
+
+                    except Exception as e:
+                        saved_errors.append(e)
+                        response = None
+
+                # decrement retrials count
+                rcount -= 1
+
+                # If we try again, pause for retry seconds and update retry seconds
+                if rcount > 0 and do_retry:
+                    # keep this only for debugging
+                    await asyncio.sleep(retry_seconds)
+                    retry_seconds = retry_seconds * 2
+                    pause += 1
+
+            if len(saved_errors) > 0 or len(saved_responses) > 0:
+                print_failure(url)
+                # print errors
+                for error_msg in saved_errors:
+                    print("\x1b[33m" + "> " + str(error_msg) + "\x1b[0m")
+
+                # print pevious url checks responses
+                for response_msg in saved_responses[1:]:
+                    check_response_status_code(url, response_msg)
+
+            # When we break from while, we record final response
+            self.record_response(url, response)
+
+        except Exception as e:
+            print(e)
+
+    async def async_urls_check(self, urls, retry_count, timeout, headers):
+        """
+        Wrapper function for the asyncronous urls check.
+
+        Args:
+            - urls           (list) : a list of urls to check.
+            - retry_count    (int)  : a number of retries to issue (defaults to 1, no retry).
+            - timeout        (int)  : a timeout in minutes for blocking operations like the connection attempt.
+            - headers        (dict) : headers to use in the request.
+        """
+        ret = await asyncio.gather(
+            *[self.aysnc_url_check(url, retry_count, timeout, headers) for url in urls]
+        )
+
+    def check_urls(self, urls=None, retry_count=3, timeout=5):
         """
         Check urls extracted from a certain file and print the checks results.
 
         Args:
-            - retry_count    (int) : a number of retries to issue (defaults to 1, no retry).
-            - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
+            - urls           (list) : a list of urls to check.
+            - retry_count    (int)  : a number of retries to issue (defaults to 1, no retry).
+            - timeout        (int)  : a timeout in minutes for blocking operations like the connection attempt.
         """
         urls = urls or self.urls
 
@@ -183,54 +273,24 @@ class UrlCheckResult:
         user_agent = get_user_agent()
         headers = {"User-Agent": user_agent}
 
-        # check links
-        for url in [url for url in urls if "http" in url]:
+        # check urls asyncronously
+        unique_urls = set([url for url in urls if "http" in url])
 
-            # init do retrails and retrails counts
-            do_retry = True
-            rcount = retry_count
-
-            # we will double the time for retry each time
-            retry_seconds = 2
-
-            # With retry, increase timeout by a second
-            pause = timeout
-
-            # No need to test the same URL twice
-            if url in seen:
-                continue
-
-            seen.add(url)
-            while rcount > 0 and do_retry:
-                response = None
-                try:
-                    response = requests.get(url, timeout=pause, headers=headers)
-
-                except requests.exceptions.Timeout as e:
-                    print(e)
-
-                except requests.exceptions.ConnectionError as e:
-                    print(e)
-
-                except Exception as e:
-                    print(e)
-
-                # decrement retrials count
-                rcount -= 1
-
-                # Break from the loop if we have success, update user
-                do_retry = check_response_status_code(url, response)
-
-                # If we try again, pause for retry seconds and update retry seconds
-                if rcount > 0 and do_retry:
-                    # keep this only for debugging
-                    # print("Retry n° %s for %s, with timeout of %s seconds." % (retry_count - rcount, url, pause))
-                    time.sleep(retry_seconds)
-                    retry_seconds = retry_seconds * 2
-                    pause += 1
-
-            # When we break from while, we record final response
-            self.record_response(url, response)
+        # handle different py versions support
+        if (3, 7) <= sys.version_info:
+            asyncio.run(
+                self.async_urls_check(unique_urls, retry_count, timeout, headers)
+            )
+        else:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(
+                asyncio.wait(
+                    [
+                        self.aysnc_url_check(url, retry_count, timeout, headers)
+                        for url in unique_urls
+                    ]
+                )
+            )
 
     def record_response(self, url, response):
         """
@@ -246,7 +306,7 @@ class UrlCheckResult:
             self.failed.append(url)
 
         # success
-        elif response.status_code == 200:
+        elif response.status == 200:
             self.passed.append(url)
 
         # Any other error
