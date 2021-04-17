@@ -8,6 +8,9 @@ python:
   - "3.6"
   - "3.7"
 
+env:
+  - CODACY_PROJECT_TOKEN = CodacyToken
+  
 cache:
   - pip
 
@@ -33,5 +36,5 @@ after_success:
   - codecov
   - coveralls
   - coverage xml
-  - export CODACY_PROJECT_TOKEN=${ secrets.CODACY_PROJECT_TOKEN }
+  - export CODACY_PROJECT_TOKEN=CodacyToken
   - python-codacy-coverage -r coverage.xml
