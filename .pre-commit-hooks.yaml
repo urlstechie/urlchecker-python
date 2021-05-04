@@ -1,7 +1,7 @@
 - id: urlchecker
   name: urlchecker
   description: "urlchecker-python: test for and report broken links" 
-  entry: urlchecker
+  entry: urlchecker check
   language: python
   language_version: python3
   minimum_pre_commit_version: 2.9.2
