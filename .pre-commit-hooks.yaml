@@ -1,9 +1,9 @@
 - id: urlchecker
   name: urlchecker
   description: "urlchecker-python: test for and report broken links" 
-  entry: urlchecker check --files
+  entry: urlchecker check . --file-types "*" --files
   language: python
   language_version: python3
   minimum_pre_commit_version: 2.9.2
-  require_serial: true
+  #require_serial: true
   types: [text]
