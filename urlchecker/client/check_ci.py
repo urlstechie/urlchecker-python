@@ -29,17 +29,7 @@ def main(args, extra):
     """
 
     # For the check_ci command path is always the current working directory (.)
-    path = '.'
-
-    # Case 1: specify present working directory
-    if not path or path == ".":
-        path = os.getcwd()
-        logging.debug("Path specified as present working directory, %s" % path)
-
-    # Case 2: We need to clone
-    elif re.search("^(git@|http)", path):
-        logging.debug("Repository url %s detected, attempting clone" % path)
-        path = clone_repo(path, branch=args.branch)
+    path = os.getcwd()
 
     # By the time we get here, a path must exist
     if not os.path.exists(path):
