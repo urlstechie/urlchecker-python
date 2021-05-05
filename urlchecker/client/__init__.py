@@ -169,6 +169,13 @@ def get_parser():
         default="",
     )
 
+    check_ci.add_argument(
+        "--force-pass",
+        help="force successful pass (return code 0) regardless of result",
+        default=False,
+        action="store_true",
+    )
+
     return parser
 
 
