@@ -18,9 +18,9 @@ logger = logging.getLogger("urlchecker")
 
 def main(args, extra):
     """
-    main entrypoint for running a check. We expect an args object with
-    arguments from the main client. From here we determine the path
-    to parse (or GitHub url to clone) and call the main check function
+    alternate entrypoint for running a check on specific files.
+    We expect an args object with arguments from the main client.
+    From here we check the arguments and call the main check function
     under main/check.py
 
     Parameters:
