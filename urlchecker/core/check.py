@@ -22,6 +22,7 @@ class UrlChecker:
 
     def __init__(
         self,
+        files=None,
         path=None,
         file_types=None,
         exclude_files=None,
@@ -34,6 +35,7 @@ class UrlChecker:
         parameters to run a url check.
 
         Args:
+            - files            (list) : list of files to check. if specified it is used exclusively for file finding.
             - path             (str) : full path to the root folder to check. If not defined, no file_paths are parsed
             - print_all        (str) : control var for whether to print all checked file names or only the ones with urls.
             - exclude_files    (list) : list of excluded files and patterns for flies.
@@ -51,19 +53,31 @@ class UrlChecker:
         self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
 
-        # get all file paths if a path is defined
-        if path:
 
-            # Exit early if path not defined
-            if not os.path.exists(path):
-                sys.exit("%s does not exist." % path)
+        if files:
+            # Check that all files specified exist and are not directories
+            for file in files:
+                # Exit early if path not defined
+                if not os.path.exists(file):
+                    sys.exit("%s does not exist." % file)
+                # Exit early if a directory was provided
+                if os.path.isdir(file):
+                    sys.exit("%s is a directory. only files are accepted in this mode." % file)
+            self.file_paths = files
+        else:
+            # get all file paths if a path is defined
+            if path:
 
-            self.file_paths = fileproc.get_file_paths(
-                include_patterns=self.include_patterns,
-                base_path=path,
-                file_types=self.file_types,
-                exclude_files=self.exclude_files,
-            )
+                # Exit early if path not defined
+                if not os.path.exists(path):
+                    sys.exit("%s does not exist." % path)
+
+                self.file_paths = fileproc.get_file_paths(
+                    include_patterns=self.include_patterns,
+                    base_path=path,
+                    file_types=self.file_types,
+                    exclude_files=self.exclude_files,
+                )
 
     def __str__(self):
         if self.path:

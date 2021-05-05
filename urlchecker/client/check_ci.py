@@ -9,7 +9,7 @@ import sys
 import logging
 
 from urlchecker.core.fileproc import remove_empty
-from urlchecker.core.check_file import UrlCheckerFile
+from urlchecker.core.check_file import UrlChecker
 from urlchecker.logger import print_failure
 
 logger = logging.getLogger("urlchecker")
@@ -52,7 +52,7 @@ def main(args, extra):
     print("                 timeout: %s" % args.timeout)
 
     # Instantiate a new checker with provided arguments
-    checker = UrlCheckerFile(
+    checker = UrlChecker(
         files=files,
         path=path,
     )
