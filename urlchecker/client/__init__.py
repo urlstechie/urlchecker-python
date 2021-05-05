@@ -141,6 +141,34 @@ def get_parser():
         default=5,
     )
 
+    ###  new main
+
+    check_ci = subparsers.add_parser(
+        "check_ci", help="check urls in static files (documentation or code), CI mode"
+    )
+
+    # Timeouts
+
+    check_ci.add_argument(
+        "--retry-count",
+        help="retry count upon failure (defaults to 2, one retry).",
+        type=int,
+        default=2,
+    )
+
+    check_ci.add_argument(
+        "--timeout",
+        help="timeout (seconds) to provide to the requests library (defaults to 5)",
+        type=int,
+        default=5,
+    )
+
+    check_ci.add_argument(
+        "--exclude-urls",
+        help="comma separated links to exclude (no spaces)",
+        default="",
+    )
+
     return parser
 
 
@@ -174,6 +202,8 @@ def main():
 
     if args.command == "check":
         from .check import main
+    if args.command == "check_ci":
+        from .check_ci import main
     else:
         print("Unsupported command %s" % args.command)
         sys.exit(0)
