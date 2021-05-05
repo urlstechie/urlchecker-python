@@ -22,6 +22,7 @@ class UrlCheckerFile(UrlChecker):
     def __init__(
         self,
         files=None,
+        path=None,
         print_all=True,
     ):
         """
@@ -31,8 +32,11 @@ class UrlCheckerFile(UrlChecker):
 
         Args:
             - files            (list) : list of files to check.
+            - path             (str) : only used when save_report(relative=True).
             - print_all        (str) : control var for whether to print all checked file names or only the ones with urls.
         """
+        self.path = path
+
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
         self.results = {"passed": set(), "failed": set(), "excluded": set()}
         self.checks = {}

@@ -54,7 +54,8 @@ def main(args, extra):
 
     # Instantiate a new checker with provided arguments
     checker = UrlCheckerFile(
-        files=files
+        files=files,
+        path=path,
     )
     check_results = checker.run(
         exclude_urls=exclude_urls,
