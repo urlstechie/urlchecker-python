@@ -144,32 +144,11 @@ def get_parser():
     # main check_ci entrypoint
 
     check_ci = subparsers.add_parser(
-        "check_ci", help="check urls in static files (documentation or code), CI mode"
+        "check_ci", help="check urls in the specified files"
     )
 
     check_ci.add_argument('files', metavar="file", nargs='+')
 
-    # Timeouts
-
-    check_ci.add_argument(
-        "--retry-count",
-        help="retry count upon failure (defaults to 2, one retry).",
-        type=int,
-        default=2,
-    )
-
-    check_ci.add_argument(
-        "--timeout",
-        help="timeout (seconds) to provide to the requests library (defaults to 5)",
-        type=int,
-        default=5,
-    )
-
-    check_ci.add_argument(
-        "--exclude-urls",
-        help="comma separated links to exclude (no spaces)",
-        default="",
-    )
 
     check_ci.add_argument(
         "--force-pass",
@@ -185,12 +164,36 @@ def get_parser():
         action="store_true",
     )
 
+    # Exlude patterns (previously whitelisting)
+
+    check_ci.add_argument(
+        "--exclude-urls",
+        help="comma separated links to exclude (no spaces)",
+        default="",
+    )
+
     # Saving
 
     check_ci.add_argument(
         "--save",
         help="Path to a csv file to save results to.",
         default=None,
+    )
+
+    # Timeouts
+
+    check_ci.add_argument(
+        "--retry-count",
+        help="retry count upon failure (defaults to 2, one retry).",
+        type=int,
+        default=2,
+    )
+
+    check_ci.add_argument(
+        "--timeout",
+        help="timeout (seconds) to provide to the requests library (defaults to 5)",
+        type=int,
+        default=5,
     )
 
     return parser
