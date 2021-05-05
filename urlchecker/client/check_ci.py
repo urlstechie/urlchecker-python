@@ -10,7 +10,6 @@ import logging
 
 from urlchecker.main.github import clone_repo, delete_repo
 from urlchecker.core.fileproc import remove_empty
-from urlchecker.core.check import UrlChecker
 from urlchecker.core.check_file import UrlCheckerFile
 from urlchecker.logger import print_failure
 
@@ -28,8 +27,8 @@ def main(args, extra):
       - args: the argparse ArgParser with parsed args
       - extra: extra arguments not handled by the parser
     """
-    # path = args.path
-    # path = os.getcwd()
+
+    # For the check_ci command path is always the current working directory (.)
     path = '.'
 
     # Case 1: specify present working directory
@@ -42,71 +41,40 @@ def main(args, extra):
         logging.debug("Repository url %s detected, attempting clone" % path)
         path = clone_repo(path, branch=args.branch)
 
-    # Add subfolder to path
-    # if args.subfolder:
-    #     path = os.path.join(path, args.subfolder)
-
     # By the time we get here, a path must exist
     if not os.path.exists(path):
         sys.exit("Error %s does not exist." % path)
 
     # Parse file types, and excluded urls and files (includes absolute and patterns)
-    # file_types = args.file_types.split(",")
     file_types = ['*']
     exclude_urls = remove_empty(args.exclude_urls.split(","))
-    # exclude_patterns = remove_empty(args.exclude_patterns.split(","))
-    # exclude_files = remove_empty(args.exclude_files.split(","))
 
-    # TODO: take from args remainder
-    # files = remove_empty(args.files.split(","))
-    # files = extra
     files = args.files
 
-    # print(args)
-    # print(extra)
-    # sys.exit(0)
-
     # Alert user about settings
-    # print("           original path: %s" % args.path)
     print("              final path: %s" % path)
-    # print("               subfolder: %s" % args.subfolder)
-    # print("                  branch: %s" % args.branch)
-    # print("                 cleanup: %s" % args.cleanup)
     print("              file types: %s" % file_types)
     print("                   files: %s" % files)
-    # print("               print all: %s" % (not args.no_print))
+    print("               print all: %s" % (not args.no_print))
     print("           urls excluded: %s" % exclude_urls)
-    # print("   url patterns excluded: %s" % exclude_patterns)
-    # print("  file patterns excluded: %s" % exclude_files)
-    # print("              force pass: %s" % args.force_pass)  # TODO: add back
+    print("              force pass: %s" % args.force_pass)
     print("             retry count: %s" % args.retry_count)
-    # print("                    save: %s" % args.save)
+    print("                    save: %s" % args.save)
     print("                 timeout: %s" % args.timeout)
 
     # Instantiate a new checker with provided arguments
     checker = UrlCheckerFile(
         files=files
-        # path=path,
-        # file_types=file_types,
-        # include_patterns=files,
-        # exclude_files=exclude_files,
-        # print_all=not args.no_print,
     )
     check_results = checker.run(
         exclude_urls=exclude_urls,
-        # exclude_patterns=exclude_patterns,
         retry_count=args.retry_count,
         timeout=args.timeout,
     )
 
     # save results to flie, if save indicated
-    # if args.save:
-    #     checker.save_results(args.save)
-
-    # delete repo when done, if requested
-    # if args.cleanup:
-    #     logger.info("Cleaning up %s..." % path)
-    #     delete_repo(path)
+    if args.save:
+        checker.save_results(args.save)
 
     # Case 1: We didn't find any urls to check
     if not check_results["failed"] and not check_results["passed"]:

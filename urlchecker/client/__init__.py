@@ -141,7 +141,7 @@ def get_parser():
         default=5,
     )
 
-    ###  new main
+    # main check_ci entrypoint
 
     check_ci = subparsers.add_parser(
         "check_ci", help="check urls in static files (documentation or code), CI mode"
@@ -176,6 +176,21 @@ def get_parser():
         help="force successful pass (return code 0) regardless of result",
         default=False,
         action="store_true",
+    )
+
+    check_ci.add_argument(
+        "--no-print",
+        help="Skip printing results to the screen (defaults to printing to console).",
+        default=False,
+        action="store_true",
+    )
+
+    # Saving
+
+    check_ci.add_argument(
+        "--save",
+        help="Path to a csv file to save results to.",
+        default=None,
     )
 
     return parser
