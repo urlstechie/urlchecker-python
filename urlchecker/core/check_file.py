@@ -15,6 +15,7 @@ from urlchecker.core import fileproc
 from urlchecker.core.urlproc import UrlCheckResult
 
 
+# TODO: inherit from UrlChecker?
 class UrlCheckerFile:
     """The UrlChecker can be instantiated by a client, and then used
     to parse files, extract urls, and save results.
@@ -31,41 +32,23 @@ class UrlCheckerFile:
         parameters to run a url check.
 
         Args:
-            - path             (str) : full path to the root folder to check. If not defined, no file_paths are parsed
+            - files            (list) : list of files to check.
             - print_all        (str) : control var for whether to print all checked file names or only the ones with urls.
-            - exclude_files    (list) : list of excluded files and patterns for flies.
-            - include_patterns (list) : list of files and patterns to check.
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
         self.results = {"passed": set(), "failed": set(), "excluded": set()}
         self.checks = {}
 
         # Save run parameters
-        # self.exclude_files = exclude_files or []
-        # self.include_patterns = include_patterns or []
         self.print_all = print_all
-        # self.path = path
-        # self.path = os.get_cwd()
-        # self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
 
-        # get all file paths if a path is defined
-        # if path:
-
-        #     # Exit early if path not defined
-        #     if not os.path.exists(path):
-        #         sys.exit("%s does not exist." % path)
-
-        #     self.file_paths = fileproc.get_file_paths(
-        #         include_patterns=self.include_patterns,
-        #         base_path=path,
-        #         file_types=self.file_types,
-        #         exclude_files=self.exclude_files,
-        #     )
-
+        # Check that all files specified exist and are not directories
         for file in files:
+          # Exit early if path not defined
           if not os.path.exists(file):
             sys.exit("%s does not exist." % file)
+          # Exit early if a directory was provided
           if os.path.isdir(file):
             sys.exit("%s is a directory. only files are accepted in this mode." % file)
 
@@ -73,8 +56,8 @@ class UrlCheckerFile:
 
     def __str__(self):
         if self.path:
-            return "UrlChecker:%s" % self.path
-        return "UrlChecker"
+            return "UrlCheckerFile:%s" % self.path
+        return "UrlCheckerFile"
 
     def __repr__(self):
         return self.__str__()
