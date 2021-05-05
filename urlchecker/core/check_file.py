@@ -15,7 +15,7 @@ from urlchecker.core.check import UrlChecker
 
 
 class UrlCheckerFile(UrlChecker):
-    """The UrlChecker can be instantiated by a client, and then used
+    """The UrlCheckerFile can be instantiated by a client, and then used
     to parse files, extract urls, and save results.
     """
 
