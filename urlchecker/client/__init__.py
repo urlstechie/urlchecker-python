@@ -149,7 +149,6 @@ def get_parser():
 
     check_ci.add_argument('files', metavar="file", nargs='+')
 
-
     check_ci.add_argument(
         "--force-pass",
         help="force successful pass (return code 0) regardless of result",
