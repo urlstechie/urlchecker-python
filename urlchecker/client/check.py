@@ -86,7 +86,7 @@ def main(args, extra):
         timeout=args.timeout,
     )
 
-    # save results to flie, if save indicated
+    # save results to file, if save indicated
     if args.save:
         checker.save_results(args.save)
 
