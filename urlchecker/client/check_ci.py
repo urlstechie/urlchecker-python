@@ -41,7 +41,7 @@ def main(args, extra):
     files = args.files
 
     # Alert user about settings
-    print("              final path: %s" % path)
+    # print("              final path: %s" % path)  # TODO: show this as save path? only UrlChecker:save_report uses (but save includes path?)
     print("                   files: %s" % files)
     print("               print all: %s" % (not args.no_print))
     print("           urls excluded: %s" % exclude_urls)
