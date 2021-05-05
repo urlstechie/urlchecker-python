@@ -41,26 +41,28 @@ class UrlCheckerFile:
         self.checks = {}
 
         # Save run parameters
-        self.exclude_files = exclude_files or []
-        self.include_patterns = include_patterns or []
+        # self.exclude_files = exclude_files or []
+        # self.include_patterns = include_patterns or []
         self.print_all = print_all
-        self.path = path
-        self.file_types = file_types or [".py", ".md"]
+        # self.path = path
+        # self.path = os.get_cwd()
+        # self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
 
         # get all file paths if a path is defined
-        if path:
+        # if path:
 
-            # Exit early if path not defined
-            if not os.path.exists(path):
-                sys.exit("%s does not exist." % path)
+        #     # Exit early if path not defined
+        #     if not os.path.exists(path):
+        #         sys.exit("%s does not exist." % path)
 
-            self.file_paths = fileproc.get_file_paths(
-                include_patterns=self.include_patterns,
-                base_path=path,
-                file_types=self.file_types,
-                exclude_files=self.exclude_files,
-            )
+        #     self.file_paths = fileproc.get_file_paths(
+        #         include_patterns=self.include_patterns,
+        #         base_path=path,
+        #         file_types=self.file_types,
+        #         exclude_files=self.exclude_files,
+        #     )
+        self.file_paths = files
 
     def __str__(self):
         if self.path:
