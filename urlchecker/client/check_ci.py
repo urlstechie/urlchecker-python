@@ -11,6 +11,7 @@ import logging
 from urlchecker.main.github import clone_repo, delete_repo
 from urlchecker.core.fileproc import remove_empty
 from urlchecker.core.check import UrlChecker
+from urlchecker.core.check_file import UrlCheckerFile
 from urlchecker.logger import print_failure
 
 logger = logging.getLogger("urlchecker")
