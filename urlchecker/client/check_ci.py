@@ -59,7 +59,8 @@ def main(args, extra):
 
     # TODO: take from args remainder
     # files = remove_empty(args.files.split(","))
-    files = extra
+    # files = extra
+    files = args.files
 
     # print(args)
     # print(extra)

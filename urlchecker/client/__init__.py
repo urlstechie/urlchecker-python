@@ -147,6 +147,8 @@ def get_parser():
         "check_ci", help="check urls in static files (documentation or code), CI mode"
     )
 
+    check_ci.add_argument('files', metavar="file", nargs='+')
+
     # Timeouts
 
     check_ci.add_argument(
