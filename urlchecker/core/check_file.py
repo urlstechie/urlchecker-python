@@ -15,7 +15,7 @@ from urlchecker.core import fileproc
 from urlchecker.core.urlproc import UrlCheckResult
 
 
-# TODO: inherit from UrlChecker?
+# TODO: inherit from UrlChecker? __init__ and __str__ are only differences
 class UrlCheckerFile:
     """The UrlChecker can be instantiated by a client, and then used
     to parse files, extract urls, and save results.
