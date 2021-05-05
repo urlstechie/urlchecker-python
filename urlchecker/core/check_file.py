@@ -42,13 +42,14 @@ class UrlCheckerFile(UrlChecker):
         self.file_paths = []
 
         # Check that all files specified exist and are not directories
-        for file in files:
-          # Exit early if path not defined
-          if not os.path.exists(file):
-            sys.exit("%s does not exist." % file)
-          # Exit early if a directory was provided
-          if os.path.isdir(file):
-            sys.exit("%s is a directory. only files are accepted in this mode." % file)
+        if files:
+            for file in files:
+                # Exit early if path not defined
+                if not os.path.exists(file):
+                    sys.exit("%s does not exist." % file)
+                # Exit early if a directory was provided
+                if os.path.isdir(file):
+                    sys.exit("%s is a directory. only files are accepted in this mode." % file)
 
         self.file_paths = files
 
