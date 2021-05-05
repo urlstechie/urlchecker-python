@@ -62,6 +62,13 @@ class UrlCheckerFile:
         #         file_types=self.file_types,
         #         exclude_files=self.exclude_files,
         #     )
+
+        for file in files:
+          if not os.path.exists(file):
+            sys.exit("%s does not exist." % file)
+          if os.path.isdir(file):
+            sys.exit("%s is a directory. only files are accepted in this mode." % file)
+
         self.file_paths = files
 
     def __str__(self):
