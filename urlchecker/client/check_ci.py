@@ -9,7 +9,7 @@ import sys
 import logging
 
 from urlchecker.core.fileproc import remove_empty
-from urlchecker.core.check_file import UrlChecker
+from urlchecker.core.check import UrlChecker
 from urlchecker.logger import print_failure
 
 logger = logging.getLogger("urlchecker")
