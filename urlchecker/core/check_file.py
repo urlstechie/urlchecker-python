@@ -7,9 +7,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-import csv
 import os
-import re
 import sys
 from urlchecker.core.check import UrlChecker
 
