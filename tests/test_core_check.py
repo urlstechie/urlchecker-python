@@ -37,6 +37,30 @@ def test_check_files(file_paths, print_all, exclude_urls, exclude_patterns):
     )
 
 
+@pytest.mark.parametrize("files_list", [[], ["./tests/test_files/sample_test_file.md"]])
+def test_check_files_arg_files(files_list):
+    checker = UrlChecker(
+        files=files_list,
+        print_all=True
+    )
+    checker.run(
+        retry_count=1,
+    )
+
+
+@pytest.mark.parametrize("files_list", [["non_existent_file"], ["./tests/test_files/"]])
+def test_check_files_arg_files_exception(files_list):
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        checker = UrlChecker(
+            files=files_list,
+            print_all=True
+        )
+        checker.run(
+            retry_count=1,
+        )
+    assert pytest_wrapped_e.type is SystemExit
+
+
 @pytest.mark.parametrize("local_folder_path", ["./tests/test_files"])
 @pytest.mark.parametrize("config_fname", ["./tests/_local_test_config.conf"])
 def test_locally(local_folder_path, config_fname):
