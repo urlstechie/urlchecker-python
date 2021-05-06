@@ -4,5 +4,6 @@
   entry: urlchecker check_ci
   language: python
   language_version: python3
+  require_serial: true
   minimum_pre_commit_version: 2.9.2
   types: [text]
