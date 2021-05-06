@@ -36,7 +36,7 @@ def main(args, extra):
         args.exclude_files = ""
         args.branch = None
         args.cleanup = False
-        # below expects a comma separated format
+        # code below expects a comma separated format
         args.files = ','.join(args.files)
 
     path = args.path
