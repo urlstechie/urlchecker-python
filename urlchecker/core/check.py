@@ -53,7 +53,6 @@ class UrlChecker:
         self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
 
-
         if files:
             # Check that all files specified exist and are not directories
             for file in files:
@@ -62,7 +61,10 @@ class UrlChecker:
                     sys.exit("%s does not exist." % file)
                 # Exit early if a directory was provided
                 if os.path.isdir(file):
-                    sys.exit("%s is a directory. only files are accepted in this mode." % file)
+                    sys.exit(
+                        "%s is a directory. only files are accepted in this mode."
+                        % file
+                    )
             self.file_paths = files
         else:
             # get all file paths if a path is defined

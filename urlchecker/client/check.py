@@ -27,7 +27,7 @@ def main(args, extra):
       - args: the argparse ArgParser with parsed args
       - extra: extra arguments not handled by the parser
     """
-    if args.command == 'check_ci':
+    if args.command == "check_ci":
         # set options that check_ci doesn't take, but we need set
         args.path = "."
         args.subfolder = None
@@ -37,7 +37,7 @@ def main(args, extra):
         args.branch = None
         args.cleanup = False
         # code below expects a comma separated format
-        args.files = ','.join(args.files)
+        args.files = ",".join(args.files)
 
     path = args.path
 

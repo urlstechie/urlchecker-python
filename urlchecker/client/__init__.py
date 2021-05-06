@@ -147,7 +147,7 @@ def get_parser():
         "check_ci", help="check urls in the specified files"
     )
 
-    check_ci.add_argument('files', metavar="file", nargs='+')
+    check_ci.add_argument("files", metavar="file", nargs="+")
 
     check_ci.add_argument(
         "--force-pass",
