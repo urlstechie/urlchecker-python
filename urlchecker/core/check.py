@@ -35,7 +35,7 @@ class UrlChecker:
         parameters to run a url check.
 
         Args:
-            - files            (list) : list of files to check. if specified it is used exclusively for file selection.
+            - files            (list) : list of files to check. If specified it is used exclusively for file selection.
             - path             (str) : full path to the root folder to check. If not defined, no file_paths are parsed
             - print_all        (str) : control var for whether to print all checked file names or only the ones with urls.
             - exclude_files    (list) : list of excluded files and patterns for flies.
