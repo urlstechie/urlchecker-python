@@ -229,7 +229,7 @@ def main():
     if args.command == "check":
         from .check import main
     if args.command == "check_ci":
-        from .check_ci import main
+        from .check import main
     else:
         print("Unsupported command %s" % args.command)
         sys.exit(0)

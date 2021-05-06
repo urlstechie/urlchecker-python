@@ -27,6 +27,18 @@ def main(args, extra):
       - args: the argparse ArgParser with parsed args
       - extra: extra arguments not handled by the parser
     """
+    if args.command == 'check_ci':
+        # set options that check_ci doesn't take, but we need set
+        args.path = "."
+        args.subfolder = None
+        args.file_types = "*"
+        args.exclude_patterns = ""
+        args.exclude_files = ""
+        args.branch = None
+        args.cleanup = False
+        # below expects a comma separated format
+        args.files = ','.join(args.files)
+
     path = args.path
 
     # Case 1: specify present working directory
@@ -73,6 +85,7 @@ def main(args, extra):
 
     # Instantiate a new checker with provided arguments
     checker = UrlChecker(
+        files=files,
         path=path,
         file_types=file_types,
         include_patterns=files,
