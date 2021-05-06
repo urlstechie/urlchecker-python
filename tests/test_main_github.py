@@ -24,6 +24,23 @@ def test_clone_and_del_repo(git_path):
         raise AssertionError
 
 
+@pytest.mark.parametrize(
+    "git_path", ["https://domain_that_should_never_exist.red.blue.green.blaaa"]
+)
+def test_clone_raises_with_bad_repo(git_path):
+    """
+    test cloning with a bad git_path.
+    """
+    # del repo if it exisits
+    if os.path.exists(os.path.basename(git_path)):
+        delete_repo(os.path.basename(git_path))
+
+    # clone
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        repo_path = clone_repo(git_path)
+    assert pytest_wrapped_e.type is SystemExit
+
+
 def test_get_branch():
     """
     test getting branch from environment or default
