@@ -51,6 +51,7 @@ class UrlChecker:
         self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
 
+        # get all file paths if a path is defined
         if path:
 
             # Exit early if path not defined
