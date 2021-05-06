@@ -85,7 +85,6 @@ def main(args, extra):
 
     # Instantiate a new checker with provided arguments
     checker = UrlChecker(
-        files=files,
         path=path,
         file_types=file_types,
         include_patterns=files,
