@@ -39,10 +39,63 @@ def get_parser():
         "version", help="show software version"  # pylint: disable=unused-variable
     )
 
-    # main check entrypoint
+    # main entrypoints
     check = subparsers.add_parser(
         "check", help="check urls in static files (documentation or code)"
     )
+
+    check_ci = subparsers.add_parser(
+        "check_ci", help="check urls in the specified files"
+    )
+
+    # shared arguments
+
+    for command in check, check_ci:
+        command.add_argument(
+            "--force-pass",
+            help="force successful pass (return code 0) regardless of result",
+            default=False,
+            action="store_true",
+        )
+
+        command.add_argument(
+            "--no-print",
+            help="Skip printing results to the screen (defaults to printing to console).",
+            default=False,
+            action="store_true",
+        )
+
+        command.add_argument(
+            "--exclude-urls",
+            help="comma separated links to exclude (no spaces)",
+            default="",
+        )
+
+        # Saving
+
+        command.add_argument(
+            "--save",
+            help="Path to a csv file to save results to.",
+            default=None,
+        )
+
+        # Timeouts
+
+        command.add_argument(
+            "--retry-count",
+            help="retry count upon failure (defaults to 2, one retry).",
+            type=int,
+            default=2,
+        )
+
+        command.add_argument(
+            "--timeout",
+            help="timeout (seconds) to provide to the requests library (defaults to 5)",
+            type=int,
+            default=5,
+        )
+
+    # check command arguments
 
     # supports a clone URL or a path
     check.add_argument(
@@ -70,20 +123,6 @@ def get_parser():
     )
 
     check.add_argument(
-        "--force-pass",
-        help="force successful pass (return code 0) regardless of result",
-        default=False,
-        action="store_true",
-    )
-
-    check.add_argument(
-        "--no-print",
-        help="Skip printing results to the screen (defaults to printing to console).",
-        default=False,
-        action="store_true",
-    )
-
-    check.add_argument(
         "--file-types",
         dest="file_types",
         help="comma separated list of file extensions to check (defaults to .md,.py)",
@@ -94,14 +133,6 @@ def get_parser():
         "--files",
         dest="files",
         help="comma separated list of exact files or patterns to check.",
-        default="",
-    )
-
-    # Exlude patterns (previously whitelisting)
-
-    check.add_argument(
-        "--exclude-urls",
-        help="comma separated links to exclude (no spaces)",
         default="",
     )
 
@@ -117,83 +148,9 @@ def get_parser():
         default="",
     )
 
-    # Saving
-
-    check.add_argument(
-        "--save",
-        help="Path to a csv file to save results to.",
-        default=None,
-    )
-
-    # Timeouts
-
-    check.add_argument(
-        "--retry-count",
-        help="retry count upon failure (defaults to 2, one retry).",
-        type=int,
-        default=2,
-    )
-
-    check.add_argument(
-        "--timeout",
-        help="timeout (seconds) to provide to the requests library (defaults to 5)",
-        type=int,
-        default=5,
-    )
-
-    # main check_ci entrypoint
-
-    check_ci = subparsers.add_parser(
-        "check_ci", help="check urls in the specified files"
-    )
+    # check_ci command arguments
 
     check_ci.add_argument("files", metavar="file", nargs="+")
-
-    check_ci.add_argument(
-        "--force-pass",
-        help="force successful pass (return code 0) regardless of result",
-        default=False,
-        action="store_true",
-    )
-
-    check_ci.add_argument(
-        "--no-print",
-        help="Skip printing results to the screen (defaults to printing to console).",
-        default=False,
-        action="store_true",
-    )
-
-    # Exlude patterns (previously whitelisting)
-
-    check_ci.add_argument(
-        "--exclude-urls",
-        help="comma separated links to exclude (no spaces)",
-        default="",
-    )
-
-    # Saving
-
-    check_ci.add_argument(
-        "--save",
-        help="Path to a csv file to save results to.",
-        default=None,
-    )
-
-    # Timeouts
-
-    check_ci.add_argument(
-        "--retry-count",
-        help="retry count upon failure (defaults to 2, one retry).",
-        type=int,
-        default=2,
-    )
-
-    check_ci.add_argument(
-        "--timeout",
-        help="timeout (seconds) to provide to the requests library (defaults to 5)",
-        type=int,
-        default=5,
-    )
 
     return parser
 
