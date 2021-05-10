@@ -183,9 +183,7 @@ def main():
         print(urlchecker.__version__)
         sys.exit(0)
 
-    if args.command == "check":
-        from .check import main
-    if args.command == "check_ci":
+    if args.command == "check" or args.command == "check_ci":
         from .check import main
     else:
         print("Unsupported command %s" % args.command)
