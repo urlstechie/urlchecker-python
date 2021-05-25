@@ -32,8 +32,6 @@ def main(args, extra):
         args.path = "."
         args.subfolder = None
         args.file_types = "*"
-        args.exclude_patterns = ""
-        args.exclude_files = ""
         args.branch = None
         args.cleanup = False
         # code below expects a comma separated format
