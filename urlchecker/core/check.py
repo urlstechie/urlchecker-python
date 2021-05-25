@@ -68,6 +68,7 @@ class UrlChecker:
             if not os.path.exists(path):
                 sys.exit("%s does not exist." % path)
 
+            # get all file paths if a path is defined
             self.file_paths = fileproc.get_file_paths(
                 include_patterns=self.include_patterns,
                 base_path=path,
