@@ -82,12 +82,12 @@ def main(args, extra):
     print("                    save: %s" % args.save)
     print("                 timeout: %s" % args.timeout)
 
-    # Instantiate a new checker with provided arguments
     files_arg = None
     if args.command == "check_ci":
         if files:
             files_arg = files
-            
+
+    # Instantiate a new checker with provided arguments
     if path:
         checker = UrlChecker(
             files=files_arg,
