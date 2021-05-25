@@ -101,12 +101,6 @@ def get_parser():
             default="",
         )
 
-        command.add_argument(
-            "--exclude-files",
-            help="comma separated list of files and patterns to exclude (no spaces)",
-            default="",
-        )
-
     # check command arguments
 
     # supports a clone URL or a path
@@ -145,6 +139,12 @@ def get_parser():
         "--files",
         dest="files",
         help="comma separated list of exact files or patterns to check.",
+        default="",
+    )
+
+    check.add_argument(
+        "--exclude-files",
+        help="comma separated list of files and patterns to exclude (no spaces)",
         default="",
     )
 
