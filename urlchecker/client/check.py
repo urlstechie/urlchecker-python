@@ -83,23 +83,25 @@ def main(args, extra):
     print("                 timeout: %s" % args.timeout)
 
     # Instantiate a new checker with provided arguments
-    if files:
-        checker = UrlChecker(
-            files=files,
-            path=path,
-            file_types=file_types,
-            include_patterns=files,
-            exclude_files=exclude_files,
-            print_all=not args.no_print,
-        )
+    if args.command == "check_ci":
+        if files:
+            checker = UrlChecker(
+                files=files,
+                path=path,
+                file_types=file_types,
+                include_patterns=files,
+                exclude_files=exclude_files,
+                print_all=not args.no_print,
+            )
     else:
-        checker = UrlChecker(
-            path=path,
-            file_types=file_types,
-            include_patterns=files,
-            exclude_files=exclude_files,
-            print_all=not args.no_print,
-        )
+        if path:
+            checker = UrlChecker(
+                path=path,
+                file_types=file_types,
+                include_patterns=files,
+                exclude_files=exclude_files,
+                print_all=not args.no_print,
+            )
     check_results = checker.run(
         exclude_urls=exclude_urls,
         exclude_patterns=exclude_patterns,
