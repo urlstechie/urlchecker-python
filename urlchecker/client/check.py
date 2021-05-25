@@ -88,15 +88,14 @@ def main(args, extra):
             files_arg = files
 
     # Instantiate a new checker with provided arguments
-    if path:
-        checker = UrlChecker(
-            files=files_arg,
-            path=path,
-            file_types=file_types,
-            include_patterns=files,
-            exclude_files=exclude_files,
-            print_all=not args.no_print,
-        )
+    checker = UrlChecker(
+        files=files_arg,
+        path=path,
+        file_types=file_types,
+        include_patterns=files,
+        exclude_files=exclude_files,
+        print_all=not args.no_print,
+    )
     check_results = checker.run(
         exclude_urls=exclude_urls,
         exclude_patterns=exclude_patterns,
