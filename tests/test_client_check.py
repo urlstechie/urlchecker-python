@@ -54,7 +54,7 @@ def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, ti
     # Add final path
     cmd.append(path)
 
-    # excute script
+    # execute script
     pipe = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
@@ -73,7 +73,7 @@ def test_client_check_ci(files_string):
     # Add final path
     cmd.append(files_string)
 
-    # excute script
+    # execute script
     pipe = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
