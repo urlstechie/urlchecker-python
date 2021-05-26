@@ -58,9 +58,9 @@ def test_client_general(config_fname, cleanup, print_all, force_pass, rcount, ti
     pipe = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-@pytest.mark.parametrize("files_string", ["test_files/sample_test_file.md  test_files/sample_test_file.rst",
+@pytest.mark.parametrize("files_string", ["./tests/test_files/sample_test_file.md ./tests/test_files/sample_test_file.rst",
                                           "a_bad_file",  # invalid file
-                                          "test_files",  # directory
+                                          "./tests",  # directory
                                           ""  # empty
                                           ])
 def test_client_check_ci(files_string):
