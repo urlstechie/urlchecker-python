@@ -240,6 +240,40 @@ urlchecker check --file-types ".*,*.html" .
 to use them because if the shell expands any part of the pattern, it will not work as
 expected. By default, the urlchecker checks python and markdown.
 
+### Version Control Integration
+
+A [pre-commit](https://pre-commit.com/) config is included. Once pre-commit has been installed, add the following to the .pre-commit-config.yaml in the root of your repository.
+
+```bash
+repos:
+  - repo: https://github.com/urlstechie/urlchecker-python
+    rev: 0.0.17 # Replace by any tag/version: https://github.com/urlstechie/urlchecker-python/tags
+    hooks:
+      - id: urlchecker
+        language_version: python3 # Should be a command that runs python3.6+
+```
+
+Options for how pre-commit runs urlchecker and urlchecker itself can be specified in .pre-commit-config.yaml.
+
+```bash
+repos
+  - repo: https://github.com/urlstechie/urlchecker-python
+    rev: 0.0.17
+    hooks:
+      - id: urlchecker
+        language_version: python3
+        entry: urlchecker check_ci --exclude-pattern "http://localhost"
+        types_or: [markdown, json]
+        exclude: |
+          (?x)^(
+              version.json|
+              package.json|
+              package-lock.json|
+              ^tests/.*|
+              ^node_modules/.*
+          )$
+```
+
 ### Check GitHub Repository
 
 But wouldn't it be easier to not have to clone the repository first?
