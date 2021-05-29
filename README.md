@@ -242,7 +242,9 @@ expected. By default, the urlchecker checks python and markdown.
 
 ### Version Control Integration
 
-A [pre-commit](https://pre-commit.com/) config is included. Once pre-commit has been installed, add the following to the .pre-commit-config.yaml in the root of your repository.
+A [pre-commit](https://pre-commit.com/) config is included. Once pre-commit has
+been installed, add the following to the .pre-commit-config.yaml in the root of
+your repository.
 
 ```bash
 repos:
@@ -253,7 +255,8 @@ repos:
         language_version: python3 # Should be a command that runs python3.6+
 ```
 
-Options for how pre-commit runs urlchecker and urlchecker itself can be specified in .pre-commit-config.yaml.
+Options for how pre-commit runs urlchecker and urlchecker itself can be
+specified in .pre-commit-config.yaml.
 
 ```bash
 repos
