@@ -1,4 +1,4 @@
-FROM bitnami/minideb:stretch
+FROM bitnami/minideb:buster
 # docker build -t urlschecker .
 WORKDIR /code
 ENV PATH /opt/conda/bin:${PATH}
