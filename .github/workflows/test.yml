@@ -39,3 +39,9 @@ jobs:
           pip install .
           pip install -r tests/test-requirements.txt
           pytest -vs -x --cov=./urlchecker tests/test_*.py
+
+      - name: Test Building container image
+        run: |
+          docker build -t quay.io/urlstechie/urlchecker .
+          DOCKER_TAG=$(docker run quay.io/urlstechie/urlchecker --version)
+          printf "Docker Tag is ${DOCKER_TAG}\n"
