@@ -10,4 +10,6 @@ if __name__ == "__main__":
     url2 = "https://github.com/SuperKogito"
     url3 = "https://github.com/SuperKogito/URLs-checker/README.md"
     url3 = {"url": "https://github.com/SuperKogito/URLs-checker/README.md"}
+    url4 = "https://www.nersc.gov"
+    url5 = "https://www.olcf.ornl.gov"
     print("Done.")
