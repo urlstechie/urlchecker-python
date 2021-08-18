@@ -14,6 +14,8 @@ RUN apt-get update && \
 COPY . /code
 RUN /bin/bash -c "source activate urlchecker && \
     which python && \
+    which pip && \
+    pip install --upgrade certifi && \
     pip install ."
 RUN echo "source activate urlchecker" > ~/.bashrc
 ENV PATH /opt/conda/envs/urlchecker/bin:${PATH}
