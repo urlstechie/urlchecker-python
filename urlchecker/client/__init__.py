@@ -85,7 +85,7 @@ def get_parser():
 
     check.add_argument(
         "--verbose",
-        help="Print file names for failed URLs in addition to the URLs.",
+        help="Print file names for failed urls in addition to the urls.",
         default=False,
         action="store_true"
     )
