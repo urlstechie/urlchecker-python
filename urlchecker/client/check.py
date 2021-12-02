@@ -86,7 +86,7 @@ def main(args, extra):
         timeout=args.timeout,
     )
 
-    # save results to flie, if save indicated
+    # save results to file, if save indicated
     if args.save:
         checker.save_results(args.save)
 
@@ -103,8 +103,8 @@ def main(args, extra):
     # Case 2: We had errors, print them for the user
     if check_results["failed"]:
         print("\n\nDone. The following urls did not pass:")
-        for failed_url in check_results["failed"]:
-            print_failure(failed_url)
+        for file_name, result in checker.checks.items():
+            print_failure(file_name + ' : ' + url for url in result.failed)
 
     # If we have failures and it's not a force pass, exit with 1
     if not args.force_pass and check_results["failed"]:
