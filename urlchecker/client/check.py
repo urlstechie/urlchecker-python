@@ -103,9 +103,13 @@ def main(args, extra):
     # Case 2: We had errors, print them for the user
     if check_results["failed"]:
         print("\n\nDone. The following urls did not pass:")
-        for file_name, result in checker.checks.items():
-            for url in result.failed:
-                print_failure(url + " (" + file_name + ")")
+        if args.verbose:
+            for file_name, result in checker.checks.items():
+                for url in result.failed:
+                    print_failure(url + " (" + file_name + ")")
+        else:
+            for failed_url in check_results["failed"]:
+                print_failure(failed_url)
 
     # If we have failures and it's not a force pass, exit with 1
     if not args.force_pass and check_results["failed"]:
