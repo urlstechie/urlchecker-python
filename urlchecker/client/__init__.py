@@ -46,7 +46,8 @@ def get_parser():
 
     # supports a clone URL or a path
     check.add_argument(
-        "path", help="the local path or GitHub repository to clone and check",
+        "path",
+        help="the local path or GitHub repository to clone and check",
     )
 
     check.add_argument(
@@ -126,7 +127,9 @@ def get_parser():
     # Saving
 
     check.add_argument(
-        "--save", help="Path to a csv file to save results to.", default=None,
+        "--save",
+        help="Path to a csv file to save results to.",
+        default=None,
     )
 
     # Timeouts
