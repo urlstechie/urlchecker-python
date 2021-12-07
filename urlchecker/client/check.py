@@ -63,6 +63,7 @@ def main(args, extra):
     print("              file types: %s" % file_types)
     print("                   files: %s" % files)
     print("               print all: %s" % (not args.no_print))
+    print("                 verbose: %s" % (args.verbose))
     print("           urls excluded: %s" % exclude_urls)
     print("   url patterns excluded: %s" % exclude_patterns)
     print("  file patterns excluded: %s" % exclude_files)
@@ -97,17 +98,19 @@ def main(args, extra):
 
     # Case 1: We didn't find any urls to check
     if not check_results["failed"] and not check_results["passed"]:
-        print("\n\nDone. No urls were collected.")
+        print("\n\n\U0001F937. No urls were collected.")
         sys.exit(0)
 
     # Case 2: We had errors, print them for the user
     if check_results["failed"]:
-        print("\n\nDone. The following urls did not pass:")
         if args.verbose:
+            print("\n\U0001F914 Uh oh... The following urls did not pass:")
             for file_name, result in checker.checks.items():
+                print_failure(file_name + ":")
                 for url in result.failed:
-                    print_failure(url + " (" + file_name + ")")
+                    print_failure("     " + url)
         else:
+            print("\n\U0001F914 Uh oh... The following urls did not pass:")
             for failed_url in check_results["failed"]:
                 print_failure(failed_url)
 
@@ -117,7 +120,7 @@ def main(args, extra):
 
     # Finally, alert user if we are passing conditionally
     if check_results["failed"]:
-        print("\n\nConditional pass force pass True.")
+        print("\n\U0001F928 Conditional pass force pass True.")
     else:
-        print("\n\nDone. All URLS passed.")
+        print("\n\n\U0001F389 All URLS passed!")
     sys.exit(0)
