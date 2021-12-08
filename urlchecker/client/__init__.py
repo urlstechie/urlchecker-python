@@ -84,6 +84,13 @@ def get_parser():
     )
 
     check.add_argument(
+        "--verbose",
+        help="Print file names for failed urls in addition to the urls.",
+        default=False,
+        action="store_true",
+    )
+
+    check.add_argument(
         "--file-types",
         dest="file_types",
         help="comma separated list of file extensions to check (defaults to .md,.py)",

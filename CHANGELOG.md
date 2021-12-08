@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - adding option to print a summary that contains file names and urls (0.0.24)
  - updating container base to use debian buster and adding certifi (0.0.23)
  - updating "whitelist" arguments to exclude (0.0.22)
  - adding support for dotfiles for a file type (0.0.21)
