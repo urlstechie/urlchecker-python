@@ -67,7 +67,6 @@ class Workers:
             self.start()
             for key, params in tasks.items():
                 func = funcs[key]
-                logger.info("Processing task %s:%s" % (key, params))
                 result = pool.apply_async(multi_wrapper, multi_package(func, [params]))
 
                 # Store the key with the result
@@ -90,7 +89,7 @@ class Workers:
             sys.exit(1)
 
         except:
-            logger.exit("Error running task.")
+            logger.exit("Error running task")
 
         return finished
 
