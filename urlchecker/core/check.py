@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -12,6 +12,7 @@ import os
 import re
 import sys
 from urlchecker.core import fileproc
+from urlchecker.core.worker import Workers
 from urlchecker.core.urlproc import UrlCheckResult
 
 
@@ -41,6 +42,8 @@ class UrlChecker:
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
         self.results = {"passed": set(), "failed": set(), "excluded": set()}
+
+        # Results organized by filename
         self.checks = {}
 
         # Save run parameters
@@ -123,12 +126,18 @@ class UrlChecker:
                     else:
                         file_name = os.path.relpath(file_name)
 
-                [writer.writerow([url, "failed", file_name]) for url in result.failed]
+                [
+                    writer.writerow([url, "failed", file_name])
+                    for url in result["failed"]
+                ]
                 [
                     writer.writerow([url, "excluded", file_name])
-                    for url in result.excluded
+                    for url in result["excluded"]
                 ]
-                [writer.writerow([url, "passed", file_name]) for url in result.passed]
+                [
+                    writer.writerow([url, "passed", file_name])
+                    for url in result["passed"]
+                ]
 
         return file_path
 
@@ -161,27 +170,56 @@ class UrlChecker:
         exclude_urls = exclude_urls or []
         exclude_patterns = exclude_patterns or []
 
-        # loop through files files
+        # Run with multiprocessing
+        tasks = {}
+        funcs = {}
+        workers = Workers()
+
+        # loop through files
         for file_name in file_paths:
 
-            # Instantiate a checker to extract urls
-            checker = UrlCheckResult(
-                file_name=file_name,
-                exclude_patterns=exclude_patterns,
-                exclude_urls=exclude_urls,
-                print_all=self.print_all,
-            )
+            # Export parameters and functions, use the same check task for all
+            tasks[file_name] = {
+                "file_name": file_name,
+                "exclude_patterns": exclude_patterns,
+                "exclude_urls": exclude_urls,
+                "print_all": self.print_all,
+                "retry_count": retry_count,
+                "timeout": timeout,
+            }
+            funcs[file_name] = check_task
 
-            # Check the urls
-            checker.check_urls(retry_count=retry_count, timeout=timeout)
-
-            # Update flattened results
-            self.results["failed"].update(checker.failed)
-            self.results["passed"].update(checker.passed)
-            self.results["excluded"].update(checker.excluded)
-
-            # Save the checker in the lookup
-            self.checks[file_name] = checker
+        results = workers.run(funcs, tasks)
+        for file_name, result in results.items():
+            self.checks[file_name] = result
+            self.results["failed"].update(result["failed"])
+            self.results["passed"].update(result["passed"])
+            self.results["excluded"].update(result["excluded"])
 
         # A flattened dict of passed and failed
         return self.results
+
+
+def check_task(*args, **kwargs):
+    """
+    A checking task, the default we use
+    """
+    # Instantiate a checker to extract urls
+    checker = UrlCheckResult(
+        file_name=kwargs["file_name"],
+        exclude_patterns=kwargs.get("exclude_patterns", []),
+        exclude_urls=kwargs.get("exclude_urls", []),
+        print_all=kwargs.get("print_all", True),
+    )
+
+    # Check the urls
+    checker.check_urls(
+        retry_count=kwargs.get("retry_count", 2), timeout=kwargs.get("timeout", 5)
+    )
+
+    # Update flattened results
+    return {
+        "failed": checker.failed,
+        "passed": checker.passed,
+        "excluded": checker.excluded,
+    }
