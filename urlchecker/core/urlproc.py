@@ -90,8 +90,37 @@ def get_user_agent():
     return random.choice(agents)
 
 
+def find_urls(file_names, exclude_patterns=None, exclude_urls=None):
+    """
+    Given a list of file names, return the file name and a list of urls to parse
+    (intended to be passed on to the UrlCheckResultResult class) that removes
+    any redundant URLs.
+    """
+    # keep a master list of urls we have seen - no repeats allowed!
+    seen = set()
+
+    for file_name in file_names:
+        checker = UrlCheckResult(
+            file_name=file_name,
+            exclude_patterns=exclude_patterns,
+            exclude_urls=exclude_urls,
+        )
+
+        # Ensure we don't have repeats and updated seen list
+        checker.urls = [u for u in checker.urls if u not in seen]
+        [seen.add(u) for u in checker.urls]
+
+        # Skip empty sets of urls
+        if not checker.urls:
+            continue
+
+        # finder.urls is already unique
+        yield file_name, checker.urls
+
+
 class UrlCheckResult:
-    """A UrlCheckResult is a basic class to hold a result for a filename.
+    """
+    A UrlCheckResult is a basic class to find urls, check, and hold results.
     It includes passed, failed, and all urls for a particular file,
     along with taking the filename and parsing it for urls.
     """
@@ -99,19 +128,23 @@ class UrlCheckResult:
     def __init__(
         self,
         file_name=None,
+        print_all=True,
         exclude_patterns=None,
         exclude_urls=None,
-        print_all=True,
+        urls=None,
     ):
         self.file_name = file_name
+        self.urls = urls or []
         self.print_all = print_all
         self.passed = []
         self.failed = []
         self.excluded = []
-        self.urls = []
         self.exclude_patterns = exclude_patterns or []
         self.exclude_urls = exclude_urls or []
-        self.extract_urls()
+
+        # Only parse urls from file if not provided
+        if not self.urls:
+            self.extract_urls()
 
     def __str__(self):
         if self.file_name:
@@ -120,17 +153,6 @@ class UrlCheckResult:
 
     def __repr__(self):
         return self.__str__()
-
-    @property
-    def all(self):
-        """All returns all urls found in a file name, including those that
-        passed and failed.
-        """
-        return self.passed + self.failed + self.excluded
-
-    @property
-    def count(self):
-        return len(self.all)
 
     def extract_urls(self):
         """Typically on init, use the provided exclude patterns and urls to
@@ -145,6 +167,17 @@ class UrlCheckResult:
 
         # collect all links from file (unique=True is set)
         self.urls = fileproc.collect_links_from_file(self.file_name)
+
+    @property
+    def all(self):
+        """All returns all urls found in a file name, including those that
+        passed and failed.
+        """
+        return self.passed + self.failed + self.excluded
+
+    @property
+    def count(self):
+        return len(self.all)
 
     def check_urls(self, urls=None, retry_count=1, timeout=5):
         """

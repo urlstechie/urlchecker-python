@@ -2,20 +2,43 @@ import pytest
 from urlchecker.core.fileproc import collect_links_from_file
 from urlchecker.core.urlproc import (
     UrlCheckResult,
+    find_urls,
     get_user_agent,
     check_response_status_code,
 )
 
 
 @pytest.mark.parametrize(
-    "file",
+    "files",
+    [
+        [
+            "tests/test_files/sample_test_file.md",
+            "tests/test_files/sample_test_file.py",
+            "tests/test_files/sample_test_file.rst",
+        ]
+    ],
+)
+def test_no_duplicates(files):
+    """
+    Ensure when we provide a list of files (with redundant urls) we don't
+    see duplicates when using find_urls
+    """
+    seen = set()
+    for _, urls in find_urls(files):
+        for url in urls:
+            assert url not in seen
+        [seen.add(url) for url in urls]
+
+
+@pytest.mark.parametrize(
+    "filename",
     ["tests/test_files/sample_test_file.md"],
 )
-def test_check_urls(file):
+def test_check_urls(filename):
     """
     test check urls check function.
     """
-    urls = collect_links_from_file(file)
+    urls = collect_links_from_file(filename)
     checker = UrlCheckResult()
     assert str(checker) == "UrlCheckResult"
 

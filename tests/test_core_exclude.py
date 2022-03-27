@@ -1,4 +1,3 @@
-import pytest
 from urlchecker.core.exclude import excluded
 
 

@@ -1,6 +1,5 @@
 import os
 import pytest
-import tempfile
 from urlchecker.core.fileproc import (
     check_file_type,
     get_file_paths,
@@ -15,7 +14,7 @@ from urlchecker.core.fileproc import (
     [".filename"],
 )
 @pytest.mark.parametrize("file_types", [[".*"]])
-def test_check_file_type(file_path, file_types):
+def test_check_all_file_type(file_path, file_types):
     """
     test pattern matching
     """
@@ -106,13 +105,13 @@ def test_get_file_paths(base_path, file_types):
     "file_path",
     ["tests/test_files/sample_test_file.md", "tests/test_files/sample_test_file.md"],
 )
-def collect_links_from_file(file_path):
+def test_collect_links_from_file(file_path):
     """
     test links collerction function.
     """
     # read file content
     urls = collect_links_from_file()
-    assert len(url) == 3
+    assert len(urls) == 3
 
 
 def test_remove_empty():

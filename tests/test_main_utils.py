@@ -1,5 +1,4 @@
 import os
-import pytest
 from urlchecker.main.utils import get_tmpdir
 
 

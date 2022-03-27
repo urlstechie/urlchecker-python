@@ -13,7 +13,7 @@ import re
 import sys
 from urlchecker.core import fileproc
 from urlchecker.core.worker import Workers
-from urlchecker.core.urlproc import UrlCheckResult
+import urlchecker.core.urlproc as urlproc
 
 
 class UrlChecker:
@@ -175,21 +175,23 @@ class UrlChecker:
         funcs = {}
         workers = Workers()
 
-        # loop through files
-        for file_name in file_paths:
+        # Iterate through files and unique urls (across workers!)
+        for file_name, urlset in urlproc.find_urls(
+            file_paths, exclude_patterns, exclude_urls
+        ):
 
             # Export parameters and functions, use the same check task for all
             tasks[file_name] = {
                 "file_name": file_name,
-                "exclude_patterns": exclude_patterns,
-                "exclude_urls": exclude_urls,
+                "urls": urlset,
                 "print_all": self.print_all,
                 "retry_count": retry_count,
                 "timeout": timeout,
             }
             funcs[file_name] = check_task
 
-        results = workers.run(funcs, tasks)
+        # No tasks, workers won't run (no results)
+        results = workers.run(funcs, tasks) or {}
         for file_name, result in results.items():
             self.checks[file_name] = result
             self.results["failed"].update(result["failed"])
@@ -205,10 +207,9 @@ def check_task(*args, **kwargs):
     A checking task, the default we use
     """
     # Instantiate a checker to extract urls
-    checker = UrlCheckResult(
+    checker = urlproc.UrlCheckResult(
         file_name=kwargs["file_name"],
-        exclude_patterns=kwargs.get("exclude_patterns", []),
-        exclude_urls=kwargs.get("exclude_urls", []),
+        urls=kwargs.get("urls", []),
         print_all=kwargs.get("print_all", True),
     )
 

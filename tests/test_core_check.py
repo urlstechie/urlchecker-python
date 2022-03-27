@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 import pytest
 import configparser
 from urlchecker.core.fileproc import get_file_paths
@@ -78,7 +77,6 @@ def test_check_run_save(tmp_path, retry_count):
     ]
     exclude_patterns = ["https://superkogito.github.io/tables"]
     timeout = 1
-    force_pass = False
 
     # clone repo
     base_path = clone_repo(git_path)
@@ -89,7 +87,7 @@ def test_check_run_save(tmp_path, retry_count):
 
     # check repo urls
     checker = UrlChecker(print_all=print_all)
-    check_results = checker.run(
+    checker.run(
         file_paths=file_paths,
         exclude_urls=exclude_urls,
         exclude_patterns=exclude_patterns,

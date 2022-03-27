@@ -12,8 +12,9 @@ import configparser
 @pytest.mark.parametrize("force_pass", [False, True])
 @pytest.mark.parametrize("rcount", [1, 3])
 @pytest.mark.parametrize("timeout", [3, 5])
-def test_client_general(config_fname, cleanup, print_all, verbose,
-                        force_pass, rcount, timeout):
+def test_client_general(
+    config_fname, cleanup, print_all, verbose, force_pass, rcount, timeout
+):
 
     # init config parser
     config = configparser.ConfigParser()
@@ -59,7 +60,7 @@ def test_client_general(config_fname, cleanup, print_all, verbose,
     cmd.append(path)
 
     # excute script
-    pipe = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
 @pytest.mark.parametrize("save", [True])
@@ -101,7 +102,7 @@ def test_client_save(save):
 
     print(" ".join(cmd))
     # excute script
-    pipe = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if save:
         if not os.path.exists(output_csv.name):
             raise AssertionError

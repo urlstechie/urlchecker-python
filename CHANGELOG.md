@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - ensure duplicated URLs are not checked across workers (0.0.27)
  - multiprocessing to speed up checks (0.0.26)
  - bug fix for verbose option to only print file names that have failures (0.0.25)
  - adding option to print a summary that contains file names and urls (0.0.24)

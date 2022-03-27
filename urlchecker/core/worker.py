@@ -89,7 +89,7 @@ class Workers:
             sys.exit(1)
 
         except:
-            logger.exit("Error running task")
+            logger.error("Error running task")
 
         return finished
 
