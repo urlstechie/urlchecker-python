@@ -1,6 +1,6 @@
 """
 client/github.py: entrypoint for interaction with a GitHub repostiory.
-Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
 """
 
 import re
@@ -106,9 +106,9 @@ def main(args, extra):
         if args.verbose:
             print("\n\U0001F914 Uh oh... The following urls did not pass:")
             for file_name, result in checker.checks.items():
-                if result.failed:
+                if result["failed"]:
                     print_failure(file_name + ":")
-                    for url in result.failed:
+                    for url in result["failed"]:
                         print_failure("     " + url)
         else:
             print("\n\U0001F914 Uh oh... The following urls did not pass:")

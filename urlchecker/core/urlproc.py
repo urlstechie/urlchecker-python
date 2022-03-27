@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2021 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.  
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -168,13 +168,8 @@ class UrlCheckResult:
         # if no urls are found, mention it if required
         if not urls:
             if self.print_all:
-                if self.file_name:
-                    print("\n", self.file_name, "\n", "-" * len(self.file_name))
                 print("No urls found.")
             return
-
-        if self.file_name:
-            print("\n", self.file_name, "\n", "-" * len(self.file_name))
 
         # init seen urls list
         seen = set()
