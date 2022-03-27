@@ -166,7 +166,22 @@ class UrlCheckResult:
             return
 
         # collect all links from file (unique=True is set)
-        self.urls = fileproc.collect_links_from_file(self.file_name)
+        urls = fileproc.collect_links_from_file(self.file_name)
+
+        # eliminate excluded urls and patterns
+        if self.exclude_urls or self.exclude_patterns:
+            self.excluded = [
+                url
+                for url in urls
+                if excluded(url, self.exclude_urls, self.exclude_patterns)
+            ]
+            urls = list(set(urls).difference(set(self.excluded)))
+
+        self.urls = urls
+
+        # if no urls are found, mention it if required
+        if not self.urls and self.print_all:
+            print("No urls found.")
 
     @property
     def all(self):
@@ -188,21 +203,6 @@ class UrlCheckResult:
             - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
         """
         urls = urls or self.urls
-
-        # eliminate excluded urls and patterns
-        if self.exclude_urls or self.exclude_patterns:
-            self.excluded = [
-                url
-                for url in urls
-                if excluded(url, self.exclude_urls, self.exclude_patterns)
-            ]
-            urls = list(set(urls).difference(set(self.excluded)))
-
-        # if no urls are found, mention it if required
-        if not urls:
-            if self.print_all:
-                print("No urls found.")
-            return
 
         # init seen urls list
         seen = set()

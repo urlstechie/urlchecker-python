@@ -111,7 +111,7 @@ def test_collect_links_from_file(file_path):
     """
     # read file content
     urls = collect_links_from_file(file_path)
-    assert len(urls) == 3
+    assert len(urls) == 17
 
 
 def test_remove_empty():
