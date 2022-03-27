@@ -110,7 +110,7 @@ def test_collect_links_from_file(file_path):
     test links collerction function.
     """
     # read file content
-    urls = collect_links_from_file()
+    urls = collect_links_from_file(file_path)
     assert len(urls) == 3
 
 
