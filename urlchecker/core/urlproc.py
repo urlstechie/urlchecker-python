@@ -179,10 +179,6 @@ class UrlCheckResult:
 
         self.urls = urls
 
-        # if no urls are found, mention it if required
-        if not self.urls and self.print_all:
-            print("No urls found.")
-
     @property
     def all(self):
         """All returns all urls found in a file name, including those that
