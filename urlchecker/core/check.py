@@ -190,6 +190,10 @@ class UrlChecker:
             funcs[file_name] = check_task
 
         results = workers.run(funcs, tasks)
+        if not results:
+            print("\U0001F914 There were no URLs to check.")
+            sys.exit(0)
+
         for file_name, result in results.items():
             self.checks[file_name] = result
             self.results["failed"].update(result["failed"])
