@@ -111,7 +111,10 @@ class UrlCheckResult:
         self.urls = []
         self.exclude_patterns = exclude_patterns or []
         self.exclude_urls = exclude_urls or []
-        self.extract_urls()
+
+        # Only extract if we have a filename in advance
+        if self.file_name:
+            self.extract_urls()
 
     def __str__(self):
         if self.file_name:

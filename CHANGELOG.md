@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - decrease verbosity when filename is None (0.0.28)
  - don't exit and fail if no URLs to check (0.0.27)
  - multiprocessing to speed up checks (0.0.26)
  - bug fix for verbose option to only print file names that have failures (0.0.25)
