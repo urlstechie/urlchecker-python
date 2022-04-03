@@ -1,6 +1,11 @@
 """
+
 client/github.py: entrypoint for interaction with a GitHub repostiory.
 Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+
+This source code is licensed under the terms of the MIT license.
+For a copy, see <https://opensource.org/licenses/MIT>.
+
 """
 
 import re
@@ -18,14 +23,14 @@ logger = logging.getLogger("urlchecker")
 
 def main(args, extra):
     """
-    main entrypoint for running a check. We expect an args object with
+    Main entrypoint for running a check. We expect an args object with
     arguments from the main client. From here we determine the path
     to parse (or GitHub url to clone) and call the main check function
     under main/check.py
 
-    Parameters:
-      - args: the argparse ArgParser with parsed args
-      - extra: extra arguments not handled by the parser
+    Args:
+      - args  : the argparse ArgParser with parsed args
+      - extra : extra arguments not handled by the parser
     """
     path = args.path
 
