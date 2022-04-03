@@ -5,8 +5,8 @@ import argparse
 import tempfile
 import subprocess
 import configparser
+from urlchecker.client import main as init_main
 from urlchecker.client.check import main as check_main
-from urlchecker.client.__init__ import main as init_main
 
 
 @pytest.mark.parametrize("config_fname", ["./tests/_local_test_config.conf"])
