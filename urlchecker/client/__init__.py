@@ -176,7 +176,7 @@ def main():
 
     # If an error occurs while parsing the arguments, the interpreter will exit with value 2
     args, extra = parser.parse_known_args()
-    
+
     # Show the version and exit
     if args.command == "version" or args.version:
         print(urlchecker.__version__)
