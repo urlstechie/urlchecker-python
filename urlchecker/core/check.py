@@ -11,6 +11,7 @@ import csv
 import os
 import re
 import sys
+from typing import List, Dict
 from urlchecker.core import fileproc
 from urlchecker.core.worker import Workers
 from urlchecker.core.urlproc import UrlCheckResult
@@ -23,11 +24,11 @@ class UrlChecker:
 
     def __init__(
         self,
-        path=None,
-        file_types=None,
-        exclude_files=None,
-        print_all=True,
-        include_patterns=None,
+        path: str = None,
+        file_types: List[str] = None,
+        exclude_files: List[str] = None,
+        print_all: bool = True,
+        include_patterns: List[str] = None,
     ):
         """
         initiate a url checker. At init we take in preferences for
@@ -35,16 +36,21 @@ class UrlChecker:
         parameters to run a url check.
 
         Args:
-            - path             (str) : full path to the root folder to check. If not defined, no file_paths are parsed
-            - print_all        (str) : control var for whether to print all checked file names or only the ones with urls.
+            - path              (str) : full path to the root folder to check. If not defined, no file_paths are parsed.
+            - file_types       (list) : types of files to scan for links.
+            - print_all        (bool) : control var for whether to print all checked file names or only the ones with urls.
             - exclude_files    (list) : list of excluded files and patterns for flies.
             - include_patterns (list) : list of files and patterns to check.
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
-        self.results = {"passed": set(), "failed": set(), "excluded": set()}
+        self.results = {
+            "passed": set(),
+            "failed": set(),
+            "excluded": set(),
+        }  # type: Dict[str, set]
 
         # Results organized by filename
-        self.checks = {}
+        self.checks = {}  # type: Dict[str, Dict]
 
         # Save run parameters
         self.exclude_files = exclude_files or []
@@ -62,21 +68,27 @@ class UrlChecker:
                 sys.exit("%s does not exist." % path)
 
             self.file_paths = fileproc.get_file_paths(
-                include_patterns=self.include_patterns,
                 base_path=path,
                 file_types=self.file_types,
                 exclude_files=self.exclude_files,
+                include_patterns=self.include_patterns,
             )
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.path:
             return "UrlChecker:%s" % self.path
         return "UrlChecker"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
-    def save_results(self, file_path, sep=",", header=None, relative_paths=True):
+    def save_results(
+        self,
+        file_path: str,
+        sep: str = ",",
+        header: List[str] = None,
+        relative_paths: bool = True,
+    ) -> str:
         """
         Given a check_results dictionary, a dict with "failed" and "passed" keys (
         or more generally, keys to indicate some status), save a csv
@@ -85,10 +97,10 @@ class UrlChecker:
         on error.
 
         Args:
-            - file_path (str): the file path (.csv) to save to.
-            - sep (str): the separate to use (defaults to comma)
-            - header (list): if not provided, will save URL,RESULT
-            - relative paths (bool) : save relative paths (default True)
+            - file_path       (str) : the file path (.csv) to save to.
+            - sep             (str) : the separate to use (defaults to comma)
+            - header         (list) : if not provided, will save URL,RESULT
+            - relative_paths (bool) : save relative paths (default True)
 
         Returns:
             (str) file_path: a newly saved csv with the results
@@ -143,12 +155,12 @@ class UrlChecker:
 
     def run(
         self,
-        file_paths=None,
-        exclude_patterns=None,
-        exclude_urls=None,
-        retry_count=2,
-        timeout=5,
-    ):
+        file_paths: List[str] = None,
+        exclude_patterns: List[str] = None,
+        exclude_urls: List[str] = None,
+        retry_count: int = 2,
+        timeout: int = 5,
+    ) -> Dict[str, set]:
         """
         Run the url checker given a path, excluded patterns for urls/files
         name paths or patterns, and a number of retries and timeouts.
@@ -159,10 +171,11 @@ class UrlChecker:
             - file_paths       (list) : list of file paths to run over, defaults to those generated on init.
             - exclude_urls     (list) : list of excluded urls.
             - exclude_patterns (list) : list of excluded patterns for urls.
-            - retry_count      (int) : number of retries on failed first check. Default=2.
-            - timeout          (int) : timeout to use when waiting on check feedback. Default=5.
+            - retry_count       (int) : number of retries on failed first check. Default=2.
+            - timeout           (int) : timeout to use when waiting on check feedback. Default=5.
 
-        Returns: dictionary with each of list of urls for "failed" and "passed."
+        Returns:
+            dictionary with each of list of urls for "failed" and "passed."
         """
         file_paths = file_paths or self.file_paths
 
