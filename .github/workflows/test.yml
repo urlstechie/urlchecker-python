@@ -22,26 +22,34 @@ jobs:
           source activate black
           pip install black
           black --check urlchecker
-          
-          
+
+
   type_checking:
+    needs: formatting
     runs-on: ubuntu-latest
     steps:
-      - uses: jpetrucciani/mypy-check@0.930
-      - name: mypy check
-      - with:
-          path: 'urlchecker'
-        
+      - uses: actions/checkout@v2
+
+      - name: Setup mypy environment
+        run: conda create --quiet --name type_checking mypy
+
+      - name: Check types with mypy
+        run: |
+          export PATH="/usr/share/miniconda/bin:$PATH"
+          source activate type_checking
+          pip install mypy
+          mypy urlchecker
+
 
   testing:
-    needs: formatting
+    needs: type_checking
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup testing environment
         run: conda create --quiet --name testing pytest
 
-      - name: Test 
+      - name: Test
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate testing
