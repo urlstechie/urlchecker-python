@@ -35,7 +35,7 @@ def test_client_init_(
         "urlchecker",
         "check",
         "--branch",
-        "master",
+        "main",
         "--subfolder",
         "test_files",
         "--file-types",
@@ -100,7 +100,7 @@ def test_arguments_from_cli(
     cmd = argparse.Namespace(
         path=config["DEFAULT"]["git_path_test_value"],
         subfolder="test_files",
-        branch="master",
+        branch="main",
         cleanup=str(cleanup),
         file_types=config["DEFAULT"]["file_types_test_values"],
         files="",

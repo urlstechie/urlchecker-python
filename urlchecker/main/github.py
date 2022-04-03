@@ -62,15 +62,15 @@ def delete_repo(base_path: str) -> int:
     return result.returncode
 
 
-def get_branch(default: str = "master") -> str:
+def get_branch(default: str = "main") -> str:
     """
     Derive the selected branch. We first look to the environment variable
     for INPUT_BRANCH, meaning that the user set the branch variable. If
     that is unset we parse GITHUB_REF. If both of those are unset,
-    then we default to default (master).
+    then we default to default (main).
 
     Returns:
-        (str) the branch found in the environment, otherwise master.
+        (str) the branch found in the environment, otherwise main.
     """
     # First check goes to use setting in action
     branch = os.getenv("INPUT_BRANCH")

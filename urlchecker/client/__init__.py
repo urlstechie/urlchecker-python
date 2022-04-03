@@ -53,8 +53,8 @@ def get_parser():
     check.add_argument(
         "-b",
         "--branch",
-        help="if cloning, specify a branch to use (defaults to master)",
-        default="master",
+        help="if cloning, specify a branch to use (defaults to main)",
+        default="main",
     )
 
     check.add_argument(
