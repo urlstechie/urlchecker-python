@@ -88,7 +88,6 @@ class Workers:
 
         except:
             logger.error("Error running task")
-            return None
 
         return finished
 
