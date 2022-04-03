@@ -22,7 +22,16 @@ jobs:
           source activate black
           pip install black
           black --check urlchecker
-
+          
+          
+  type_checking:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jpetrucciani/mypy-check@0.930
+      - name: mypy check
+      - with:
+          path: 'urlchecker'
+        
 
   testing:
     needs: formatting
