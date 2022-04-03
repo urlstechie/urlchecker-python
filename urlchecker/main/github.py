@@ -2,7 +2,7 @@
 
 Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
@@ -13,7 +13,7 @@ import subprocess
 from urlchecker.main.utils import get_tmpdir
 
 
-def clone_repo(git_path, branch="master", dest=None):
+def clone_repo(git_path: str, branch: str = "master", dest: str = None) -> str:
     """
     Clone and name a git repository.
 
@@ -41,7 +41,7 @@ def clone_repo(git_path, branch="master", dest=None):
     return dest
 
 
-def delete_repo(base_path):
+def delete_repo(base_path: str) -> int:
     """
     Delete repository.
 
@@ -49,7 +49,11 @@ def delete_repo(base_path):
         - base_path (str) : base path of the cloned git repository.
 
     Returns:
-        (str) message/ code describing whether the operation was successfully excuted.
+        (int) Exit status of the child process.
+
+    Remark:
+        The exit status is typically, an exit status of 0 indicates that it ran successfully.
+        A negative value -N indicates that the child was terminated by signal N (POSIX only)
     """
     # clone repo
     result = subprocess.run(
@@ -58,7 +62,7 @@ def delete_repo(base_path):
     return result.returncode
 
 
-def get_branch(default="master"):
+def get_branch(default: str = "master") -> str:
     """
     Derive the selected branch. We first look to the environment variable
     for INPUT_BRANCH, meaning that the user set the branch variable. If
