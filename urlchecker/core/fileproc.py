@@ -10,10 +10,11 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import fnmatch
 import re
 import os
+from typing import List
 from urlchecker.core import urlmarker
 
 
-def check_file_type(file_path, file_types):
+def check_file_type(file_path: str, file_types: List[str]) -> bool:
     """
     Check file type to assert that only file with certain predefined extensions
     are checked. We currently support an extension verbatim, or regular
@@ -39,13 +40,17 @@ def check_file_type(file_path, file_types):
     return False
 
 
-def include_file(file_path, exclude_patterns=None, include_patterns=None):
+def include_file(
+    file_path: str,
+    exclude_patterns: List[str] = None,
+    include_patterns: List[str] = None,
+) -> bool:
     """
     Check a file path for inclusion based on an OR regular expression.
     The user is currently not notified if a file is marked for removal.
 
     Args:
-        - file_path        (str) : a file path to check if should be included.
+        - file_path         (str) : a file path to check if should be included.
         - exclude_patterns (list) : list of patterns to exclude.
         - include_patterns (list) : list of patterns to include.
 
@@ -65,19 +70,24 @@ def include_file(file_path, exclude_patterns=None, include_patterns=None):
 
     # Return False (don't include) if excluded
     if not include_patterns:
-        return not re.search(exclude_regexp, file_path)
+        return not bool(re.search(exclude_regexp, file_path))
 
     # We have an include_patterns only
     elif not exclude_patterns:
-        return re.search(include_regexp, file_path)
+        return bool(re.search(include_regexp, file_path))
 
     # If both defined, excluded takes preference
-    return re.search(include_regexp, file_path) and not re.search(
-        exclude_regexp, file_path
+    return bool(re.search(include_regexp, file_path)) and not bool(
+        re.search(exclude_regexp, file_path)
     )
 
 
-def get_file_paths(base_path, file_types, exclude_files=None, include_patterns=None):
+def get_file_paths(
+    base_path: str,
+    file_types: List[str],
+    exclude_files: List[str] = None,
+    include_patterns: List[str] = None,
+) -> List[str]:
     """
     Get path to all files under a give directory and its subfolders.
 
@@ -85,7 +95,7 @@ def get_file_paths(base_path, file_types, exclude_files=None, include_patterns=N
         - base_path           (str) : base path.
         - file_types         (list) : list of file extensions to accept.
         - include_patterns   (list) : list of files and patterns to include.
-        - exclude_files (list) : list of files or patterns to exclude
+        - exclude_files      (list) : list of files or patterns to exclude
 
     Returns:
         (list) list of file paths.
@@ -108,12 +118,13 @@ def get_file_paths(base_path, file_types, exclude_files=None, include_patterns=N
     return file_paths
 
 
-def collect_links_from_file(file_path, unique=True):
+def collect_links_from_file(file_path: str, unique: bool = True) -> List[str]:
     """
     Collect all links in a file.
 
     Args:
-        - file_path   (str) : path to file.
+        - file_path  (str) : path to file.
+        - unique    (bool) : specify whether to filter out duplicate links.
 
     Returns:
         (list) list of links/ urls in a file.
@@ -144,7 +155,7 @@ def collect_links_from_file(file_path, unique=True):
     return final
 
 
-def remove_empty(file_list):
+def remove_empty(file_list: List[str]) -> List[str]:
     """
     Given a file list, return only those that aren't empty string or None.
 

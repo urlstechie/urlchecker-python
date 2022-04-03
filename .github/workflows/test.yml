@@ -24,15 +24,33 @@ jobs:
           black --check urlchecker
 
 
-  testing:
+  type_checking:
     needs: formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup mypy environment
+        run: conda create --quiet --name type_checking mypy
+
+      - name: Check types with mypy
+        run: |
+          export PATH="/usr/share/miniconda/bin:$PATH"
+          source activate type_checking
+          pip install mypy
+          pip install types-requests
+          mypy urlchecker
+
+
+  testing:
+    needs: type_checking
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup testing environment
         run: conda create --quiet --name testing pytest
 
-      - name: Test 
+      - name: Test
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate testing

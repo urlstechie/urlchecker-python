@@ -28,11 +28,11 @@ def test_get_branch():
     """
     test getting branch from environment or default
     """
-    # Unset defaults to master
+    # Unset defaults to main
     os.environ["GITHUB_REF"] = ""
     os.putenv("GITHUB_REF", "")
     branch = get_branch()
-    if branch != "master":
+    if branch != "main":
         raise AssertionError
 
     # Set both GitHub input variable and ref (ref takes priority)

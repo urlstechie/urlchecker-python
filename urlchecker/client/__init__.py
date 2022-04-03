@@ -53,8 +53,8 @@ def get_parser():
     check.add_argument(
         "-b",
         "--branch",
-        help="if cloning, specify a branch to use (defaults to master)",
-        default="master",
+        help="if cloning, specify a branch to use (defaults to main)",
+        default="main",
     )
 
     check.add_argument(
@@ -152,12 +152,15 @@ def get_parser():
 
 
 def main():
-    """main is the entrypoint urlchecker-python."""
+    """
+    main is the entrypoint urlchecker-python.
+    """
 
     parser = get_parser()
 
     def help(return_code=0):
-        """print help, including the software version and active client
+        """
+        print help, including the software version and active client
         and exit with return code.
         """
 

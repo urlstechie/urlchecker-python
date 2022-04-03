@@ -1,7 +1,7 @@
 # CHANGELOG
 
-This is a manually generated log to track changes to the repository for each release. 
-Each section should include general headers such as **Implemented enhancements** 
+This is a manually generated log to track changes to the repository for each release.
+Each section should include general headers such as **Implemented enhancements**
 and **Merged pull requests**. Critical items to know are:
 
  - renamed commands
@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - adding type hints to code, more tests and logging bug fix (0.0.29)
  - decrease verbosity when filename is None (0.0.28)
  - don't exit and fail if no URLs to check (0.0.27)
  - multiprocessing to speed up checks (0.0.26)

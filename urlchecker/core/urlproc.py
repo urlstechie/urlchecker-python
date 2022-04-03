@@ -2,7 +2,7 @@
 
 Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
 
-This source code is licensed under the terms of the MIT license.  
+This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
@@ -11,19 +11,22 @@ import os
 import time
 import random
 import requests
+from typing import List, Optional
 from urlchecker.core import fileproc
 from urlchecker.core.exclude import excluded
 from urlchecker.logger import print_success, print_failure
 
 
-def check_response_status_code(url, response):
+def check_response_status_code(
+    url: str, response: Optional[requests.models.Response]
+) -> bool:
     """
     Check response status of an input url. Returns a boolean
     to indicate if retry is needed.
 
     Args:
-        - url          (str) : url text.
-        - response    (list) : request response from the url request.
+        - url                    (str) : url text.
+        - response (requests.Response) : request response from the url request.
 
     Returns:
         (bool) boolean to indicate if retry is needed (True) or not (False)
@@ -43,7 +46,7 @@ def check_response_status_code(url, response):
     return True
 
 
-def get_user_agent():
+def get_user_agent() -> str:
     """
     Return a randomly chosen user agent for requests
 
@@ -91,24 +94,25 @@ def get_user_agent():
 
 
 class UrlCheckResult:
-    """A UrlCheckResult is a basic class to hold a result for a filename.
-    It includes passed, failed, and all urls for a particular file,
-    along with taking the filename and parsing it for urls.
+    """
+    A UrlCheckResult is a basic class to hold a result for a filename.
+    It includes passed, failed, and all urls for a particular file, along with
+    taking the filename and parsing it for urls.
     """
 
     def __init__(
         self,
-        file_name=None,
-        exclude_patterns=None,
-        exclude_urls=None,
-        print_all=True,
+        file_name: str = None,
+        exclude_patterns: List[str] = None,
+        exclude_urls: List[str] = None,
+        print_all: bool = True,
     ):
         self.file_name = file_name
         self.print_all = print_all
-        self.passed = []
-        self.failed = []
-        self.excluded = []
-        self.urls = []
+        self.passed = []  # type: List[str]
+        self.failed = []  # type: List[str]
+        self.excluded = []  # type: List[str]
+        self.urls = []  # type: List[str]
         self.exclude_patterns = exclude_patterns or []
         self.exclude_urls = exclude_urls or []
 
@@ -116,23 +120,24 @@ class UrlCheckResult:
         if self.file_name:
             self.extract_urls()
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.file_name:
             return "UrlCheckResult:%s" % self.file_name
         return "UrlCheckResult"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
     @property
-    def all(self):
-        """All returns all urls found in a file name, including those that
+    def all(self) -> List[str]:
+        """
+        All returns all urls found in a file name, including those that
         passed and failed.
         """
         return self.passed + self.failed + self.excluded
 
     @property
-    def count(self):
+    def count(self) -> int:
         return len(self.all)
 
     def extract_urls(self):
@@ -149,11 +154,14 @@ class UrlCheckResult:
         # collect all links from file (unique=True is set)
         self.urls = fileproc.collect_links_from_file(self.file_name)
 
-    def check_urls(self, urls=None, retry_count=1, timeout=5):
+    def check_urls(
+        self, urls: List[str] = None, retry_count: int = 1, timeout: int = 5
+    ) -> None:
         """
         Check urls extracted from a certain file and print the checks results.
 
         Args:
+            - urls          (list) : list of urls.
             - retry_count    (int) : a number of retries to issue (defaults to 1, no retry).
             - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
         """
@@ -230,14 +238,14 @@ class UrlCheckResult:
             # When we break from while, we record final response
             self.record_response(url, response)
 
-    def record_response(self, url, response):
+    def record_response(self, url: str, response: Optional[requests.models.Response]):
         """
         Record response status of an input url. This function is run after success,
         or at the end of retry to record the final response.
 
         Args:
-            - url          (str) : url text.
-            - response    (list) : request response from the url request.
+            - url                    (str) : url text.
+            - response (requests.Response) : request response from the url request.
         """
         # response of None indicates a failure
         if not response:

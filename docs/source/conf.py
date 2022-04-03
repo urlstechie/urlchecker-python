@@ -12,13 +12,14 @@
 #
 import os
 import sys
+from datetime import datetime
 
 sys.path.insert(0, os.path.abspath("../../"))
 
 # -- Project information -----------------------------------------------------
 
-project = "URLs-checker"
-copyright = "2020, urlstechie"
+project = "urlchecker"
+copyright = "2020-%s, urlstechie" % datetime.now().year
 author = "urlstechie"
 
 # The master toctree document.
