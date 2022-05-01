@@ -1,0 +1,7 @@
+repos:
+-   repo: https://github.com/urlstechie/urlchecker-python
+    rev: add/pre-commit-hook
+    hooks:
+    -   id: urlchecker-check
+#        additional_dependencies: [urlchecker>=0.0.30]
+        args: ['check', '.']

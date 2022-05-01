@@ -1,0 +1,7 @@
+-   id: urlchecker
+    name: urlchecker-check
+    description: Look for broken URLs in your static files
+    entry: urlchecker
+    language: python
+    language_version: python3
+    files: '\.(rst|md|markdown|py|tex)$'

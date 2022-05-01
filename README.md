@@ -308,6 +308,26 @@ https://github.com/SuperKogito/URLs-checker/issues/1,failed
 https://github.com/SuperKogito/URLs-checker/issues/4,failed
 ```
 
+### Pre Commit Hook
+
+You can use urlchecker-python with [pre-commit](https://pre-commit.com/)!
+Add the following entry to your `.pre-commit-config.yaml` in the root of
+your repository:
+
+```yaml
+repos:
+-   repo: https://github.com/urlstechie/urlchecker-python
+    rev: 0.0.16 
+    hooks:
+    -   id: urlchecker-check
+        additional_dependencies: [urlchecker>=0.0.16]
+```
+
+And then you can run:
+
+```bash
+$ pre-commit run
+```
 
 ### Usage from Python
 
