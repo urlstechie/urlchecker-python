@@ -185,12 +185,12 @@ class UrlCheckResult:
         # init seen urls list
         seen = set()
 
-        # Some sites will return 403 if it's not a "human" user agent
-        user_agent = get_user_agent()
-        headers = {"User-Agent": user_agent}
-
         # check links
         for url in [url for url in urls if "http" in url]:
+
+            # Some sites will return 403 if it's not a "human" user agent
+            # We define headers here to vary the user agent
+            headers = {"User-Agent": get_user_agent()}
 
             # init do retrails and retrails counts
             do_retry = True
@@ -208,6 +208,7 @@ class UrlCheckResult:
 
             seen.add(url)
             while rcount > 0 and do_retry:
+
                 response = None
                 try:
                     response = requests.get(url, timeout=pause, headers=headers)
@@ -229,6 +230,13 @@ class UrlCheckResult:
 
                 # If we try again, pause for retry seconds and update retry seconds
                 if rcount > 0 and do_retry:
+
+                    # If we've failed once, try adding the accept header
+                    headers = {
+                        "User-Agent": get_user_agent(),
+                        "Accept": "application/json",
+                    }
+
                     # keep this only for debugging
                     # print("Retry n° %s for %s, with timeout of %s seconds." % (retry_count - rcount, url, pause))
                     time.sleep(retry_seconds)
