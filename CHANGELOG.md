@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - use ANSI escape sequences for colors (0.0.30)
  - adding type hints to code, more tests and logging bug fix (0.0.29)
  - decrease verbosity when filename is None (0.0.28)
  - don't exit and fail if no URLs to check (0.0.27)

@@ -17,7 +17,7 @@ def print_failure(message: str):
     Args:
       - message (str): the message to print in red (indicating failure).
     """
-    print("\x1b[31m" + message + "\x1b[0m")
+    print("\033[91m" + message + "\033[0m")
 
 
 def print_success(message: str):
@@ -27,7 +27,7 @@ def print_success(message: str):
     Args:
       - message (str): the message to print in green (indicating success).
     """
-    print("\x1b[32m" + message + "\x1b[0m")
+    print("\033[92m" + message + "\033[0m")
 
 
 def get_logger(name: str = "urlchecker", level: int = logging.INFO) -> logging.Logger:
