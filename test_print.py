@@ -8,3 +8,10 @@ print("  " + url)
 print("   " + url)
 print("    " + url)
 print("     " + url)
+
+
+print("🤓️" + url)
+print("  🤓️" + url)
+print("   🤓️" + url)
+print("    🤓️" + url)
+print("     🤓️" + url)
