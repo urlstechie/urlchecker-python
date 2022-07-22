@@ -114,11 +114,11 @@ def main(args, extra):
                 if result["failed"]:
                     print_failure(file_name + ":")
                     for url in result["failed"]:
-                        print_failure("     " + url)
+                        print_failure("     ❌️" + url)
         else:
             print("\n\U0001F914 Uh oh... The following urls did not pass:")
             for failed_url in check_results["failed"]:
-                print_failure(failed_url)
+                print_failure("❌️" + failed_url)
 
     # If we have failures and it's not a force pass, exit with 1
     if not args.force_pass and check_results["failed"]:

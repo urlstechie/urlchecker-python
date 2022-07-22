@@ -9,9 +9,44 @@ print("   " + url)
 print("    " + url)
 print("     " + url)
 
+print()
+print("❌️" + url)
+print("  ❌️" + url)
+print("   ❌️" + url)
+print("    ❌️" + url)
+print("     ❌️" + url)
 
-print("🤓️" + url)
-print("  🤓️" + url)
-print("   🤓️" + url)
-print("    🤓️" + url)
-print("     🤓️" + url)
+print()
+print("❌️ " + url)
+print("  ❌️ " + url)
+print("   ❌️ " + url)
+print("    ❌️ " + url)
+print("     ❌️ " + url)
+
+
+print()
+
+def colorize(message):
+   print("\033[91m" + message + "\033[0m")
+
+
+colorize(url)
+colorize(" " + url)
+colorize("  " + url)
+colorize("   " + url)
+colorize("    " + url)
+colorize("     " + url)
+
+print()
+colorize("❌️" + url)
+colorize("  ❌️" + url)
+colorize("   ❌️" + url)
+colorize("    ❌️" + url)
+colorize("     ❌️" + url)
+
+print()
+colorize("❌️ " + url)
+colorize("  ❌️ " + url)
+colorize("   ❌️ " + url)
+colorize("    ❌️ " + url)
+colorize("     ❌️ " + url)
