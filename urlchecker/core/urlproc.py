@@ -90,7 +90,7 @@ def get_faux_headers(browser) -> Dict[Any, Any]:
             "Upgrade-Insecure-Requests": "1",
         },
     }
-    return headers["browser"]
+    return headers[browser]
 
 
 class UrlCheckResult:
@@ -175,7 +175,7 @@ class UrlCheckResult:
                 if excluded(url, self.exclude_urls, self.exclude_patterns)
             ]
             urls = list(set(urls).difference(set(self.excluded)))
-
+        
         # if no urls are found, mention it if required
         if not urls:
             if self.print_all:
