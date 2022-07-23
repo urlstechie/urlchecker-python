@@ -90,7 +90,7 @@ def get_faux_headers(browser) -> Dict[Any, Any]:
             "Upgrade-Insecure-Requests": "1",
         },
     }
-    return headers['browser']
+    return headers["browser"]
 
 
 class UrlCheckResult:
