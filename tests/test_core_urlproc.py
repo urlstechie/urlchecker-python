@@ -55,8 +55,9 @@ def test_check_urls(file):
 
 
 def test_get_user_agent():
-    user_agent = get_user_agent()
-    assert isinstance(user_agent, str)
+    ua = get_user_agent()    
+    assert isinstance(ua, dict)
+    assert "User-Agent" in ua
 
 
 def test_check_response_status_code():
