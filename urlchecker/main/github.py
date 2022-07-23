@@ -8,8 +8,9 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 import os
-import sys
 import subprocess
+import sys
+
 from urlchecker.main.utils import get_tmpdir
 
 

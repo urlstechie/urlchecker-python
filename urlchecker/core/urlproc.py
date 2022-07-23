@@ -8,13 +8,16 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 import os
-import time
 import random
+import time
+from typing import Any, Dict, List, Optional
+
 import requests
-from typing import List, Optional
+from fake_useragent import UserAgent
+
 from urlchecker.core import fileproc
 from urlchecker.core.exclude import excluded
-from urlchecker.logger import print_success, print_failure
+from urlchecker.logger import print_failure, print_success
 
 
 def check_response_status_code(
@@ -46,51 +49,48 @@ def check_response_status_code(
     return True
 
 
-def get_user_agent() -> str:
+def get_user_agent() -> dict:
     """
-    Return a randomly chosen user agent for requests
+    Return a randomly chosen user agent and headers for requests
 
     Returns:
-        user agent string to include with User-Agent.
+        headers dict to include with request.
     """
-    agents = [
-        (
-            "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/57.0.2987.110 "
-            "Safari/537.36"
-        ),  # chrome
-        (
-            "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/61.0.3163.79 "
-            "Safari/537.36"
-        ),  # chrome
-        (
-            "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) "
-            "Gecko/20100101 "
-            "Firefox/55.0"
-        ),  # firefox
-        (
-            "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/61.0.3163.91 "
-            "Safari/537.36"
-        ),  # chrome
-        (
-            "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/62.0.3202.89 "
-            "Safari/537.36"
-        ),  # chrome
-        (
-            "Mozilla/5.0 (X11; Linux x86_64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/63.0.3239.108 "
-            "Safari/537.36"
-        ),  # chrome
-    ]
-    return random.choice(agents)
+    browser = random.choice(["chrome", "firefox"])
+    headers = get_faux_headers(browser)
+    headers["User-Agent"] = getattr(UserAgent(), browser)
+    return headers
+
+
+def get_faux_headers(browser) -> Dict[Any, Any]:
+    """
+    Get faux headers to populate based on user agent
+    """
+    headers = {
+        "chrome": {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Sec-Ch-Ua": '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+        },
+        "firefox": {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+        },
+    }
+    return headers[browser]
 
 
 class UrlCheckResult:
@@ -185,12 +185,11 @@ class UrlCheckResult:
         # init seen urls list
         seen = set()
 
-        # Some sites will return 403 if it's not a "human" user agent
-        user_agent = get_user_agent()
-        headers = {"User-Agent": user_agent}
-
         # check links
         for url in [url for url in urls if "http" in url]:
+
+            # Some sites will return 403 if it's not a "human" user agent
+            headers = get_user_agent()
 
             # init do retrails and retrails counts
             do_retry = True
@@ -211,7 +210,6 @@ class UrlCheckResult:
                 response = None
                 try:
                     response = requests.get(url, timeout=pause, headers=headers)
-
                 except requests.exceptions.Timeout as e:
                     print(e)
 
