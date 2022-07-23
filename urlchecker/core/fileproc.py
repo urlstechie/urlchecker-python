@@ -8,9 +8,10 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 import fnmatch
-import re
 import os
+import re
 from typing import List
+
 from urlchecker.core import urlmarker
 
 

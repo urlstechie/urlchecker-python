@@ -8,15 +8,16 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 import os
-import time
 import random
+import time
+from typing import Any, Dict, List, Optional
+
 import requests
-from typing import List, Optional
+from fake_useragent import UserAgent
+
 from urlchecker.core import fileproc
 from urlchecker.core.exclude import excluded
-from urlchecker.logger import print_success, print_failure
-from playwright.sync_api import sync_playwright
-from fake_useragent import UserAgent
+from urlchecker.logger import print_failure, print_success
 
 
 def check_response_status_code(
@@ -61,7 +62,7 @@ def get_user_agent() -> dict:
     return headers
 
 
-def get_faux_headers(browser) -> dict:
+def get_faux_headers(browser) -> Dict[Any, Any]:
     """
     Get faux headers to populate based on user agent
     """
@@ -89,7 +90,7 @@ def get_faux_headers(browser) -> dict:
             "Upgrade-Insecure-Requests": "1",
         },
     }
-    return headers.get(browser)
+    return headers['browser']
 
 
 class UrlCheckResult:

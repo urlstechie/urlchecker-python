@@ -11,10 +11,11 @@ import csv
 import os
 import re
 import sys
-from typing import List, Dict
+from typing import Dict, List
+
 from urlchecker.core import fileproc
-from urlchecker.core.worker import Workers
 from urlchecker.core.urlproc import UrlCheckResult
+from urlchecker.core.worker import Workers
 
 
 class UrlChecker:

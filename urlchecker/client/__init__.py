@@ -10,8 +10,9 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 
-import sys
 import argparse
+import sys
+
 import urlchecker
 
 

@@ -8,15 +8,15 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-import re
-import os
-import sys
 import logging
+import os
+import re
+import sys
 
-from urlchecker.main.github import clone_repo, delete_repo
-from urlchecker.core.fileproc import remove_empty
 from urlchecker.core.check import UrlChecker
+from urlchecker.core.fileproc import remove_empty
 from urlchecker.logger import print_failure
+from urlchecker.main.github import clone_repo, delete_repo
 
 logger = logging.getLogger("urlchecker")
 

@@ -10,10 +10,11 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import itertools
 import multiprocessing
 import os
-import time
 import signal
 import sys
+import time
 from typing import Optional
+
 from urlchecker.logger import get_logger
 
 logger = get_logger()
