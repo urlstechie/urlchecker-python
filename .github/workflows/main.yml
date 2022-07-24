@@ -7,7 +7,7 @@ on:
   # Deploy on merge to main
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy-test-containers:
