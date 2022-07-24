@@ -65,11 +65,7 @@ class WebDriver:
         self.server = Thread(target=self.httpd.serve_forever)
         self.server.setDaemon(True)
         self.server.start()
-        self.started = True
-        self.pause_time = 100
         self.browser = None
-        self.headless = True
-        self.display = None
 
     def set_driver(self, **kwargs):
         self.driver = kwargs.get("browser") or "Chrome"
@@ -80,7 +76,7 @@ class WebDriver:
         os.environ["PATH"] = new_path
         os.putenv("PATH", new_path)
 
-    def check(self, url):
+    def check(self, url: str):
         """
         Check that a url is valid with the browser
         """
@@ -91,8 +87,9 @@ class WebDriver:
             # This could technically be 404, but we are only calling for 403
             self.browser.get(url)
             return self.browser.title != "" and self.browser.page_source != empty_page
-        except TimeoutException:
+        except:
             return False
+        return False
 
     def get_browser(self):
         """
@@ -105,14 +102,15 @@ class WebDriver:
                 self.browser = webdriver.Chrome(chrome_options=self.get_options())
         return self.browser
 
-    def get_options(self, width=1200, height=800):
+    def get_options(self, width: int = 1200, height: int = 800):
         """
         Options for headless, no-sandbox, and custom width/height
         """
         options = webdriver.ChromeOptions()
-        options.add_argument("headless")
-        options.add_argument("no-sandbox")
-        options.add_argument("window-size=%sx%s" % (width, height))
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--window-size=%sx%s" % (width, height))
         return options
 
     def close(self):
@@ -122,6 +120,3 @@ class WebDriver:
         if self.browser is not None:
             self.browser.close()
         self.httpd.server_close()
-
-        if self.display is not None:
-            self.display.close()
