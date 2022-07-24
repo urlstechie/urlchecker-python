@@ -1,31 +1,34 @@
-name: docker-deploy
+name: Build and Deploy containers
 
 on:
+  # Always test on pull request
+  pull_request: []
+
+  # Deploy on merge to main
   push:
-    branches:    
-      - master    
+    branches:
+      - main
 
 jobs:
-  testing-docker:
+  deploy-test-containers:
     runs-on: ubuntu-latest
+    name: Build Container
     steps:
-      - uses: actions/checkout@v3
-      - name: Build container image
-        run: |
-          docker build -t quay.io/urlstechie/urlchecker .
-          DOCKER_TAG=$(docker run quay.io/urlstechie/urlchecker --version)
-          printf "Docker Tag is ${DOCKER_TAG}\n"
-          echo "DOCKER_TAG=${DOCKER_TAG}" >> $GITHUB_ENV
-      - name: Docker login
-        env:
-          docker_user: ${{ secrets.DOCKER_USERNAME }}
-          docker_pass: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          docker login -u="${docker_user}" -p="${docker_pass}" quay.io
-      - name: Push containers
-        run: |
-          printf "Docker Tag is ${DOCKER_TAG}\n"
-          docker tag quay.io/urlstechie/urlchecker:latest "quay.io/urlstechie/urlchecker:${DOCKER_TAG}"
-          docker push quay.io/urlstechie/urlchecker:latest
-          docker push "quay.io/urlstechie/urlchecker:${DOCKER_TAG}"
+      - name: Checkout
+        uses: actions/checkout@v3     
 
+      - name: Build
+        run: |
+           docker build -t ghcr.io/urlstechie/urlchecker .
+           DOCKER_TAG=$(docker run ghcr.io/urlstechie/urlchecker --version)
+           printf "Docker Tag is ${DOCKER_TAG}\n"
+           echo "DOCKER_TAG=${DOCKER_TAG}" >> $GITHUB_ENV
+      - name: Login and Deploy Test Container
+        if: (github.event_name != 'pull_request')
+        run: |
+          docker images
+          printf "Docker Tag is ${DOCKER_TAG}\n"
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+          docker tag ghcr.io/urlstechie/urlchecker:latest "ghcr.io/urlstechie/urlchecker:${DOCKER_TAG}"
+          docker push ghcr.io/urlstechie/urlchecker:latest
+          docker push "ghcr.io/urlstechie/urlchecker:${DOCKER_TAG}"
