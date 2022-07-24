@@ -25,6 +25,7 @@ LICENSE = "LICENSE"
 
 INSTALL_REQUIRES = (
     ("requests", {"min_version": "2.18.4"}),
+    # Recommended: pip install git+https://github.com/danger89/fake-useragent.git
     ("fake-useragent", {"min_version": None}),
 )
 

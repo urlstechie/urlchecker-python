@@ -20,7 +20,14 @@ A detailed documentation of the code is available under [urlchecker-python.readt
 
 ### Install
 
-You can install the urlchecker from [pypi](https://pypi.org/project/urlchecker):
+You can install the urlchecker from [pypi](https://pypi.org/project/urlchecker).
+Before you do, it's recommended to install fake-useragent from:
+
+```bash
+pip install git+https://github.com/danger89/fake-useragent.git
+```
+
+And then urlchecker:
 
 ```bash
 $ pip install urlchecker
