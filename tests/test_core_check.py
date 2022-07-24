@@ -47,7 +47,8 @@ def test_difficult_urls(file_paths):
 
     # This should be the only failing (503)
     assert (
-        "https://www.sciencedirect.com/science/article/pii/S0013468608005045" in failed
+        "https://www.sciencedirect.com/science/article/pii/S0013468608005045"
+        in results["failed"]
     )
     working = [
         "http://groundwire.org/blog/groundwire-engagement-pyramid/",
