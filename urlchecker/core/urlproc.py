@@ -140,8 +140,21 @@ class UrlCheckResult:
     def count(self) -> int:
         return len(self.all)
 
+    def get_driver(self, port: Optional[int] = None, timeout: Optional[int] = 5):
+        """
+        Get a selenium web driver for a check session, if possible.
+        Requires selenium driver to exit, fall back to not using
+        """
+        try:
+            from .webdriver import WebDriver
+
+            return WebDriver(port=port, timeout=timeout)
+        except:
+            return
+
     def extract_urls(self):
-        """Typically on init, use the provided exclude patterns and urls to
+        """
+        Typically on init, use the provided exclude patterns and urls to
         extract a list of urls for the given filename.
         """
         if not self.file_name or not os.path.exists(self.file_name):
@@ -155,7 +168,11 @@ class UrlCheckResult:
         self.urls = fileproc.collect_links_from_file(self.file_name)
 
     def check_urls(
-        self, urls: List[str] = None, retry_count: int = 1, timeout: int = 5
+        self,
+        urls: List[str] = None,
+        retry_count: int = 1,
+        timeout: int = 5,
+        port: Optional[int] = None,
     ) -> None:
         """
         Check urls extracted from a certain file and print the checks results.
@@ -164,8 +181,12 @@ class UrlCheckResult:
             - urls          (list) : list of urls.
             - retry_count    (int) : a number of retries to issue (defaults to 1, no retry).
             - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
+            - port           (int) : a port for the driver to use (if installed)
         """
         urls = urls or self.urls
+
+        # Set driver (session) at start of check
+        driver = self.get_driver(port, timeout)
 
         # eliminate excluded urls and patterns
         if self.exclude_urls or self.exclude_patterns:
@@ -210,14 +231,22 @@ class UrlCheckResult:
                 response = None
                 try:
                     response = requests.get(url, timeout=pause, headers=headers)
-                except requests.exceptions.Timeout as e:
-                    print(e)
 
-                except requests.exceptions.ConnectionError as e:
-                    print(e)
+                    # Fallback to trying selenium driver for any error code
+                    if (
+                        response.status_code not in [200, 404]
+                        and driver
+                        and driver.check(url)
+                    ):
+                        response.status_code = 200
 
+                # Web driver doesn't have same issues with ssl
                 except Exception as e:
-                    print(e)
+                    if driver.check(url):
+                        response = requests.Response()
+                        response.status_code = 200
+                    else:
+                        print(e)
 
                 # decrement retrials count
                 rcount -= 1
@@ -235,6 +264,10 @@ class UrlCheckResult:
 
             # When we break from while, we record final response
             self.record_response(url, response)
+
+        # Close driver at end of session
+        if driver:
+            driver.close()
 
     def record_response(self, url: str, response: Optional[requests.models.Response]):
         """

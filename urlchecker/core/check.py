@@ -9,6 +9,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 import csv
 import os
+import random
 import re
 import sys
 from typing import Dict, List
@@ -189,6 +190,10 @@ class UrlChecker:
         funcs = {}
         workers = Workers()
 
+        # Each run should have its own port (~2k)
+        ports = list(range(8000, 9999))
+        random.shuffle(ports)
+
         # loop through files
         for file_name in file_paths:
 
@@ -200,6 +205,7 @@ class UrlChecker:
                 "print_all": self.print_all,
                 "retry_count": retry_count,
                 "timeout": timeout,
+                "port": ports.pop(0),
             }
             funcs[file_name] = check_task
 
@@ -232,7 +238,9 @@ def check_task(*args, **kwargs):
 
     # Check the urls
     checker.check_urls(
-        retry_count=kwargs.get("retry_count", 2), timeout=kwargs.get("timeout", 5)
+        retry_count=kwargs.get("retry_count", 2),
+        timeout=kwargs.get("timeout", 5),
+        port=kwargs.get("port"),
     )
 
     # Update flattened results

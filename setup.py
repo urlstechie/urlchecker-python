@@ -21,12 +21,11 @@ def get_lookup():
 
 # Read in requirements
 def get_reqs(lookup=None, key="INSTALL_REQUIRES"):
-    """get requirements, mean reading in requirements and versions from
-    the lookup obtained with get_lookup"""
-
-    if lookup == None:
-        lookup = get_lookup()
-
+    """
+    Get requirements, mean reading in requirements and versions from
+    the lookup obtained with get_lookup
+    """
+    lookup = lookup or get_lookup()
     install_requires = []
     for module in lookup[key]:
         module_name = module[0]
@@ -67,6 +66,8 @@ if __name__ == "__main__":
 
     INSTALL_REQUIRES = get_reqs(lookup)
     TESTS_REQUIRES = get_reqs(lookup, "TESTS_REQUIRES")
+    INSTALL_REQUIRES_ALL = get_reqs(lookup, "INSTALL_REQUIRES_ALL")
+    SELENIUM_REQUIRES = get_reqs(lookup, "SELENIUM_REQUIRES")
 
     setup(
         name=NAME,
@@ -87,7 +88,10 @@ if __name__ == "__main__":
         setup_requires=["pytest-runner"],
         install_requires=INSTALL_REQUIRES,
         tests_require=TESTS_REQUIRES,
-        extras_require={},
+        extras_require={
+            "all": INSTALL_REQUIRES_ALL,
+            "selenium": SELENIUM_REQUIRES,
+        },
         classifiers=[
             "Intended Audience :: Developers",
             "License :: OSI Approved :: MIT License",

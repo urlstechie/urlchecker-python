@@ -92,10 +92,12 @@ def test_get_file_paths(base_path, file_types):
         [
             "tests/test_files/sample_test_file.md",
             "tests/test_files/sample_test_file.py",
+            "tests/test_files/hard_urls.md",
         ],
         [
             "tests/test_files/sample_test_file.py",
             "tests/test_files/sample_test_file.md",
+            "tests/test_files/hard_urls.md",
         ],
     ]
     # assert
