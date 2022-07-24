@@ -19,6 +19,7 @@ RUN /bin/bash -c "source activate urlchecker && \
     pip install .[all]"
 # Download chrome driver for selenium
 RUN wget https://chromedriver.storage.googleapis.com/104.0.5112.29/chromedriver_linux64.zip && \
+    rm -rf chromedriver && \
     unzip chromedriver_linux64.zip && \
     rm chromedriver_linux64.zip
 RUN echo "source activate urlchecker" > ~/.bashrc
