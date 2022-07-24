@@ -43,7 +43,7 @@ def test_difficult_urls(file_paths):
     test difficult urls that likely require selenium.
     """
     checker = UrlChecker()
-    results = checker.run(file_paths)
+    results = checker.run(file_paths, timeout=20)
 
     # This should be the only failing (503)
     assert (
