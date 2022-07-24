@@ -115,6 +115,7 @@ class UrlCheckResult:
         self.urls = []  # type: List[str]
         self.exclude_patterns = exclude_patterns or []
         self.exclude_urls = exclude_urls or []
+        self.set_driver()
 
         # Only extract if we have a filename in advance
         if self.file_name:
@@ -140,8 +141,28 @@ class UrlCheckResult:
     def count(self) -> int:
         return len(self.all)
 
+    def set_driver(self):
+        """
+        Set a selenium web driver, if possible.
+        Requires selenium driver to exit, fall back to not using
+        """
+        try:
+            from .webdriver import WebDriver
+
+            self.driver = WebDriver()
+        except:
+            self.driver = None
+
+    def __exit__(self):
+        """
+        Ensure we close/stop the driver, if used
+        """
+        if self.driver:
+            self.driver.close()
+
     def extract_urls(self):
-        """Typically on init, use the provided exclude patterns and urls to
+        """
+        Typically on init, use the provided exclude patterns and urls to
         extract a list of urls for the given filename.
         """
         if not self.file_name or not os.path.exists(self.file_name):
@@ -210,6 +231,12 @@ class UrlCheckResult:
                 response = None
                 try:
                     response = requests.get(url, timeout=pause, headers=headers)
+
+                    # Fallback to trying selenium driver
+                    if response.status_code == 403 and self.driver:
+                        if self.driver.check(url):
+                            response.status_code = 200
+
                 except requests.exceptions.Timeout as e:
                     print(e)
 

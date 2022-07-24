@@ -16,7 +16,11 @@ RUN /bin/bash -c "source activate urlchecker && \
     which python && \
     which pip && \
     pip install --upgrade certifi && \
-    pip install ."
+    pip install .[all]"
+# Download chrome driver for selenium
+RUN wget https://chromedriver.storage.googleapis.com/104.0.5112.29/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    rm chromedriver_linux64.zip
 RUN echo "source activate urlchecker" > ~/.bashrc
 ENV PATH /opt/conda/envs/urlchecker/bin:${PATH}
 ENTRYPOINT ["urlchecker"]

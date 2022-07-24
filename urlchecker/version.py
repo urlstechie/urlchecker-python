@@ -7,7 +7,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-__version__ = "0.0.30"
+__version__ = "0.0.31"
 AUTHOR = "Ayoub Malek, Vanessa Sochat"
 AUTHOR_EMAIL = "superkogito@gmail.com, vsochat@stanford.edu"
 NAME = "urlchecker"
@@ -28,6 +28,8 @@ INSTALL_REQUIRES = (
     ("fake-useragent", {"min_version": None}),
 )
 
+SELENIUM_REQUIRES = (("selenium", {"min_version": None}),)
+
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)
 
-INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + TESTS_REQUIRES
+INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + SELENIUM_REQUIRES + TESTS_REQUIRES

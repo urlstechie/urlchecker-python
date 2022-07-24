@@ -37,6 +37,33 @@ def test_check_files(file_paths, print_all, exclude_urls, exclude_patterns):
     )
 
 
+@pytest.mark.parametrize("file_paths", [["tests/test_files/hard_urls.md"]])
+def test_difficult_urls(file_paths):
+    """
+    test difficult urls that likely require selenium.
+    """
+    checker = UrlChecker()
+    results = checker.run(file_paths)
+
+    # This should be the only failing (503)
+    assert (
+        "https://www.sciencedirect.com/science/article/pii/S0013468608005045" in failed
+    )
+    working = [
+        "http://groundwire.org/blog/groundwire-engagement-pyramid/",
+        "https://codepen.io/rootwork/",
+        "https://doi.org/10.1063/5.0023771",
+        "https://drupal.org/",
+        "https://groups.drupal.org/node/298298",
+        "https://portland2013.drupal.org/program/sprints.html",
+        "https://twig.symfony.com/doc/",
+        "https://www.hpcwire.com/2019/01/17/pfizer-hpc-engineer-aims-to-automate-software-stack-testing/",
+        "https://www.linux.org/",
+    ]
+    for url in working:
+        assert url in results["passed"]
+
+
 @pytest.mark.parametrize("local_folder_path", ["./tests/test_files"])
 @pytest.mark.parametrize("config_fname", ["./tests/_local_test_config.conf"])
 def test_locally(local_folder_path, config_fname):

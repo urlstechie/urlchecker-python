@@ -557,6 +557,26 @@ In the "client" folder, for example, the commands that are exposed for the clien
 Functions for Github are be provided in `main/github.py`. This organization should
 be fairly straight forward to always find what you are looking for.
 
+### Drivers
+
+To test more difficult urls, we use a web driver, and you can choose between:
+
+ - [Chrome Driver](https://chromedriver.chromium.org/downloads)
+ - [Gecko Driver](https://github.com/mozilla/geckodriver/releases) (firefox)
+ 
+both to be used with selenium. This driver is optional, but will come by default with our action. To install
+it, you can download the driver at either of the links above and ensure you install selenium:
+
+```bash
+$ pip install urlchecker[selenium]
+```
+and either:
+
+1. Add it directly to your path
+2. Export the directory where it lives as `URLCHECKER_DRIVERS_PATH`
+3. Put it in the root of the urlchecker clone (it will be looked for here)
+
+
 ## Support
 
 If you need help, or want to suggest a project for the organization,

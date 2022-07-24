@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Web drivers
+chromedriver
+geckodriver
+
 # C extensions
 *.so
 
