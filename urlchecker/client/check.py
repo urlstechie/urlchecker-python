@@ -65,6 +65,7 @@ def main(args, extra):
     print("               subfolder: %s" % args.subfolder)
     print("                  branch: %s" % args.branch)
     print("                 cleanup: %s" % args.cleanup)
+    print("                  serial: %s" % args.serial)
     print("              file types: %s" % file_types)
     print("                   files: %s" % files)
     print("               print all: %s" % (not args.no_print))
@@ -84,6 +85,7 @@ def main(args, extra):
         include_patterns=files,
         exclude_files=exclude_files,
         print_all=not args.no_print,
+        serial=args.serial,
     )
     check_results = checker.run(
         exclude_urls=exclude_urls,

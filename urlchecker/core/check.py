@@ -20,7 +20,8 @@ from urlchecker.core.worker import Workers
 
 
 class UrlChecker:
-    """The UrlChecker can be instantiated by a client, and then used
+    """
+    The UrlChecker can be instantiated by a client, and then used
     to parse files, extract urls, and save results.
     """
 
@@ -31,6 +32,7 @@ class UrlChecker:
         exclude_files: List[str] = None,
         print_all: bool = True,
         include_patterns: List[str] = None,
+        serial: bool = False,
     ):
         """
         initiate a url checker. At init we take in preferences for
@@ -43,6 +45,7 @@ class UrlChecker:
             - print_all        (bool) : control var for whether to print all checked file names or only the ones with urls.
             - exclude_files    (list) : list of excluded files and patterns for flies.
             - include_patterns (list) : list of files and patterns to check.
+            - serial           (bool) : do checks in serial (no multiprocessing)
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
         self.results = {
@@ -61,6 +64,7 @@ class UrlChecker:
         self.path = path
         self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
+        self.serial = serial
 
         # get all file paths if a path is defined
         if path:
@@ -195,10 +199,11 @@ class UrlChecker:
         random.shuffle(ports)
 
         # loop through files
+        results = {}
         for file_name in file_paths:
 
             # Export parameters and functions, use the same check task for all
-            tasks[file_name] = {
+            kwargs = {
                 "file_name": file_name,
                 "exclude_patterns": exclude_patterns,
                 "exclude_urls": exclude_urls,
@@ -207,9 +212,16 @@ class UrlChecker:
                 "timeout": timeout,
                 "port": ports.pop(0),
             }
+
+            if self.serial:
+                results[file_name] = check_task(**kwargs)
+                continue
+
+            tasks[file_name] = kwargs
             funcs[file_name] = check_task
 
-        results = workers.run(funcs, tasks)
+        if not self.serial:
+            results = workers.run(funcs, tasks)
         if not results:
             print("\U0001F914 There were no URLs to check.")
             sys.exit(0)

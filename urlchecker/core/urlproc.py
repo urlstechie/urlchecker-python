@@ -242,7 +242,7 @@ class UrlCheckResult:
 
                 # Web driver doesn't have same issues with ssl
                 except Exception as e:
-                    if driver.check(url):
+                    if driver and driver.check(url):
                         response = requests.Response()
                         response.status_code = 200
                     else:
