@@ -71,6 +71,12 @@ def get_parser():
     )
 
     check.add_argument(
+        "--serial",
+        help="run checks in serial (no multiprocess)",
+        default=False,
+        action="store_true",
+    )
+    check.add_argument(
         "--force-pass",
         help="force successful pass (return code 0) regardless of result",
         default=False,

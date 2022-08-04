@@ -247,7 +247,12 @@ urlchecker check --file-types ".*,*.html" .
 
 **Note that while some patterns will work without quotes, it's recommended for most**
 to use them because if the shell expands any part of the pattern, it will not work as
-expected. By default, the urlchecker checks python and markdown.
+expected. By default, the urlchecker checks python and markdown. If a multiprocessing workers has an error,
+you can also add `--serial` to run in serial and test. The run will be slower, but it's useful for debugging.
+
+```bash
+$ urlchecker check . --files "content/docs/hacking/contributing/documentation/index.md" --serial
+```
 
 ### Check GitHub Repository
 
