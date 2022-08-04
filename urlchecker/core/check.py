@@ -221,7 +221,7 @@ class UrlChecker:
             funcs[file_name] = check_task
 
         if not self.serial:
-            results = workers.run(funcs, tasks)
+            results = workers.run(funcs, tasks)  # type: ignore
         if not results:
             print("\U0001F914 There were no URLs to check.")
             sys.exit(0)
