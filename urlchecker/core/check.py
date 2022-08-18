@@ -202,6 +202,10 @@ class UrlChecker:
         results = {}
         for file_name in file_paths:
 
+            # Re-use ports if we run out
+            if not ports:
+                ports = list(range(8000, 9999))
+
             # Export parameters and functions, use the same check task for all
             kwargs = {
                 "file_name": file_name,
