@@ -46,10 +46,7 @@ def test_difficult_urls(file_paths):
     results = checker.run(file_paths, timeout=20)
 
     # This should be the only failing (503)
-    assert (
-        "https://thisurldoesnotexist-pancakes.whatever"
-        in results["failed"]
-    )
+    assert "https://thisurldoesnotexist-pancakes.whatever" in results["failed"]
     working = [
         "https://www.hpcwire.com/2019/01/17/pfizer-hpc-engineer-aims-to-automate-software-stack-testing/",
         "https://www.sciencedirect.com/science/article/pii/S0013468608005045",

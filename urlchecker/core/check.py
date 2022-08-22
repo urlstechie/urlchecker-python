@@ -202,6 +202,10 @@ class UrlChecker:
         results = {}
         for file_name in file_paths:
 
+            # Re-use ports if we run out
+            if not ports:
+                ports = list(range(8000, 9999))
+
             # Export parameters and functions, use the same check task for all
             kwargs = {
                 "file_name": file_name,
@@ -224,7 +228,7 @@ class UrlChecker:
             results = workers.run(funcs, tasks)  # type: ignore
         if not results:
             print("\U0001F914 There were no URLs to check.")
-            sys.exit(0)
+            return self.results
 
         for file_name, result in results.items():
             self.checks[file_name] = result

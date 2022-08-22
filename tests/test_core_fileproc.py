@@ -88,20 +88,15 @@ def test_get_file_paths(base_path, file_types):
         list of file paths.
     """
     file_paths = get_file_paths(base_path, file_types)
+    file_paths = get_file_paths(base_path, file_types)
     expected_paths = [
-        [
-            "tests/test_files/sample_test_file.md",
-            "tests/test_files/sample_test_file.py",
-            "tests/test_files/hard_urls.md",
-        ],
-        [
-            "tests/test_files/sample_test_file.py",
-            "tests/test_files/sample_test_file.md",
-            "tests/test_files/hard_urls.md",
-        ],
+        "tests/test_files/sample_test_file.md",
+        "tests/test_files/sample_test_file.py",
+        "tests/test_files/hard_urls.md",
     ]
     # assert
-    assert file_paths in expected_paths
+    for found in file_paths:
+        assert found in expected_paths
 
 
 @pytest.mark.parametrize(
