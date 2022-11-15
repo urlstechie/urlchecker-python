@@ -26,7 +26,7 @@ RUN /bin/bash -c "source activate urlchecker && \
     pip install --upgrade certifi && \
     pip install .[all]"
 # Download chrome driver for selenium
-RUN /bin/bash -c "wget https://chromedriver.storage.googleapis.com/103.0.5060.134/chromedriver_linux64.zip && \
+RUN /bin/bash -c "wget https://chromedriver.storage.googleapis.com/107.0.5304.18/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     rm chromedriver_linux64.zip"
 RUN echo "source activate urlchecker" > ~/.bashrc
