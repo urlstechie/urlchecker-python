@@ -86,10 +86,7 @@ if __name__ == "__main__":
         long_description_content_type="text/markdown",
         keywords=KEYWORDS,
         setup_requires=["pytest-runner"],
-        install_requires=INSTALL_REQUIRES
-        + [
-            "fake-useragent @ git+https://github.com/danger89/fake-useragent@master#egg=fake-useragent"
-        ],
+        install_requires=INSTALL_REQUIRES,
         tests_require=TESTS_REQUIRES,
         extras_require={
             "all": INSTALL_REQUIRES_ALL,

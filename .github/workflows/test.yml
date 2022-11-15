@@ -51,7 +51,7 @@ jobs:
 
       - name: Download ChromeDriver
         run: |
-            wget https://chromedriver.storage.googleapis.com/103.0.5060.134/chromedriver_linux64.zip
+            wget https://chromedriver.storage.googleapis.com/107.0.5304.18/chromedriver_linux64.zip
             unzip chromedriver_linux64.zip
             rm chromedriver_linux64.zip
 
@@ -59,7 +59,6 @@ jobs:
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate testing
-          pip install git+https://github.com/danger89/fake-useragent.git
           pip install .[all]
           pip install -r tests/test-requirements.txt
           pytest -vs -x --cov=./urlchecker tests/test_*.py
