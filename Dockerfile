@@ -24,7 +24,6 @@ RUN /bin/bash -c "source activate urlchecker && \
     which python && \
     which pip && \
     pip install --upgrade certifi && \
-    pip install git+https://github.com/danger89/fake-useragent.git && \
     pip install .[all]"
 # Download chrome driver for selenium
 RUN /bin/bash -c "wget https://chromedriver.storage.googleapis.com/103.0.5060.134/chromedriver_linux64.zip && \
