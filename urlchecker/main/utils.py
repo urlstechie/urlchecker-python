@@ -9,9 +9,12 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 import os
 import tempfile
+from typing import Optional
 
 
-def get_tmpdir(base_dir: str = None, prefix: str = "", create: bool = True) -> str:
+def get_tmpdir(
+    base_dir: Optional[str] = None, prefix: str = "", create: bool = True
+) -> str:
     """
     Get a temporary directory for an operation. If SREGISTRY_TMPDIR
     is set, return that. Otherwise, return the output of tempfile.mkdtemp

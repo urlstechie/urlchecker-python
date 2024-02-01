@@ -12,7 +12,7 @@ import os
 import random
 import re
 import sys
-from typing import Dict, List
+from typing import Optional, Dict, List
 
 from urlchecker.core import fileproc
 from urlchecker.core.urlproc import UrlCheckResult
@@ -27,11 +27,11 @@ class UrlChecker:
 
     def __init__(
         self,
-        path: str = None,
-        file_types: List[str] = None,
-        exclude_files: List[str] = None,
+        path: Optional[str] = None,
+        file_types: Optional[List[str]] = None,
+        exclude_files: Optional[List[str]] = None,
         print_all: bool = True,
-        include_patterns: List[str] = None,
+        include_patterns: Optional[List[str]] = None,
         serial: bool = False,
     ):
         """
@@ -92,7 +92,7 @@ class UrlChecker:
         self,
         file_path: str,
         sep: str = ",",
-        header: List[str] = None,
+        header: Optional[List[str]] = None,
         relative_paths: bool = True,
     ) -> str:
         """
@@ -161,9 +161,9 @@ class UrlChecker:
 
     def run(
         self,
-        file_paths: List[str] = None,
-        exclude_patterns: List[str] = None,
-        exclude_urls: List[str] = None,
+        file_paths: Optional[List[str]] = None,
+        exclude_patterns: Optional[List[str]] = None,
+        exclude_urls: Optional[List[str]] = None,
         retry_count: int = 2,
         timeout: int = 5,
         no_check_certs: bool = False,

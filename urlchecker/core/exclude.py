@@ -7,11 +7,13 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-from typing import List
+from typing import Optional, List
 
 
 def excluded(
-    url: str, exclude_urls: List[str] = None, exclude_patterns: List[str] = None
+    url: str,
+    exclude_urls: Optional[List[str]] = None,
+    exclude_patterns: Optional[List[str]] = None,
 ) -> bool:
     """
     Check if link is in the excluded URLs or patterns to ignore.

@@ -102,9 +102,9 @@ class UrlCheckResult:
 
     def __init__(
         self,
-        file_name: str = None,
-        exclude_patterns: List[str] = None,
-        exclude_urls: List[str] = None,
+        file_name: Optional[str] = None,
+        exclude_patterns: Optional[List[str]] = None,
+        exclude_urls: Optional[List[str]] = None,
         print_all: bool = True,
     ):
         self.file_name = file_name
@@ -169,7 +169,7 @@ class UrlCheckResult:
 
     def check_urls(
         self,
-        urls: List[str] = None,
+        urls: Optional[List[str]] = None,
         retry_count: int = 1,
         timeout: int = 5,
         port: Optional[int] = None,
