@@ -56,49 +56,42 @@ for files. In this case, you can use urlchecker check:
 
 ```bash
 $ urlchecker check --help
-usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup]
-                        [--force-pass] [--no-print] [--file-types FILE_TYPES]
-                        [--files FILES] [--exclude-urls EXCLUDE_URLS]
-                        [--exclude-patterns EXCLUDE_PATTERNS]
-                        [--exclude-files EXCLUDE_FILES] [--save SAVE]
-                        [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
+```
+```console
+usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup] [--serial] [--no-check-certs]
+                        [--force-pass] [--no-print] [--verbose] [--file-types FILE_TYPES] [--files FILES]
+                        [--exclude-urls EXCLUDE_URLS] [--exclude-patterns EXCLUDE_PATTERNS]
+                        [--exclude-files EXCLUDE_FILES] [--save SAVE] [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
                         path
 
 positional arguments:
   path                  the local path or GitHub repository to clone and check
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -b BRANCH, --branch BRANCH
-                        if cloning, specify a branch to use (defaults to
-                        master)
+                        if cloning, specify a branch to use (defaults to main)
   --subfolder SUBFOLDER
-                        relative subfolder path within path (if not specified,
-                        we use root)
-  --cleanup             remove root folder after checking (defaults to False,
-                        no cleaup)
-  --force-pass          force successful pass (return code 0) regardless of
-                        result
-  --no-print            Skip printing results to the screen (defaults to
-                        printing to console).
+                        relative subfolder path within path (if not specified, we use root)
+  --cleanup             remove root folder after checking (defaults to False, no cleaup)
+  --serial              run checks in serial (no multiprocess)
+  --no-check-certs      Allow urls to validate that fail certificate checks
+  --force-pass          force successful pass (return code 0) regardless of result
+  --no-print            Skip printing results to the screen (defaults to printing to console).
+  --verbose             Print file names for failed urls in addition to the urls.
   --file-types FILE_TYPES
-                        comma separated list of file extensions to check
-                        (defaults to .md,.py)
-  --files FILES         comma separated list of exact files or patterns to
-                        check.
+                        comma separated list of file extensions to check (defaults to .md,.py)
+  --files FILES         comma separated list of exact files or patterns to check.
   --exclude-urls EXCLUDE_URLS
                         comma separated links to exclude (no spaces)
   --exclude-patterns EXCLUDE_PATTERNS
-                        comma separated list of patterns to exclude (no
-                        spaces)
+                        comma separated list of patterns to exclude (no spaces)
   --exclude-files EXCLUDE_FILES
-                        comma separated list of files and patterns to exclude
-                        (no spaces)
+                        comma separated list of files and patterns to exclude (no spaces)
   --save SAVE           Path to a csv file to save results to.
   --retry-count RETRY_COUNT
                         retry count upon failure (defaults to 2, one retry).
-  --timeout TIMEOUT     timeout (seconds) to provide to the requests library
-                        (defaults to 5)
+  --timeout TIMEOUT     timeout (seconds) to provide to the requests library (defaults to 5)
 ```
 
 You have a lot of flexibility to define patterns of urls or files to skip,

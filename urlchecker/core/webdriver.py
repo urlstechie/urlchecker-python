@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2022 Vanessa Sochat and Ayoub Malek
+Copyright (c) 2022-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.

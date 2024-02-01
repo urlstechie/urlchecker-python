@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -173,6 +173,7 @@ class UrlCheckResult:
         retry_count: int = 1,
         timeout: int = 5,
         port: Optional[int] = None,
+        no_check_certs: bool = False,
     ) -> None:
         """
         Check urls extracted from a certain file and print the checks results.
@@ -182,8 +183,10 @@ class UrlCheckResult:
             - retry_count    (int) : a number of retries to issue (defaults to 1, no retry).
             - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
             - port           (int) : a port for the driver to use (if installed)
+            - no_check_certs (bool) : do not check certificates
         """
         urls = urls or self.urls
+        no_check_certs = False if no_check_certs is None else no_check_certs
 
         # Set driver (session) at start of check
         driver = self.get_driver(port, timeout)
@@ -230,7 +233,9 @@ class UrlCheckResult:
             while rcount > 0 and do_retry:
                 response = None
                 try:
-                    response = requests.get(url, timeout=pause, headers=headers)
+                    response = requests.get(
+                        url, timeout=pause, headers=headers, verify=not no_check_certs
+                    )
 
                     # Fallback to trying selenium driver for any error code
                     if (

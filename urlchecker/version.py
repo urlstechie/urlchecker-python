@@ -1,13 +1,13 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
 
 """
 
-__version__ = "0.0.34"
+__version__ = "0.0.35"
 AUTHOR = "Ayoub Malek, Vanessa Sochat"
 AUTHOR_EMAIL = "superkogito@gmail.com, vsochat@stanford.edu"
 NAME = "urlchecker"

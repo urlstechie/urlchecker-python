@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -166,6 +166,7 @@ class UrlChecker:
         exclude_urls: List[str] = None,
         retry_count: int = 2,
         timeout: int = 5,
+        no_check_certs: bool = False,
     ) -> Dict[str, set]:
         """
         Run the url checker given a path, excluded patterns for urls/files
@@ -179,6 +180,7 @@ class UrlChecker:
             - exclude_patterns (list) : list of excluded patterns for urls.
             - retry_count       (int) : number of retries on failed first check. Default=2.
             - timeout           (int) : timeout to use when waiting on check feedback. Default=5.
+            - no_check_certs   (bool) : do not check certificates
 
         Returns:
             dictionary with each of list of urls for "failed" and "passed."
@@ -210,6 +212,7 @@ class UrlChecker:
             kwargs = {
                 "file_name": file_name,
                 "exclude_patterns": exclude_patterns,
+                "no_check_certs": no_check_certs,
                 "exclude_urls": exclude_urls,
                 "print_all": self.print_all,
                 "retry_count": retry_count,
@@ -257,6 +260,7 @@ def check_task(*args, **kwargs):
         retry_count=kwargs.get("retry_count", 2),
         timeout=kwargs.get("timeout", 5),
         port=kwargs.get("port"),
+        no_check_certs=kwargs.get("no_check_certs"),
     )
 
     # Update flattened results

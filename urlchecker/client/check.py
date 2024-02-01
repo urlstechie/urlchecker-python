@@ -1,7 +1,6 @@
 """
 
-client/github.py: entrypoint for interaction with a GitHub repostiory.
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -73,6 +72,7 @@ def main(args, extra):
     print("           urls excluded: %s" % exclude_urls)
     print("   url patterns excluded: %s" % exclude_patterns)
     print("  file patterns excluded: %s" % exclude_files)
+    print("          no check certs: %s" % args.no_check_certs)
     print("              force pass: %s" % args.force_pass)
     print("             retry count: %s" % args.retry_count)
     print("                    save: %s" % args.save)
@@ -90,6 +90,7 @@ def main(args, extra):
     check_results = checker.run(
         exclude_urls=exclude_urls,
         exclude_patterns=exclude_patterns,
+        no_check_certs=args.no_check_certs,
         retry_count=args.retry_count,
         timeout=args.timeout,
     )
