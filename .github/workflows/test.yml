@@ -38,6 +38,7 @@ jobs:
           export PATH="/usr/share/miniconda/bin:$PATH"
           source activate type_checking
           pip install mypy
+          pip install no_implicit_optional
           pip install types-requests
           mypy urlchecker
 
