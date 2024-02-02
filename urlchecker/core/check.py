@@ -186,10 +186,12 @@ class UrlChecker:
             dictionary with each of list of urls for "failed" and "passed."
         """
         file_paths = file_paths or self.file_paths
+        print("Paths:", file_paths)
 
         # Allow for user to skip specifying excluded options
         exclude_urls = exclude_urls or []
         exclude_patterns = exclude_patterns or []
+        print("Excludes:", exclude_urls, exclude_patterns)
 
         # Run with multiprocessing
         tasks = {}
@@ -219,6 +221,7 @@ class UrlChecker:
                 "timeout": timeout,
                 "port": ports.pop(0),
             }
+            print("Kwargs:", kwargs)
 
             if self.serial:
                 results[file_name] = check_task(**kwargs)
@@ -234,6 +237,7 @@ class UrlChecker:
             return self.results
 
         for file_name, result in results.items():
+            print(file_name, "->", result)
             self.checks[file_name] = result
             self.results["failed"].update(result["failed"])
             self.results["passed"].update(result["passed"])
