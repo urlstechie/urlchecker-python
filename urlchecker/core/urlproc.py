@@ -166,6 +166,9 @@ class UrlCheckResult:
 
         # collect all links from file (unique=True is set)
         self.urls = fileproc.collect_links_from_file(self.file_name)
+        print("*" * 35)
+        print("Extracted URLS:", self.urls)
+        print("*" * 35)
 
     def check_urls(
         self,
