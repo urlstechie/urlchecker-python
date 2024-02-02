@@ -42,7 +42,7 @@ def test_difficult_urls(file_paths):
     """
     test difficult urls that likely require selenium.
     """
-    checker = UrlChecker(serial=True)
+    checker = UrlChecker()
     results = checker.run(file_paths, timeout=120)
     print("Results:", results)
 
