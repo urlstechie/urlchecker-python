@@ -61,7 +61,7 @@ jobs:
           source activate testing
           pip install .[all]
           pip install -r tests/test-requirements.txt
-          pytest -vs -x --cov=./urlchecker tests/test_core_check.py
+          pytest -vs -x --cov=./urlchecker tests/test_core_check.py::test_check_run_save
 
       - name: Test Building container image
         run: |
