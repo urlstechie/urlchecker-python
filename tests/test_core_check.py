@@ -44,6 +44,7 @@ def test_difficult_urls(file_paths):
     """
     checker = UrlChecker()
     results = checker.run(file_paths, timeout=120)
+    print("Results:", results)
 
     # This should be the only failing (503)
     print("Failed URLs:", results["failed"])
