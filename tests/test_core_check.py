@@ -43,9 +43,11 @@ def test_difficult_urls(file_paths):
     test difficult urls that likely require selenium.
     """
     checker = UrlChecker()
-    results = checker.run(file_paths, timeout=20)
+    results = checker.run(file_paths, timeout=120)
 
     # This should be the only failing (503)
+    print("Failed URLs:", results["failed"])
+
     assert "https://thisurldoesnotexist-pancakes.whatever" in results["failed"]
     working = [
         "https://www.hpcwire.com/2019/01/17/pfizer-hpc-engineer-aims-to-automate-software-stack-testing/",
@@ -53,10 +55,10 @@ def test_difficult_urls(file_paths):
         "https://doi.org/10.1063/5.0023771",
         "https://www.linux.org/",
         "https://drupal.org/",
-        # "https://codepen.io/rootwork/",
+        "https://codepen.io/rootwork/",
         "http://groundwire.org/blog/groundwire-engagement-pyramid/",
         "https://twig.symfony.com/doc/",
-        # "https://groups.drupal.org/node/298298",
+        "https://groups.drupal.org/node/298298",
         "https://portland2013.drupal.org/program/sprints.html",
         "https://twitter.com/wharman",
         "https://www.progressiveexchange.org",
