@@ -26,9 +26,9 @@ RUN /bin/bash -c "source activate urlchecker && \
     pip install --upgrade certifi && \
     pip install .[all]"
 # Download chrome driver for selenium
-RUN /bin/bash -c "wget https://chromedriver.storage.googleapis.com/107.0.5304.18/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip && \
-    rm chromedriver_linux64.zip"
+RUN /bin/bash -c "wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/121.0.6167.85/linux64/chromedriver-linux64.zip && \
+    unzip -o chromedriver-linux64.zip && \
+    rm chromedriver-linux64.zip"
 RUN echo "source activate urlchecker" > ~/.bashrc
 ENV PATH /code:/opt/conda/envs/urlchecker/bin:${PATH}
 ENTRYPOINT ["urlchecker"]
