@@ -2,7 +2,7 @@
 
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -73,6 +73,13 @@ def get_parser():
     check.add_argument(
         "--serial",
         help="run checks in serial (no multiprocess)",
+        default=False,
+        action="store_true",
+    )
+    check.add_argument(
+        "--no-check-certs",
+        dest="no_check_certs",
+        help="Allow urls to validate that fail certificate checks",
         default=False,
         action="store_true",
     )

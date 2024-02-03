@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -18,6 +18,10 @@ from fake_useragent import UserAgent
 from urlchecker.core import fileproc
 from urlchecker.core.exclude import excluded
 from urlchecker.logger import print_failure, print_success
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def check_response_status_code(
@@ -102,9 +106,9 @@ class UrlCheckResult:
 
     def __init__(
         self,
-        file_name: str = None,
-        exclude_patterns: List[str] = None,
-        exclude_urls: List[str] = None,
+        file_name: Optional[str] = None,
+        exclude_patterns: Optional[List[str]] = None,
+        exclude_urls: Optional[List[str]] = None,
         print_all: bool = True,
     ):
         self.file_name = file_name
@@ -145,12 +149,19 @@ class UrlCheckResult:
         Get a selenium web driver for a check session, if possible.
         Requires selenium driver to exit, fall back to not using
         """
+        driver = None
         try:
             from .webdriver import WebDriver
 
-            return WebDriver(port=port, timeout=timeout)
+            driver = WebDriver(port=port, timeout=timeout)
+
+            # Do a sanity check of the driver
+            driver.check("https://google.com")
         except:
-            return
+            logger.warning(
+                "Issue with driver, results will be improved if you have it! Please match your version from https://googlechromelabs.github.io/chrome-for-testing"
+            )
+        return driver
 
     def extract_urls(self):
         """
@@ -167,12 +178,37 @@ class UrlCheckResult:
         # collect all links from file (unique=True is set)
         self.urls = fileproc.collect_links_from_file(self.file_name)
 
+    def make_request(self, url, timeout=5, headers=None, verify=True):
+        """
+        Make a request.
+
+        Start with a HEAD (quicker) and fall back to standard get. We
+        return None if there is an error
+        """
+        response = requests.Response()
+        response.status_code = 0
+        try:
+            response = requests.head(
+                url, timeout=timeout, headers=headers, verify=verify
+            )
+
+            # 405 means that head is not allowed, fall back to requests.get
+            if response.status_code == 405:
+                response = requests.get(
+                    url, timeout=timeout, headers=headers, verify=verify
+                )
+            response.close()
+        except Exception as e:
+            logger.warning(f"Issue with url {url}: {e}")
+        return response
+
     def check_urls(
         self,
-        urls: List[str] = None,
+        urls: Optional[List[str]] = None,
         retry_count: int = 1,
         timeout: int = 5,
         port: Optional[int] = None,
+        no_check_certs: bool = False,
     ) -> None:
         """
         Check urls extracted from a certain file and print the checks results.
@@ -182,10 +218,14 @@ class UrlCheckResult:
             - retry_count    (int) : a number of retries to issue (defaults to 1, no retry).
             - timeout        (int) : a timeout in seconds for blocking operations like the connection attempt.
             - port           (int) : a port for the driver to use (if installed)
+            - no_check_certs (bool) : do not check certificates
         """
         urls = urls or self.urls
+        no_check_certs = False if no_check_certs is None else no_check_certs
 
         # Set driver (session) at start of check
+        # NOTE: since selenium is installed by default, we might want
+        # a flag for the user to ask to disable using it
         driver = self.get_driver(port, timeout)
 
         # eliminate excluded urls and patterns
@@ -228,16 +268,18 @@ class UrlCheckResult:
 
             seen.add(url)
             while rcount > 0 and do_retry:
-                response = None
                 try:
-                    response = requests.get(url, timeout=pause, headers=headers)
+                    response = self.make_request(
+                        url, timeout=pause, headers=headers, verify=not no_check_certs
+                    )
+
+                    needs_driver_check = (
+                        not response.status_code
+                        or response.status_code not in [200, 404]
+                    )
 
                     # Fallback to trying selenium driver for any error code
-                    if (
-                        response.status_code not in [200, 404]
-                        and driver
-                        and driver.check(url)
-                    ):
+                    if needs_driver_check and driver and driver.check(url):
                         response.status_code = 200
 
                 # Web driver doesn't have same issues with ssl

@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -10,7 +10,7 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 import fnmatch
 import os
 import re
-from typing import List
+from typing import Optional, List
 
 from urlchecker.core import urlmarker
 
@@ -43,8 +43,8 @@ def check_file_type(file_path: str, file_types: List[str]) -> bool:
 
 def include_file(
     file_path: str,
-    exclude_patterns: List[str] = None,
-    include_patterns: List[str] = None,
+    exclude_patterns: Optional[List[str]] = None,
+    include_patterns: Optional[List[str]] = None,
 ) -> bool:
     """
     Check a file path for inclusion based on an OR regular expression.
@@ -86,8 +86,8 @@ def include_file(
 def get_file_paths(
     base_path: str,
     file_types: List[str],
-    exclude_files: List[str] = None,
-    include_patterns: List[str] = None,
+    exclude_files: Optional[List[str]] = None,
+    include_patterns: Optional[List[str]] = None,
 ) -> List[str]:
     """
     Get path to all files under a give directory and its subfolders.

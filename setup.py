@@ -67,7 +67,6 @@ if __name__ == "__main__":
     INSTALL_REQUIRES = get_reqs(lookup)
     TESTS_REQUIRES = get_reqs(lookup, "TESTS_REQUIRES")
     INSTALL_REQUIRES_ALL = get_reqs(lookup, "INSTALL_REQUIRES_ALL")
-    SELENIUM_REQUIRES = get_reqs(lookup, "SELENIUM_REQUIRES")
 
     setup(
         name=NAME,
@@ -90,7 +89,6 @@ if __name__ == "__main__":
         tests_require=TESTS_REQUIRES,
         extras_require={
             "all": INSTALL_REQUIRES_ALL,
-            "selenium": SELENIUM_REQUIRES,
         },
         classifiers=[
             "Intended Audience :: Developers",

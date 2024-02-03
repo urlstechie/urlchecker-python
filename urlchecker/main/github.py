@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -12,9 +12,12 @@ import subprocess
 import sys
 
 from urlchecker.main.utils import get_tmpdir
+from typing import Optional
 
 
-def clone_repo(git_path: str, branch: str = "master", dest: str = None) -> str:
+def clone_repo(
+    git_path: str, branch: str = "master", dest: Optional[str] = None
+) -> str:
     """
     Clone and name a git repository.
 

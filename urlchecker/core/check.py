@@ -1,6 +1,6 @@
 """
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
@@ -12,7 +12,7 @@ import os
 import random
 import re
 import sys
-from typing import Dict, List
+from typing import Optional, Dict, List
 
 from urlchecker.core import fileproc
 from urlchecker.core.urlproc import UrlCheckResult
@@ -27,11 +27,11 @@ class UrlChecker:
 
     def __init__(
         self,
-        path: str = None,
-        file_types: List[str] = None,
-        exclude_files: List[str] = None,
+        path: Optional[str] = None,
+        file_types: Optional[List[str]] = None,
+        exclude_files: Optional[List[str]] = None,
         print_all: bool = True,
-        include_patterns: List[str] = None,
+        include_patterns: Optional[List[str]] = None,
         serial: bool = False,
     ):
         """
@@ -73,12 +73,16 @@ class UrlChecker:
             if not os.path.exists(path):
                 sys.exit("%s does not exist." % path)
 
-            self.file_paths = fileproc.get_file_paths(
-                base_path=path,
-                file_types=self.file_types,
-                exclude_files=self.exclude_files,
-                include_patterns=self.include_patterns,
-            )
+            # Case 1: a single file
+            if os.path.isfile(path):
+                self.file_paths = [os.path.abspath(path)]
+            else:
+                self.file_paths = fileproc.get_file_paths(
+                    base_path=path,
+                    file_types=self.file_types,
+                    exclude_files=self.exclude_files,
+                    include_patterns=self.include_patterns,
+                )
 
     def __str__(self) -> str:
         if self.path:
@@ -92,7 +96,7 @@ class UrlChecker:
         self,
         file_path: str,
         sep: str = ",",
-        header: List[str] = None,
+        header: Optional[List[str]] = None,
         relative_paths: bool = True,
     ) -> str:
         """
@@ -161,11 +165,12 @@ class UrlChecker:
 
     def run(
         self,
-        file_paths: List[str] = None,
-        exclude_patterns: List[str] = None,
-        exclude_urls: List[str] = None,
+        file_paths: Optional[List[str]] = None,
+        exclude_patterns: Optional[List[str]] = None,
+        exclude_urls: Optional[List[str]] = None,
         retry_count: int = 2,
         timeout: int = 5,
+        no_check_certs: bool = False,
     ) -> Dict[str, set]:
         """
         Run the url checker given a path, excluded patterns for urls/files
@@ -179,6 +184,7 @@ class UrlChecker:
             - exclude_patterns (list) : list of excluded patterns for urls.
             - retry_count       (int) : number of retries on failed first check. Default=2.
             - timeout           (int) : timeout to use when waiting on check feedback. Default=5.
+            - no_check_certs   (bool) : do not check certificates
 
         Returns:
             dictionary with each of list of urls for "failed" and "passed."
@@ -210,6 +216,7 @@ class UrlChecker:
             kwargs = {
                 "file_name": file_name,
                 "exclude_patterns": exclude_patterns,
+                "no_check_certs": no_check_certs,
                 "exclude_urls": exclude_urls,
                 "print_all": self.print_all,
                 "retry_count": retry_count,
@@ -257,6 +264,7 @@ def check_task(*args, **kwargs):
         retry_count=kwargs.get("retry_count", 2),
         timeout=kwargs.get("timeout", 5),
         port=kwargs.get("port"),
+        no_check_certs=kwargs.get("no_check_certs"),
     )
 
     # Update flattened results

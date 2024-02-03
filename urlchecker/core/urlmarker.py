@@ -4,7 +4,7 @@ The web url matching regex used by markdown
 http://daringfireball.net/2010/07/improved_regex_for_matching_urls
 https://gist.github.com/gruber/8891611
 
-Copyright (c) 2020-2022 Ayoub Malek and Vanessa Sochat
+Copyright (c) 2020-2024 Ayoub Malek and Vanessa Sochat
 
 This source code is licensed under the terms of the MIT license.
 For a copy, see <https://opensource.org/licenses/MIT>.
