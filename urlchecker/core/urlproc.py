@@ -149,12 +149,19 @@ class UrlCheckResult:
         Get a selenium web driver for a check session, if possible.
         Requires selenium driver to exit, fall back to not using
         """
+        driver = None
         try:
             from .webdriver import WebDriver
 
-            return WebDriver(port=port, timeout=timeout)
+            driver = WebDriver(port=port, timeout=timeout)
+
+            # Do a sanity check of the driver
+            driver.check("https://google.com")
         except:
-            return
+            logger.warning(
+                "Issue with driver, results will be improved if you have it! Please match your version from https://googlechromelabs.github.io/chrome-for-testing"
+            )
+        return driver
 
     def extract_urls(self):
         """
@@ -179,7 +186,7 @@ class UrlCheckResult:
         return None if there is an error
         """
         response = requests.Response()
-        response.status_code = None
+        response.status_code = 0
         try:
             response = requests.head(
                 url, timeout=timeout, headers=headers, verify=verify
@@ -192,7 +199,7 @@ class UrlCheckResult:
                 )
             response.close()
         except Exception as e:
-            logger.warn(f"Issue with url {url}: {e}")
+            logger.warning(f"Issue with url {url}: {e}")
         return response
 
     def check_urls(
@@ -217,6 +224,8 @@ class UrlCheckResult:
         no_check_certs = False if no_check_certs is None else no_check_certs
 
         # Set driver (session) at start of check
+        # NOTE: since selenium is installed by default, we might want
+        # a flag for the user to ask to disable using it
         driver = self.get_driver(port, timeout)
 
         # eliminate excluded urls and patterns
@@ -259,20 +268,18 @@ class UrlCheckResult:
 
             seen.add(url)
             while rcount > 0 and do_retry:
-                response = None
-
                 try:
                     response = self.make_request(
                         url, timeout=pause, headers=headers, verify=not no_check_certs
                     )
 
-                    # Fallback to trying selenium driver for any error code
-                    if (
+                    needs_driver_check = (
                         not response.status_code
                         or response.status_code not in [200, 404]
-                        and driver
-                        and driver.check(url)
-                    ):
+                    )
+
+                    # Fallback to trying selenium driver for any error code
+                    if needs_driver_check and driver and driver.check(url):
                         response.status_code = 200
 
                 # Web driver doesn't have same issues with ssl

@@ -26,10 +26,9 @@ LICENSE = "LICENSE"
 INSTALL_REQUIRES = (
     ("requests", {"min_version": "2.18.4"}),
     ("fake-useragent", {"min_version": "0.1.13"}),
+    ("selenium", {"min_version": None}),
 )
-
-SELENIUM_REQUIRES = (("selenium", {"min_version": None}),)
 
 TESTS_REQUIRES = (("pytest", {"min_version": "4.6.2"}),)
 
-INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + SELENIUM_REQUIRES + TESTS_REQUIRES
+INSTALL_REQUIRES_ALL = INSTALL_REQUIRES + TESTS_REQUIRES

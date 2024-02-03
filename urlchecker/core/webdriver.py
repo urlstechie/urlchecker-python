@@ -97,9 +97,11 @@ class WebDriver:
         """
         if self.browser is None:
             if self.driver == "Firefox":
-                self.browser = webdriver.Firefox()
+                self.browser = webdriver.firefox.webdriver.WebDriver()
             else:
-                self.browser = webdriver.Chrome(chrome_options=self.get_options())
+                self.browser = webdriver.chrome.webdriver.WebDriver(
+                    options=self.get_options()
+                )
         return self.browser
 
     def get_options(self, width: int = 1200, height: int = 800):
