@@ -28,7 +28,7 @@ jobs:
     needs: formatting
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup mypy environment
         run: conda create --quiet --name type_checking mypy
@@ -45,13 +45,13 @@ jobs:
     needs: type_checking
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup testing environment
         run: conda create --quiet --name testing pytest
 
       - name: Download ChromeDriver
         run: |
-            wget https://chromedriver.storage.googleapis.com/107.0.5304.18/chromedriver_linux64.zip
+            wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
             unzip chromedriver_linux64.zip
             rm chromedriver_linux64.zip
 

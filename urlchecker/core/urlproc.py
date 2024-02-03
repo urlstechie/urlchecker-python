@@ -19,6 +19,10 @@ from urlchecker.core import fileproc
 from urlchecker.core.exclude import excluded
 from urlchecker.logger import print_failure, print_success
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 def check_response_status_code(
     url: str, response: Optional[requests.models.Response]
@@ -167,6 +171,30 @@ class UrlCheckResult:
         # collect all links from file (unique=True is set)
         self.urls = fileproc.collect_links_from_file(self.file_name)
 
+    def make_request(self, url, timeout=5, headers=None, verify=True):
+        """
+        Make a request.
+
+        Start with a HEAD (quicker) and fall back to standard get. We
+        return None if there is an error
+        """
+        response = requests.Response()
+        response.status_code = None
+        try:
+            response = requests.head(
+                url, timeout=timeout, headers=headers, verify=verify
+            )
+
+            # 405 means that head is not allowed, fall back to requests.get
+            if response.status_code == 405:
+                response = requests.get(
+                    url, timeout=timeout, headers=headers, verify=verify
+                )
+            response.close()
+        except Exception as e:
+            logger.warn(f"Issue with url {url}: {e}")
+        return response
+
     def check_urls(
         self,
         urls: Optional[List[str]] = None,
@@ -232,14 +260,16 @@ class UrlCheckResult:
             seen.add(url)
             while rcount > 0 and do_retry:
                 response = None
+
                 try:
-                    response = requests.get(
+                    response = self.make_request(
                         url, timeout=pause, headers=headers, verify=not no_check_certs
                     )
 
                     # Fallback to trying selenium driver for any error code
                     if (
-                        response.status_code not in [200, 404]
+                        not response.status_code
+                        or response.status_code not in [200, 404]
                         and driver
                         and driver.check(url)
                     ):

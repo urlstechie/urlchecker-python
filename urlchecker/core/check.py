@@ -73,12 +73,16 @@ class UrlChecker:
             if not os.path.exists(path):
                 sys.exit("%s does not exist." % path)
 
-            self.file_paths = fileproc.get_file_paths(
-                base_path=path,
-                file_types=self.file_types,
-                exclude_files=self.exclude_files,
-                include_patterns=self.include_patterns,
-            )
+            # Case 1: a single file
+            if os.path.isfile(path):
+                self.file_paths = [os.path.abspath(path)]
+            else:
+                self.file_paths = fileproc.get_file_paths(
+                    base_path=path,
+                    file_types=self.file_types,
+                    exclude_files=self.exclude_files,
+                    include_patterns=self.include_patterns,
+                )
 
     def __str__(self) -> str:
         if self.path:
