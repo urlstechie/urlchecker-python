@@ -76,6 +76,7 @@ def main(args, extra):
     print("              force pass: %s" % args.force_pass)
     print("             retry count: %s" % args.retry_count)
     print("                    save: %s" % args.save)
+    print("                  format: %s" % args.format)
     print("                 timeout: %s" % args.timeout)
 
     # Instantiate a new checker with provided arguments
@@ -86,6 +87,8 @@ def main(args, extra):
         exclude_files=exclude_files,
         print_all=not args.no_print,
         serial=args.serial,
+        save_results_format=args.format,
+
     )
     check_results = checker.run(
         exclude_urls=exclude_urls,

@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import pytest
+import json
 import configparser
 from urlchecker.core.fileproc import get_file_paths
 from urlchecker.main.github import clone_repo
@@ -95,9 +96,8 @@ def test_locally(local_folder_path, config_fname):
     )
     print("Done.")
 
-
 @pytest.mark.parametrize("retry_count", [1, 3])
-def test_check_run_save(tmp_path, retry_count):
+def test_check_run_save_csv(tmp_path, retry_count):
 
     # init vars
     git_path = "https://github.com/urlstechie/urlchecker-test-repo"
@@ -161,3 +161,73 @@ def test_check_run_save(tmp_path, retry_count):
     for line in lines[1:]:
         url, result, filename = line.split(",")
         assert not filename.startswith(root)
+
+@pytest.mark.parametrize("retry_count", [1, 3])
+def test_check_run_save_sarif(tmp_path, retry_count):
+
+    # init vars
+    git_path = "https://github.com/urlstechie/urlchecker-test-repo"
+    file_types = [".py", ".md"]
+    print_all = True
+    exclude_urls = [
+        "https://superkogito.github.io/figures/fig2.html",
+        "https://superkogito.github.io/figures/fig4.html",
+    ]
+    exclude_patterns = ["https://superkogito.github.io/tables"]
+    timeout = 1
+    force_pass = False
+
+    # clone repo
+    base_path = clone_repo(git_path)
+
+    # get all file paths in subfolder specified
+    base_path = os.path.join(base_path, "test_files")
+    file_paths = get_file_paths(base_path, file_types)
+
+    # check repo urls
+    checker = UrlChecker(print_all=print_all, save_results_format="sarif")
+    check_results = checker.run(
+        file_paths=file_paths,
+        exclude_urls=exclude_urls,
+        exclude_patterns=exclude_patterns,
+        retry_count=retry_count,
+        timeout=timeout,
+    )
+
+    # Test saving to file
+    output_file = os.path.join(str(tmp_path), "results.sarif")
+    assert not os.path.exists(output_file)
+    saved_file = checker.save_results(output_file)
+    assert os.path.exists(output_file)
+
+    # Read in output file
+    with open(saved_file, "r") as file:
+        sarif_output = json.load(file)
+
+    # Verify SARIF output structure
+    assert "version" in sarif_output
+    assert sarif_output["version"] == "2.1.0"
+    assert "runs" in sarif_output
+    assert len(sarif_output["runs"]) > 0
+    assert "tool" in sarif_output["runs"][0]
+    assert "driver" in sarif_output["runs"][0]["tool"]
+    assert "name" in sarif_output["runs"][0]["tool"]["driver"]
+    assert sarif_output["runs"][0]["tool"]["driver"]["name"] == "UrlChecker"
+    assert "results" in sarif_output["runs"][0]
+
+    # Verify at least one result entry
+    assert len(sarif_output["runs"][0]["results"]) > 0
+
+    # Verify the structure of a result entry
+    result_entry = sarif_output["runs"][0]["results"][0]
+    assert "ruleId" in result_entry
+    assert result_entry["ruleId"] == "URL001"
+    assert "message" in result_entry
+    assert "text" in result_entry["message"]
+    assert "locations" in result_entry
+    assert len(result_entry["locations"]) > 0
+    assert "physicalLocation" in result_entry["locations"][0]
+    assert "artifactLocation" in result_entry["locations"][0]["physicalLocation"]
+    assert "uri" in result_entry["locations"][0]["physicalLocation"]["artifactLocation"]
+    assert "region" in result_entry["locations"][0]["physicalLocation"]
+    assert "startLine" in result_entry["locations"][0]["physicalLocation"]["region"]

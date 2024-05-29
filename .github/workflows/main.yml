@@ -2,7 +2,7 @@ name: Build and Deploy containers
 
 on:
   # Always test on pull request
-  pull_request: []
+  pull_request:
 
   # Deploy on merge to main
   push:

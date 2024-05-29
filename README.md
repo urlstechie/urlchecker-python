@@ -61,7 +61,7 @@ $ urlchecker check --help
 usage: urlchecker check [-h] [-b BRANCH] [--subfolder SUBFOLDER] [--cleanup] [--serial] [--no-check-certs]
                         [--force-pass] [--no-print] [--verbose] [--file-types FILE_TYPES] [--files FILES]
                         [--exclude-urls EXCLUDE_URLS] [--exclude-patterns EXCLUDE_PATTERNS]
-                        [--exclude-files EXCLUDE_FILES] [--save SAVE] [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
+                        [--exclude-files EXCLUDE_FILES] [--save SAVE] [--format FORMAT] [--retry-count RETRY_COUNT] [--timeout TIMEOUT]
                         path
 
 positional arguments:
@@ -89,6 +89,7 @@ options:
   --exclude-files EXCLUDE_FILES
                         comma separated list of files and patterns to exclude (no spaces)
   --save SAVE           Path to a csv file to save results to.
+  --format FORMAT       format to save results to (csv or sarif), defaults to csv.
   --retry-count RETRY_COUNT
                         retry count upon failure (defaults to 2, one retry).
   --timeout TIMEOUT     timeout (seconds) to provide to the requests library (defaults to 5)
@@ -266,7 +267,9 @@ $ urlchecker check --exclude-files=README.md,_config.yml
 
 ### Save Results
 
-If you want to save your results to file, perhaps for some kind of record or
+#### Save results in CSV format
+
+If you want to save your results to file in csv format, perhaps for some kind of record or
 other data analysis, you can provide the `--save` argument:
 
 ```bash
@@ -313,6 +316,56 @@ https://github.com/SuperKogito/URLs-checker/issues/1,failed
 https://github.com/SuperKogito/URLs-checker/issues/4,failed
 ```
 
+#### Save results in SARIF format
+
+To save results in SARIF format, you can provide the `--format` argument with `sarif`:
+
+```bash
+$ urlchecker check --save results.sarif --format sarif .
+```
+
+This will produce a SARIF file with detailed information about each URL, including the exact line in the code where the URL was found, useful for integrating with tools that support SARIF for static analysis.
+This output helps in pinpointing the exact issues directly in the code, improving the efficiency of addressing broken links.
+
+```json
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "UrlChecker",
+          "informationUri": "https://github.com/urlstechie/urlchecker-python",
+          "rules": [
+            {
+              "id": "URL001",
+              "name": "Invalid URL",
+              "shortDescription": { "text": "This URL is invalid or unreachable." },
+              "fullDescription": { "text": "This URL is invalid or unreachable." },
+              "helpUri": "https://example.com/rule/url001"
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "URL001",
+          "message": { "text": "URL https://github.com/SuperKogito/URLs-checker/README.md is invalid or unreachable." },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "example_file.py" },
+                "region": { "startLine": 10 }
+              }
+            }
+          ]
+        },
+        ...
+      ]
+    }
+  ]
+}
+```
 
 ### Usage from Python
 
