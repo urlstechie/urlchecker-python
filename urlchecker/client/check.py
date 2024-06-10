@@ -88,7 +88,6 @@ def main(args, extra):
         print_all=not args.no_print,
         serial=args.serial,
         save_results_format=args.format,
-
     )
     check_results = checker.run(
         exclude_urls=exclude_urls,
