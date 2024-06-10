@@ -219,3 +219,55 @@ def test_client_save(save):
     if save:
         if not os.path.exists(output_csv.name):
             raise AssertionError
+
+@pytest.mark.parametrize("save, output_format", [(True, ""), (True, "csv"), (True, "sarif")])
+def test_client_save_format_csv(save, output_format):
+
+    # init config parser
+    config = configparser.ConfigParser()
+    config.read("./tests/_local_test_config.conf")
+
+    # init env variables
+    path = config["DEFAULT"]["git_path_test_value"]
+    file_types = config["DEFAULT"]["file_types_test_values"]
+    exclude_urls = config["DEFAULT"]["exclude_test_urls"]
+    exclude_patterns = config["DEFAULT"]["exclude_test_patterns"]
+
+    # Generate command
+    cmd = [
+        "urlchecker",
+        "check",
+        "--subfolder",
+        "test_files",
+        "--file-types",
+        file_types,
+        "--exclude-files",
+        "conf.py",
+        "--exclude-urls",
+        exclude_urls,
+        "--exclude_patterns",
+        exclude_patterns,
+    ]
+
+    suffix = {
+        "csv": ".csv",
+        "sarif": ".sarif",
+        "" : ".csv"
+    }
+    # Write to file
+    if save:
+        output_file = tempfile.NamedTemporaryFile(suffix=suffix[output_format], prefix="urlchecker-")
+        cmd += ["--save", output_file.name]
+    if output_format:
+        cmd += ["--format", output_format]
+
+    # Add final path
+    cmd.append(path)
+
+    print(" ".join(cmd))
+    # execute script
+    pipe = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if save:
+        if not os.path.exists(output_file.name):
+            raise AssertionError
+ 

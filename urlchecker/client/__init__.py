@@ -142,8 +142,15 @@ def get_parser():
 
     check.add_argument(
         "--save",
-        help="Path to a csv file to save results to.",
+        help="Path to file to save results to.",
         default=None,
+    )
+    check.add_argument(
+        "--format",
+        help="File format to save results to.",
+        default="csv",
+        choices=["csv", "sarif"],
+        type=str,
     )
 
     # Timeouts

@@ -8,10 +8,12 @@ For a copy, see <https://opensource.org/licenses/MIT>.
 """
 
 import csv
+import copy
 import os
 import random
 import re
 import sys
+import json
 from typing import Optional, Dict, List
 
 from urlchecker.core import fileproc
@@ -33,6 +35,7 @@ class UrlChecker:
         print_all: bool = True,
         include_patterns: Optional[List[str]] = None,
         serial: bool = False,
+        save_results_format: str = "csv",
     ):
         """
         initiate a url checker. At init we take in preferences for
@@ -40,12 +43,13 @@ class UrlChecker:
         parameters to run a url check.
 
         Args:
-            - path              (str) : full path to the root folder to check. If not defined, no file_paths are parsed.
-            - file_types       (list) : types of files to scan for links.
-            - print_all        (bool) : control var for whether to print all checked file names or only the ones with urls.
-            - exclude_files    (list) : list of excluded files and patterns for flies.
-            - include_patterns (list) : list of files and patterns to check.
-            - serial           (bool) : do checks in serial (no multiprocessing)
+            - path                (str) : full path to the root folder to check. If not defined, no file_paths are parsed.
+            - file_types          (list) : types of files to scan for links.
+            - print_all           (bool) : control var for whether to print all checked file names or only the ones with urls.
+            - exclude_files       (list) : list of excluded files and patterns for flies.
+            - include_patterns    (list) : list of files and patterns to check.
+            - serial              (bool) : do checks in serial (no multiprocessing)
+            - save_results_format (bool) : format to save results (csv or sarif)
         """
         # Initiate results object, and checks lookup (holds UrlCheck) for each file
         self.results = {
@@ -65,6 +69,16 @@ class UrlChecker:
         self.file_types = file_types or [".py", ".md"]
         self.file_paths = []
         self.serial = serial
+
+        # Mapping save results formats to their respective methods
+        save_methods = {
+            "csv": self.save_results_as_csv,
+            "sarif": self.save_results_as_sarif,
+        }
+        if save_results_format in save_methods:
+            self.save_results = save_methods[save_results_format]
+        else:
+            sys.exit(f"{save_results_format} is an invalid format to save results.")
 
         # get all file paths if a path is defined
         if path:
@@ -92,7 +106,7 @@ class UrlChecker:
     def __repr__(self) -> str:
         return self.__str__()
 
-    def save_results(
+    def save_results_as_csv(
         self,
         file_path: str,
         sep: str = ",",
@@ -160,6 +174,68 @@ class UrlChecker:
                     writer.writerow([url, "passed", file_name])
                     for url in result["passed"]
                 ]
+
+        return file_path
+
+    def save_results_as_sarif(self, file_path: str) -> str:
+
+        results = []
+        for file_name, result in self.checks.items():
+            failed_urls = copy.deepcopy(result["failed"])
+            unique_failed_urls = set(failed_urls)
+            for url in unique_failed_urls:
+                line_numbers = find_url_lines(file_name, url)
+                if not line_numbers:
+                    line_numbers = [1]  # Default to 1 if not found
+
+                for line_number in line_numbers:
+                    results.append(
+                        {
+                            "ruleId": "URL001",
+                            "message": {
+                                "text": f"URL {url} is invalid or unreachable."
+                            },
+                            "locations": [
+                                {
+                                    "physicalLocation": {
+                                        "artifactLocation": {"uri": file_name},
+                                        "region": {"startLine": line_number},
+                                    }
+                                }
+                            ],
+                        }
+                    )
+
+        sarif_log = {
+            "version": "2.1.0",
+            "runs": [
+                {
+                    "tool": {
+                        "driver": {
+                            "name": "UrlChecker",
+                            "informationUri": "https://github.com/urlstechie/urlchecker-python",
+                            "rules": [
+                                {
+                                    "id": "RFC3986",
+                                    "name": "Invalid/Unreachable URL",
+                                    "shortDescription": {
+                                        "text": "This URL is invalid or unreachable."
+                                    },
+                                    "fullDescription": {
+                                        "text": "This URL is invalid or unreachable."
+                                    },
+                                    "helpUri": "https://www.rfc-editor.org/rfc/rfc3986",
+                                }
+                            ],
+                        }
+                    },
+                    "results": results,
+                }
+            ],
+        }
+
+        with open(file_path, "w") as file:
+            json.dump(sarif_log, file, indent=2)
 
         return file_path
 
@@ -273,3 +349,12 @@ def check_task(*args, **kwargs):
         "passed": checker.passed,
         "excluded": checker.excluded,
     }
+
+
+def find_url_lines(file_name: str, url: str) -> List[int]:
+    line_numbers = []
+    with open(file_name, "r") as file:
+        for i, line in enumerate(file, 1):
+            if url in line:
+                line_numbers.append(i)
+    return line_numbers
