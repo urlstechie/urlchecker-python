@@ -155,9 +155,10 @@ class UrlCheckResult:
 
             driver = WebDriver(port=port, timeout=timeout)
 
-            # Do a sanity check of the driver
+            # Do a sanity check of the default driver
             driver.check("https://google.com")
         except:
+            driver = None
             logger.warning(
                 "Issue with driver, results will be improved if you have it! Please match your version from https://googlechromelabs.github.io/chrome-for-testing"
             )

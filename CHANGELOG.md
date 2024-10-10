@@ -12,6 +12,7 @@ and **Merged pull requests**. Critical items to know are:
 Referenced versions in headers are tagged on Github, in parentheses are for pypi.
 
 ## [vxx](https://github.com/urlstechie/urlschecker-python/tree/master) (master)
+ - avoid using web driver when it doesn't work (0.0.36)
  - allow variable to skip checking certificates (0.0.35)
  - switch back to pypi release of fake-useragent (0.0.34)
  - preparing to install from git for fake-useragent (0.0.33)
