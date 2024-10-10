@@ -153,12 +153,12 @@ class UrlCheckResult:
         try:
             from .webdriver import WebDriver
 
-            default_driver = WebDriver(port=port, timeout=timeout)
+            driver = WebDriver(port=port, timeout=timeout)
 
             # Do a sanity check of the default driver
-            default_driver.check("https://google.com")
-            driver = default_driver
+            driver.check("https://google.com")
         except:
+            driver = None
             logger.warning(
                 "Issue with driver, results will be improved if you have it! Please match your version from https://googlechromelabs.github.io/chrome-for-testing"
             )
